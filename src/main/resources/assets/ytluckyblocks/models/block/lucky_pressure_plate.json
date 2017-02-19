@@ -1,0 +1,19 @@
+{
+    "textures": {
+	 "2": "ytluckyblocks:blocks/BaseLine",
+        "particle": "ytluckyblocks:blocks/BaseLine"
+    },
+    "elements": [
+        {   "from": [ 1, 0, 1 ],
+            "to": [ 15, 2, 15 ],
+            "faces": {
+                "down":  { "uv": [ 1,  1, 15, 15 ], "texture": "#2", "cullface": "down" },
+                "up":    { "uv": [ 2,  1, 15, 15 ], "texture": "#2" },
+                "north": { "uv": [ 2, 15, 15, 16 ], "texture": "#2" },
+                "south": { "uv": [ 2, 15, 15, 16 ], "texture": "#2" },
+                "west":  { "uv": [ 2, 15, 15, 16 ], "texture": "#2" },
+                "east":  { "uv": [ 2, 15, 15, 16 ], "texture": "#2" }
+            }
+        }
+    ]
+}
