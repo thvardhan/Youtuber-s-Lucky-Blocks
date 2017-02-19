@@ -1,16 +1,14 @@
 [
 {
   "modid": "ytstuff",
-  "name": "YouTube Stuff Mod",
-  "description": "This Is A Mod",
+  "name": "YouTuber's Lucky Blocks Mod",
+  "description": "YouTuve",
   "version": "${version}",
   "mcversion": "${mcversion}",
-  "url": "",
+  "url": "http://all-minecraft.weebly.com/youtuber-lucky-blocks.html",
   "updateUrl": "",
-  "authorList": ["thvardhan ALSO KNOW AS Serial Player"],
-  "credits": "The Forge and FML guys, for making this API, And my self OFC :D",
-  "logoFile": "",
-  "screenshots": [],
-  "dependencies": []
+  "authorList": ["thvardhan (AKA Serial Player)", "spikespaz"],
+  "credits": "The Forge Dev Team, and spikespaz.",
+  "logoFile": "ytlblocks.png"
 }
 ]
