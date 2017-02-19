@@ -5,34 +5,33 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-
 import thvardhan.ytluckyblocks.blocks.ModBlocks;
 import thvardhan.ytluckyblocks.items.ModItems;
 
 
 public class CommonProxy {
-	
-	public static CreativeTabs tabYTStuffMod = new TabYTStuffMod(CreativeTabs.getNextID(), "YTSuffMod");
-	public static CreativeTabs tabYtStuffArmor=new TabYTStuffArmor(CreativeTabs.getNextID(),"YTStuffArmor");
-	
-	 public void preInit(FMLPreInitializationEvent e) {
-		 ModItems.createTools();
-		 ModBlocks.createBlocks();
 
-	    }
+    public static CreativeTabs tabYTStuffMod = new TabYTStuffMod(CreativeTabs.getNextID(), "YTSuffMod");
+    public static CreativeTabs tabYtStuffArmor = new TabYTStuffArmor(CreativeTabs.getNextID(), "YTStuffArmor");
 
-		public void init(FMLInitializationEvent e) {
-	//		registerRecipes();
-    	FMLCommonHandler.instance().bus().register(new YTEventHandler());
+    public void preInit(FMLPreInitializationEvent e) {
+        ModItems.createTools();
+        ModBlocks.createBlocks();
 
-	    }
+    }
 
-	    public void postInit(FMLPostInitializationEvent e) {
+    public void init(FMLInitializationEvent e) {
+        //		registerRecipes();
+        FMLCommonHandler.instance().bus().register(new YTEventHandler());
 
-	    }
-	    
-	    public void registerRecipes() {
-	  /*  	
+    }
+
+    public void postInit(FMLPostInitializationEvent e) {
+
+    }
+
+    public void registerRecipes() {
+      /*
 	    	GameRegistry.addRecipe(new ItemStack(ModBlocks.youtubeLuckyBlock), "AAA","AXA","AAA",'A',Items.egg,'X',Items.iron_ingot);
 	    	GameRegistry.addRecipe(new ItemStack(ModBlocks.serialPlayerLuckyBlock), "AAA","AXA","AAA",'A',Items.redstone,'X',Items.iron_ingot);
 	    	GameRegistry.addRecipe(new ItemStack(ModBlocks.popularMMOLuckyBlock), "AAA","AXA","AAA",'A',Blocks.obsidian,'X',Items.iron_ingot);
@@ -62,9 +61,8 @@ public class CommonProxy {
 	    	GameRegistry.addRecipe(new ItemStack(ModBlocks.vikkstar123LuckyBlock), "AAA","AXA","AAA",'A',Items.feather,'X',Items.iron_ingot);
 	    	
 	    	*/
-			
-		}
-	
-	    
-	 
+
+    }
+
+
 }

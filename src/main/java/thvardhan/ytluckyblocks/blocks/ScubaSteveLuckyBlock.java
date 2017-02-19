@@ -1,11 +1,5 @@
 package thvardhan.ytluckyblocks.blocks;
 
-import thvardhan.ytluckyblocks.CommonProxy;
-import thvardhan.ytluckyblocks.entity.EntityBajanCanadian;
-import thvardhan.ytluckyblocks.entity.EntityScubaSteve;
-import thvardhan.ytluckyblocks.entity.EntitySerialPlayer;
-import thvardhan.ytluckyblocks.functions.ExtraFunctions;
-import thvardhan.ytluckyblocks.items.ModItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -23,6 +17,12 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thvardhan.ytluckyblocks.CommonProxy;
+import thvardhan.ytluckyblocks.entity.EntityBajanCanadian;
+import thvardhan.ytluckyblocks.entity.EntityScubaSteve;
+import thvardhan.ytluckyblocks.entity.EntitySerialPlayer;
+import thvardhan.ytluckyblocks.functions.ExtraFunctions;
+import thvardhan.ytluckyblocks.items.ModItems;
 
 import java.util.Random;
 
@@ -51,18 +51,16 @@ public class ScubaSteveLuckyBlock extends Block {
     }
 
     @SideOnly(Side.CLIENT)
-    public void randomDisplayTick(World worldIn, BlockPos pos, IBlockState state, Random rand)
-    {
-        for (int i = 0; i < 3; ++i)
-        {
+    public void randomDisplayTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+        for (int i = 0; i < 3; ++i) {
             int j = rand.nextInt(2) * 2 - 1;
             int k = rand.nextInt(2) * 2 - 1;
-            double d0 = (double)pos.getX() + 0.5D + 0.25D * (double)j;
-            double d1 = (double)((float)pos.getY() + rand.nextFloat());
-            double d2 = (double)pos.getZ() + 0.5D + 0.25D * (double)k;
-            double d3 = (double)(rand.nextFloat() * (float)j);
-            double d4 = ((double)rand.nextFloat() - 0.5D) * 0.125D;
-            double d5 = (double)(rand.nextFloat() * (float)k);
+            double d0 = (double) pos.getX() + 0.5D + 0.25D * (double) j;
+            double d1 = (double) ((float) pos.getY() + rand.nextFloat());
+            double d2 = (double) pos.getZ() + 0.5D + 0.25D * (double) k;
+            double d3 = (double) (rand.nextFloat() * (float) j);
+            double d4 = ((double) rand.nextFloat() - 0.5D) * 0.125D;
+            double d5 = (double) (rand.nextFloat() * (float) k);
             worldIn.spawnParticle(EnumParticleTypes.SPELL, d0, d1, d2, d3, d4, d5, new int[0]);
         }
     }
@@ -70,7 +68,7 @@ public class ScubaSteveLuckyBlock extends Block {
 
     @Override
     public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
-        if(!world.isRemote && player != null && !(player instanceof FakePlayer)){
+        if (!world.isRemote && player != null && !(player instanceof FakePlayer)) {
 
             world.setBlockToAir(pos);
             drops(world, pos, player);
@@ -80,261 +78,231 @@ public class ScubaSteveLuckyBlock extends Block {
         //super.onBlockDestroyedByPlayer(worldIn, pos, state);
     }
 
-    private void drops(World worldIn,BlockPos pos,EntityPlayer player){
+    private void drops(World worldIn, BlockPos pos, EntityPlayer player) {
 
-        Enchantment[] e=new Enchantment[5];
-        e[0]=Enchantment.flame;
-        e[1]=Enchantment.knockback;
-        e[2]=Enchantment.power;
-        e[3]=Enchantment.thorns;
-        e[4]=Enchantment.looting;
+        Enchantment[] e = new Enchantment[5];
+        e[0] = Enchantment.flame;
+        e[1] = Enchantment.knockback;
+        e[2] = Enchantment.power;
+        e[3] = Enchantment.thorns;
+        e[4] = Enchantment.looting;
 
 
         Random rand = new Random();
 
 
-        switch(rand.nextInt(51)){
+        switch (rand.nextInt(51)) {
 
-            default:{
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.diamond_sword), e,5, worldIn, pos);}
-            case 0:{
+            default: {
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.diamond_sword), e, 5, worldIn, pos);
+            }
+            case 0: {
 
-                ExtraFunctions.lookUp(worldIn,  player);
+                ExtraFunctions.lookUp(worldIn, player);
                 break;
             }
-            case 1:{
+            case 1: {
                 ExtraFunctions.foodKit(worldIn, pos);
                 break;
             }
-            case 2:{
+            case 2: {
                 ExtraFunctions.burgerStructOne(worldIn, pos);
                 break;
             }
-            case 3:{
+            case 3: {
                 ExtraFunctions.summonMobsNearby(new EntityScubaSteve(worldIn), 50, worldIn, pos, rand);
                 break;
-            }case 4:{
+            }
+            case 4: {
                 ExtraFunctions.summonMobsNearby(new EntitySkeleton(worldIn), 5, worldIn, pos, rand);
                 break;
-            }case 5:{
+            }
+            case 5: {
                 ExtraFunctions.summonMobsNearby(new EntityScubaSteve(worldIn), 25, worldIn, pos, rand);
                 break;
-            }case 6:{
+            }
+            case 6: {
                 ExtraFunctions.towerStruct(worldIn, pos);
                 break;
-            }case 7:{
-                ExtraFunctions.hellWellStructure(worldIn, pos,rand);
+            }
+            case 7: {
+                ExtraFunctions.hellWellStructure(worldIn, pos, rand);
                 break;
-            }case 8:{
+            }
+            case 8: {
                 ExtraFunctions.holeDeathTrap(worldIn, pos);
                 break;
-            }case 9:{
+            }
+            case 9: {
                 ExtraFunctions.redstoneKit(worldIn, pos);
                 break;
-            }case 10:{
-                ExtraFunctions.endWellStruct(worldIn, pos,rand);
+            }
+            case 10: {
+                ExtraFunctions.endWellStruct(worldIn, pos, rand);
                 break;
             }
-            case 11:
-            {
-                ExtraFunctions.setOneBlock(worldIn,pos,ModBlocks.luckyPressurePlate);
+            case 11: {
+                ExtraFunctions.setOneBlock(worldIn, pos, ModBlocks.luckyPressurePlate);
                 break;
             }
-            case 12:
-            {
-                ExtraFunctions.summonItemAsDrop(pos,worldIn,new ItemStack(Items.ghast_tear));
+            case 12: {
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.ghast_tear));
                 break;
             }
-            case 13:
-            {
+            case 13: {
                 ExtraFunctions.holeDeathTrap(worldIn, pos);
                 break;
             }
-            case 14:
-            {
+            case 14: {
                 ExtraFunctions.addEnchantsMany(new ItemStack(Items.egg), new Enchantment[]{Enchantment.fireAspect}, 2, worldIn, pos);
                 break;
             }
-            case 15:
-            {
-                ExtraFunctions.summonMobsOnBreakBlock(new EntitySerialPlayer(worldIn),2,worldIn, pos);
+            case 15: {
+                ExtraFunctions.summonMobsOnBreakBlock(new EntitySerialPlayer(worldIn), 2, worldIn, pos);
                 break;
             }
-            case 16:
-            {
+            case 16: {
                 ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.apple));
                 break;
             }
-            case 17:
-            {
+            case 17: {
                 ExtraFunctions.addEnchantsMany(new ItemStack(Items.wooden_hoe), e, 10, worldIn, pos);
                 break;
             }
-            case 18:
-            {
-               ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(ModItems.scubaBoots));
+            case 18: {
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(ModItems.scubaBoots));
                 break;
             }
-            case 19:
-            {
+            case 19: {
                 ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(ModItems.scubaChestplate));
                 break;
             }
-            case 20:
-            {
+            case 20: {
                 ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(ModItems.scubaHelmet));
                 break;
             }
-            case 21:
-            {
+            case 21: {
                 ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(ModItems.scubaLeggings));
                 break;
             }
-            case 22:
-            {
+            case 22: {
                 ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.sponge));
                 break;
             }
-            case 23:
-            {
+            case 23: {
                 ExtraFunctions.luckyBlockTower(worldIn, pos);
                 break;
             }
-            case 24:
-            {
+            case 24: {
                 ExtraFunctions.musicKit(worldIn, pos);
-                ExtraFunctions.chat(EnumChatFormatting.GREEN+"Go Listen To Some Music...", player);
+                ExtraFunctions.chat(EnumChatFormatting.GREEN + "Go Listen To Some Music...", player);
                 break;
             }
-            case 25:
-            {
+            case 25: {
                 ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(ModItems.devilSword));
                 break;
             }
-            case 26:
-            {	ExtraFunctions.summonMobsOnBreakBlock(new EntityIronGolem(worldIn),50,worldIn, pos);
+            case 26: {
+                ExtraFunctions.summonMobsOnBreakBlock(new EntityIronGolem(worldIn), 50, worldIn, pos);
                 break;
             }
-            case 27:
-            {ExtraFunctions.setOneBlock(worldIn, pos, Blocks.tnt);
+            case 27: {
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.tnt);
                 ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.flint_and_steel));
 
                 break;
             }
-            case 28:
-            {
+            case 28: {
                 ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(ModItems.ytLeggings));
                 break;
             }
-            case 29:
-            {
+            case 29: {
                 ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(ModItems.ytHelmet));
                 break;
             }
-            case 30:
-            {
+            case 30: {
                 ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(ModItems.ytChestplate));
                 break;
             }
-            case 31:
-            {
+            case 31: {
                 ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(ModItems.ytBoots));
                 break;
             }
-            case 32:
-            {
+            case 32: {
 
-                    Enchantment[] a={Enchantment.aquaAffinity,Enchantment.baneOfArthropods,Enchantment.blastProtection,Enchantment.knockback,Enchantment.power,Enchantment.looting,Enchantment.fireAspect,Enchantment.sharpness};
-                    ExtraFunctions.addEnchantsMany(new ItemStack(Items.diamond_axe), a, 3, worldIn, pos);
+                Enchantment[] a = {Enchantment.aquaAffinity, Enchantment.baneOfArthropods, Enchantment.blastProtection, Enchantment.knockback, Enchantment.power, Enchantment.looting, Enchantment.fireAspect, Enchantment.sharpness};
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.diamond_axe), a, 3, worldIn, pos);
                 break;
             }
-            case 33:
-            {
+            case 33: {
                 ExtraFunctions.addEnchantsMany(new ItemStack(Items.wooden_sword), e, 2, worldIn, pos);
                 break;
             }
-            case 34:
-            {
+            case 34: {
                 ExtraFunctions.hellWellStructure(worldIn, pos, rand);
                 break;
             }
-            case 35:
-            {
-                ExtraFunctions.summonCowNearby(worldIn, pos, 20,rand);
+            case 35: {
+                ExtraFunctions.summonCowNearby(worldIn, pos, 20, rand);
                 break;
             }
-            case 36:
-            {
-                ExtraFunctions.summonItemAsDrop(pos,worldIn,new ItemStack(ModItems.rainbowBlade));
+            case 36: {
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(ModItems.rainbowBlade));
                 break;
             }
-            case 37:
-            {
-                ExtraFunctions.summonItemAsDrop(pos,worldIn,new ItemStack(ModBlocks.youtube));
+            case 37: {
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(ModBlocks.youtube));
                 break;
             }
-            case 38:
-            {
-                ExtraFunctions.summonItemAsDrop(pos,worldIn,new ItemStack(Items.nether_star));
+            case 38: {
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.nether_star));
                 break;
             }
-            case 39:
-            {
-                ExtraFunctions.summonItemAsDrop(pos,worldIn,new ItemStack(ModBlocks.goldButton));
+            case 39: {
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(ModBlocks.goldButton));
                 break;
             }
-            case 40:
-            {
-                ExtraFunctions.summonItemAsDrop(pos,worldIn,new ItemStack(ModBlocks.ironButton));
+            case 40: {
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(ModBlocks.ironButton));
                 break;
             }
-            case 41:
-            {
+            case 41: {
                 ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.dragon_egg));
                 break;
             }
-            case 42:
-            {
+            case 42: {
                 ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.cake));
                 break;
             }
-            case 43:
-            {
+            case 43: {
                 ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.command_block));
                 break;
             }
-            case 44:
-            {
+            case 44: {
                 ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.arrow), 64, 0, 0);
                 break;
             }
-            case 45:
-            {
+            case 45: {
                 ExtraFunctions.flyingIsle(worldIn, pos);
                 break;
             }
-            case 46:
-            {
+            case 46: {
                 ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.diamond_horse_armor));
                 break;
             }
-            case 47:
-            {
+            case 47: {
                 ExtraFunctions.summonMobsNearby(new EntityBajanCanadian(worldIn), 42, worldIn, pos, rand);
                 break;
             }
-            case 48:
-            {
+            case 48: {
                 ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.diamond_sword));
                 break;
             }
-            case 49:
-            {
+            case 49: {
                 ExtraFunctions.setOneBlock(worldIn, pos, Blocks.enchanting_table);
                 break;
             }
-            case 50:
-            {
+            case 50: {
                 ExtraFunctions.setOneBlock(worldIn, pos, Blocks.bedrock);
                 break;
             }

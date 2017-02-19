@@ -1,40 +1,37 @@
 package thvardhan.ytluckyblocks.entity.render;
 
 
-import thvardhan.ytluckyblocks.Main;
-import thvardhan.ytluckyblocks.entity.EntityLDShadowLady;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.entity.RenderBiped;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.ResourceLocation;
+import thvardhan.ytluckyblocks.Main;
+import thvardhan.ytluckyblocks.entity.EntityLDShadowLady;
 
 public class EntityLDShadowLadyRender extends RenderBiped {
-	protected ResourceLocation loc;
-	
-	public EntityLDShadowLadyRender(ModelBiped par1ModelBase, float parShadowSize)
-    {
-		
+    protected ResourceLocation loc;
+
+    public EntityLDShadowLadyRender(ModelBiped par1ModelBase, float parShadowSize) {
+
         super(Minecraft.getMinecraft().getRenderManager(), par1ModelBase, parShadowSize);
-        
-        setEntityTexture();        
+
+        setEntityTexture();
     }
- 
-    protected void preRenderCallback(EntityLivingBase entity, float f)
-    {
+
+    protected void preRenderCallback(EntityLivingBase entity, float f) {
         preRenderCallbackLogDotZip((EntityLDShadowLady) entity, f);
 
     }
-  
+
     protected void preRenderCallbackLogDotZip(EntityLDShadowLady entity, float f)
 
     {
-    	
+
         // some people do some G11 transformations or blends here, like you can do
-    	
-   //     GL11.glScalef(2F, 2F, 2F);
+
+        //     GL11.glScalef(2F, 2F, 2F);
 
         // which is used for Slime entities.  I suggest having the entity cast to
 
@@ -46,26 +43,20 @@ public class EntityLDShadowLadyRender extends RenderBiped {
 
     }
 
-    protected void setEntityTexture()
-    {
-        loc = new ResourceLocation(Main.MODID+":textures/entity/ld_skin.png");
+    protected void setEntityTexture() {
+        loc = new ResourceLocation(Main.MODID + ":textures/entity/ld_skin.png");
 
     }
 
 
     /**
-    * Returns the location of an entity's texture. Doesn't seem to be called 
-    * unless you call Render.bindEntityTexture.
-    */
-    protected ResourceLocation getEntityTexture(Entity par1Entity)
-    {
+     * Returns the location of an entity's texture. Doesn't seem to be called
+     * unless you call Render.bindEntityTexture.
+     */
+    protected ResourceLocation getEntityTexture(Entity par1Entity) {
         return loc;
 
     }
-    
-    
-	
 
-    
-    
+
 }

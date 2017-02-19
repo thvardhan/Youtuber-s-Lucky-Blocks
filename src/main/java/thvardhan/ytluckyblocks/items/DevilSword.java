@@ -1,20 +1,18 @@
 package thvardhan.ytluckyblocks.items;
 
-import thvardhan.ytluckyblocks.CommonProxy;
-
 import net.minecraft.item.ItemSword;
+import thvardhan.ytluckyblocks.CommonProxy;
 
 public class DevilSword extends ItemSword {
 
-	public DevilSword(String string, ToolMaterial devil) {
-		super(devil);
-		this.setUnlocalizedName(string);
-		this.setCreativeTab(CommonProxy.tabYTStuffMod);
-		
-		
-		
-	}
-	
+    public DevilSword(String string, ToolMaterial devil) {
+        super(devil);
+        this.setUnlocalizedName(string);
+        this.setCreativeTab(CommonProxy.tabYTStuffMod);
+
+
+    }
+
 	
 	/*	@Override
 	public void onUpdate(ItemStack stack, World worldIn, Entity player, int itemSlot, boolean isSelected) {
@@ -45,10 +43,6 @@ public class DevilSword extends ItemSword {
 		super.onUpdate(stack, worldIn, player, itemSlot, isSelected);
 	}
 	}*/
-	
-	
-	
-	
-	
+
 
 }

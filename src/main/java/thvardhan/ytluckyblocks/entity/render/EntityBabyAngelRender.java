@@ -1,28 +1,25 @@
 package thvardhan.ytluckyblocks.entity.render;
 
-import thvardhan.ytluckyblocks.Main;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.entity.RenderBiped;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.ResourceLocation;
+import thvardhan.ytluckyblocks.Main;
 import thvardhan.ytluckyblocks.entity.EntityBabyAngel;
 
 public class EntityBabyAngelRender extends RenderBiped {
     protected ResourceLocation alexircraft;
 
-    public EntityBabyAngelRender(ModelBiped par1ModelBase, float parShadowSize)
-    {
+    public EntityBabyAngelRender(ModelBiped par1ModelBase, float parShadowSize) {
 
         super(Minecraft.getMinecraft().getRenderManager(), par1ModelBase, parShadowSize);
 
         setEntityTexture();
     }
 
-    protected void preRenderCallback(EntityLivingBase entity, float f)
-    {
+    protected void preRenderCallback(EntityLivingBase entity, float f) {
         preRenderCallbackLogDotZip((EntityBabyAngel) entity, f);
 
 
@@ -46,9 +43,8 @@ public class EntityBabyAngelRender extends RenderBiped {
 
     }
 
-    protected void setEntityTexture()
-    {
-        alexircraft = new ResourceLocation(Main.MODID+":textures/entity/baby_angel.png");
+    protected void setEntityTexture() {
+        alexircraft = new ResourceLocation(Main.MODID + ":textures/entity/baby_angel.png");
 
     }
 
@@ -57,15 +53,10 @@ public class EntityBabyAngelRender extends RenderBiped {
      * Returns the location of an entity's texture. Doesn't seem to be called
      * unless you call Render.bindEntityTexture.
      */
-    protected ResourceLocation getEntityTexture(Entity par1Entity)
-    {
+    protected ResourceLocation getEntityTexture(Entity par1Entity) {
         return alexircraft;
 
     }
-
-
-
-
 
 
 }

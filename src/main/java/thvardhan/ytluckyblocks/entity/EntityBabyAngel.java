@@ -1,19 +1,9 @@
 package thvardhan.ytluckyblocks.entity;
 
-import com.mojang.realmsclient.gui.ChatFormatting;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIAttackOnCollide;
-import net.minecraft.entity.ai.EntityAIHurtByTarget;
-import net.minecraft.entity.ai.EntityAILookIdle;
-import net.minecraft.entity.ai.EntityAIMoveThroughVillage;
-import net.minecraft.entity.ai.EntityAIMoveTowardsRestriction;
-import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
-import net.minecraft.entity.ai.EntityAISwimming;
-import net.minecraft.entity.ai.EntityAIWander;
-import net.minecraft.entity.ai.EntityAIWatchClosest;
+import net.minecraft.entity.ai.*;
 import net.minecraft.entity.monster.EntityIronGolem;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.EntityPigZombie;
@@ -27,12 +17,12 @@ import net.minecraft.world.World;
 
 public class EntityBabyAngel extends EntityMob {
 
-    private String name="Baby Angel";
-    boolean alwaysRenderNameTag=true;
+    boolean alwaysRenderNameTag = true;
+    private String name = "Baby Angel";
 
     public EntityBabyAngel(World worldIn) {
         super(worldIn);
-        ((PathNavigateGround)this.getNavigator()).setBreakDoors(true);
+        ((PathNavigateGround) this.getNavigator()).setBreakDoors(true);
         this.tasks.addTask(0, new EntityAISwimming(this));
         this.tasks.addTask(2, new EntityAIAttackOnCollide(this, EntityPlayer.class, 1.0D, false));
         this.tasks.addTask(5, new EntityAIMoveTowardsRestriction(this, 1.0D));
@@ -46,19 +36,17 @@ public class EntityBabyAngel extends EntityMob {
 
     }
 
-    protected void applyEntityAI()
-    {
+    protected void applyEntityAI() {
         this.tasks.addTask(4, new EntityAIAttackOnCollide(this, EntityVillager.class, 1.0D, true));
         this.tasks.addTask(4, new EntityAIAttackOnCollide(this, EntityIronGolem.class, 1.0D, true));
         this.tasks.addTask(6, new EntityAIMoveThroughVillage(this, 1.0D, false));
-        this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, true, new Class[] {EntityPigZombie.class}));
+        this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, true, new Class[]{EntityPigZombie.class}));
         this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityPlayer.class, true));
         this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityVillager.class, false));
         this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityIronGolem.class, true));
     }
 
-    protected void applyEntityAttributes()
-    {
+    protected void applyEntityAttributes() {
         super.applyEntityAttributes();
         this.getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(10.0D);
         this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.3D);
@@ -68,12 +56,9 @@ public class EntityBabyAngel extends EntityMob {
     }
 
 
-
     @Override
     public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty,
                                             IEntityLivingData livingdata) {
-
-
 
 
         return livingdata;
@@ -128,14 +113,6 @@ public class EntityBabyAngel extends EntityMob {
     public void setAlwaysRenderNameTag(boolean alwaysRenderNameTag) {
         super.setAlwaysRenderNameTag(true);
     }
-
-
-
-
-
-
-
-
 
 
 }

@@ -1,8 +1,5 @@
 package thvardhan.ytluckyblocks.blocks;
 
-import thvardhan.ytluckyblocks.CommonProxy;
-import thvardhan.ytluckyblocks.functions.ExtraFunctions;
-import thvardhan.ytluckyblocks.items.ModItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -16,6 +13,9 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
+import thvardhan.ytluckyblocks.CommonProxy;
+import thvardhan.ytluckyblocks.functions.ExtraFunctions;
+import thvardhan.ytluckyblocks.items.ModItems;
 
 import java.util.Random;
 
@@ -30,7 +30,7 @@ public class LuckyPressurePlate extends Block {
         this.setHardness(hardness);
         this.setResistance(resistance);
         this.setLightLevel(0F);
-        this.setBlockBounds(0.03f,0,0.03f,0.93F,0.2F,0.93F);
+        this.setBlockBounds(0.03f, 0, 0.03f, 0.93F, 0.2F, 0.93F);
     }
 
 
@@ -50,7 +50,7 @@ public class LuckyPressurePlate extends Block {
 
     @Override
     public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
-        this.pos=pos;
+        this.pos = pos;
         super.onBlockAdded(worldIn, pos, state);
     }
 
@@ -283,7 +283,7 @@ public class LuckyPressurePlate extends Block {
             }
         }
 
-                super.onLanded(worldIn, entityIn);
+        super.onLanded(worldIn, entityIn);
     }
 
 
