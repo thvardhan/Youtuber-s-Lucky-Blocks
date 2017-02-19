@@ -16,7 +16,7 @@ import thvardhan.ytluckyblocks.entity.*;
 @Mod(modid = Main.MODID, version = Main.VERSION, name=Main.NAME)
 public class Main {
 	private static int modEntitys=0;
-	@SidedProxy(clientSide="ClientProxy", serverSide="ServerProxy")
+	@SidedProxy(clientSide="thvardhan.ytluckyblocks.ClientProxy", serverSide="thvardhan.ytluckyblocks.ServerProxy")
 	public static CommonProxy proxy;
 
 
