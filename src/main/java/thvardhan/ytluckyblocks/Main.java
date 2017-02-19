@@ -21,9 +21,9 @@ public class Main {
 
 
 	
-    public static final String MODID = "ytstuff";
-    public static final String VERSION = "6.0.0";
-    public static final String NAME="Youtuber Lucky Block";   
+    public static final String MODID = "ytluckyblocks";
+    public static final String VERSION = "6.1.0";
+    public static final String NAME="YouTuber's Lucky Blocks Mod";
     
 	 @Instance(MODID)
 	    public static Main instance;
