@@ -13,29 +13,29 @@ After the great success of Youtuber's Lucky Block Command Block Edition, I proud
 * This mod also add YouTuber mobs which will do their best to take you down as they spawn in world.
 
 ## FAQ
-**Q:** My game crashes after installing this, what should I do?
+> **Q:** My game crashes after installing this, what should I do?
 
-A: Make sure you are using latest java version and then try again. And make sure you are in minecraft 1.8.9. If the issue persists, create an issue and link your crash log.
+> A: Make sure you are using latest java version and then try again. And make sure you are in minecraft 1.8.9. If the issue persists, create an issue and link your crash log.
 
-**Q:** Will this mod have support to other versions of Minecraft (1.9, 1.10 etc.)?
+> **Q:** Will this mod have support to other versions of Minecraft (1.9, 1.10 etc.)?
 
-A: Yes, I am working on them.
+> A: Yes, I am working on them.
 
-**Q:** Sometimes a lot og ghosts spawn in and I lag, what should I do?
+> **Q:** Sometimes a lot og ghosts spawn in and I lag, what should I do?
 
-A: Close the game and log in again. If this doesn't work, look online for tutorials on how to icrease your game allocated ram. You might also just need a new computer.
+> A: Close the game and log in again. If this doesn't work, look online for tutorials on how to icrease your game allocated ram. You might also just need a new computer.
 
-**Q:** When I open a lucky block a lot of items come out but when I take them I get only few of them and others disappear. Why?
+> **Q:** When I open a lucky block a lot of items come out but when I take them I get only few of them and others disappear. Why?
 
-A: Thats because I like to keep things unique. so this way no one can tell how many drops there are.
+> A: Thats because I like to keep things unique. so this way no one can tell how many drops there are.
 
-**Q:** My favorite youtuber is ________ and they are missing, what should I do?
+> **Q:** My favorite youtuber is ________ and they are missing, what should I do?
 
-A: Look down at contributing to add it yourself. Otherwise, ask me to add them.
+> A: Look down at contributing to add it yourself. Otherwise, ask me to add them.
 
-**Q:** I have done a review of this mod, can you link it?
+> **Q:** I have done a review of this mod, can you link it?
 
-A: Let me know I might put it here. :D
+> A: Let me know I might put it here. :D
 
 ## Drops
 Every luck block in this mod has its own drops, some drops are common though. Each block has 100 random drops that you can get, so in total there are 4000+ random drops that you can get by this mod. More are coming.
