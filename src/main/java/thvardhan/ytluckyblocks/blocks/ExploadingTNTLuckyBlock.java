@@ -153,7 +153,6 @@ public class ExploadingTNTLuckyBlock extends Block {
             case 12: {
                 EntityGuardian g = new EntityGuardian(worldIn);
                 ExtraFunctions.summonMobsNearby(g, 15, worldIn, pos, rand);
-                g.setElder();
                 ExtraFunctions.summonMobsNearby(g, 5, worldIn, pos, rand);
                 break;
             }

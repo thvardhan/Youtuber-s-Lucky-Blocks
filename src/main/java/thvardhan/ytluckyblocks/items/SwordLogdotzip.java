@@ -19,7 +19,7 @@ public class SwordLogdotzip extends ItemSword {
 
 
     @Override
-    public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
+    public void addInformation(ItemStack stack, EntityPlayer playerIn, List tooltip, boolean advanced) {
 
         tooltip.add(EnumChatFormatting.RED + "I Have Power Of Logdotzip");
         tooltip.add(EnumChatFormatting.BLUE + "And I Seriously Dont Have Any Enchantments");
@@ -27,6 +27,7 @@ public class SwordLogdotzip extends ItemSword {
 
         super.addInformation(stack, playerIn, tooltip, advanced);
     }
+
 
 
 }

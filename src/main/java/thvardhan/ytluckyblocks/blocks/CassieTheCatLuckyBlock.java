@@ -237,7 +237,7 @@ public class CassieTheCatLuckyBlock extends Block {
             }
             case 34: {
                 EntityGuardian t = new EntityGuardian(worldIn);
-                t.setElder();
+
                 ExtraFunctions.summonMobsNearby(t, 15, worldIn, pos, rand);
                 break;
             }

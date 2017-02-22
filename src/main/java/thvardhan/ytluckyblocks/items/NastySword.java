@@ -19,12 +19,10 @@ public class NastySword extends ItemSword {
     }
 
     @Override
-    public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
+    public void getSubItems(Item itemIn, CreativeTabs tab, List subItems) {
         ItemStack s = new ItemStack(this);
         s.addEnchantment(Enchantment.fireAspect, 60);
         subItems.add(s);
 
     }
-
-
 }

@@ -16,7 +16,7 @@ import thvardhan.ytluckyblocks.entity.*;
 @Mod(modid = Main.MODID, version = Main.VERSION, name = Main.NAME)
 public class Main {
     public static final String MODID = "ytluckyblocks";
-    public static final String VERSION = "6.1.0";
+    public static final String VERSION = "6.1.1";
     public static final String NAME = "YouTuber's Lucky Blocks Mod";
     @SidedProxy(clientSide = "thvardhan.ytluckyblocks.ClientProxy", serverSide = "thvardhan.ytluckyblocks.ServerProxy")
     public static CommonProxy proxy;

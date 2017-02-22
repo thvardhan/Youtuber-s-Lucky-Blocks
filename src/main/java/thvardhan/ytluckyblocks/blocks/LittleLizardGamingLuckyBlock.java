@@ -148,8 +148,7 @@ public class LittleLizardGamingLuckyBlock extends Block {
             case 12: {
                 EntityGuardian q = new EntityGuardian(worldIn);
                 ExtraFunctions.summonMobsNearby(q, 15, worldIn, pos, rand);
-                q.setElder();
-                ExtraFunctions.summonMobsNearby(q, 5, worldIn, pos, rand);
+                 ExtraFunctions.summonMobsNearby(q, 5, worldIn, pos, rand);
                 break;
             }
             case 13: {

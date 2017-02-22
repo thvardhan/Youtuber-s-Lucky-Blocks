@@ -1,7 +1,6 @@
 package thvardhan.ytluckyblocks.entity;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.monster.EntityIronGolem;
@@ -13,11 +12,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.pathfinding.PathNavigateGround;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
 public class EntityGhost extends EntityMob {
@@ -27,7 +23,6 @@ public class EntityGhost extends EntityMob {
 
     public EntityGhost(World worldIn) {
         super(worldIn);
-        ((PathNavigateGround) this.getNavigator()).setBreakDoors(true);
         this.tasks.addTask(0, new EntityAISwimming(this));
         this.tasks.addTask(2, new EntityAIAttackOnCollide(this, EntityPlayer.class, 1.0D, false));
         this.tasks.addTask(5, new EntityAIMoveTowardsRestriction(this, 1.0D));
@@ -61,15 +56,6 @@ public class EntityGhost extends EntityMob {
         this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(10D);
         this.getEntityAttribute(SharedMonsterAttributes.knockbackResistance).setBaseValue(2D);
     }
-
-    @Override
-    public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty,
-                                            IEntityLivingData livingdata) {
-
-
-        return livingdata;
-    }
-
 
     public void onLivingUpdate() {
         if (this.worldObj.isRemote) {
@@ -115,11 +101,6 @@ public class EntityGhost extends EntityMob {
         return super.attackEntityAsMob(entityIn);
     }
 
-
-    @Override
-    public float getBlockPathWeight(BlockPos pos) {
-        return super.getBlockPathWeight(pos);
-    }
 
 
     @Override

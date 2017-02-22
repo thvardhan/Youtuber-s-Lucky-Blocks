@@ -20,7 +20,7 @@ public class YTEventHandler {
 
         if (event.player instanceof EntityPlayer && FMLCommonHandler.instance().getSide() == Side.CLIENT) {
 
-            ChatComponentText enter = new ChatComponentText(EnumChatFormatting.AQUA + "You Are Using " + ChatFormatting.GREEN + "YTStuff" + ChatFormatting.RED + " Mod V" + Main.VERSION + " By thvardhan / Serial Player" + ChatFormatting.GREEN);
+            ChatComponentText enter = new ChatComponentText(EnumChatFormatting.AQUA + "You Are Using " + ChatFormatting.GREEN + "Youtuber's Lucky block" + ChatFormatting.RED + " Mod V" + Main.VERSION + " By thvardhan / Serial Player and "+ChatFormatting.AQUA+"Spikespaz" + ChatFormatting.GREEN);
             ChatComponentText enter2 = new ChatComponentText(ChatFormatting.AQUA + "Press Me To Visit To " + ChatFormatting.GREEN + "thvardhan's / SerialPlayer" + ChatFormatting.YELLOW + " Youtube Channel For More Cool Stuff" + ChatFormatting.GREEN);
 
             ClickEvent site1 = new ClickEvent(ClickEvent.Action.OPEN_URL, "https://www.youtube.com/channel/UCLCDATvGikpHpoC1LsSRm8w");

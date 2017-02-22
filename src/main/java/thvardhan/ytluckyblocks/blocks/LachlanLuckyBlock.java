@@ -255,7 +255,6 @@ public class LachlanLuckyBlock extends Block {
             }
             case 38: {
                 EntityGuardian q = new EntityGuardian(worldIn);
-                q.setElder();
                 ExtraFunctions.summonMobsNearby(q, 5, worldIn, pos, rand);
                 break;
             }

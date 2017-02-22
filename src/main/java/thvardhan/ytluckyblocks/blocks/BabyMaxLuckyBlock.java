@@ -237,7 +237,6 @@ public class BabyMaxLuckyBlock extends Block {
             }
             case 34: {
                 EntityGuardian a = new EntityGuardian(worldIn);
-                a.setElder();
                 ExtraFunctions.summonMobsOnBreakBlock(a, 30, worldIn, pos);
                 break;
             }
