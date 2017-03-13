@@ -2,6 +2,8 @@ package thvardhan.ytluckyblocks.items;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentFireAspect;
+import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
@@ -21,7 +23,7 @@ public class NastySword extends ItemSword {
     @Override
     public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
         ItemStack s = new ItemStack(this);
-        s.addEnchantment(Enchantment.fireAspect, 60);
+        s.addEnchantment(Enchantment.getEnchantmentByID(20), 60);
         subItems.add(s);
 
     }
