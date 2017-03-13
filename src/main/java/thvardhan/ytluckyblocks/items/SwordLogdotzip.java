@@ -1,9 +1,9 @@
 package thvardhan.ytluckyblocks.items;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
-import net.minecraft.util.EnumChatFormatting;
 import thvardhan.ytluckyblocks.CommonProxy;
 
 import java.util.List;
@@ -21,8 +21,8 @@ public class SwordLogdotzip extends ItemSword {
     @Override
     public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
 
-        tooltip.add(EnumChatFormatting.RED + "I Have Power Of Logdotzip");
-        tooltip.add(EnumChatFormatting.BLUE + "And I Seriously Dont Have Any Enchantments");
+        tooltip.add(ChatFormatting.RED + "I Have Power Of Logdotzip");
+        tooltip.add(ChatFormatting.BLUE + "And I Seriously Dont Have Any Enchantments");
 
 
         super.addInformation(stack, playerIn, tooltip, advanced);
