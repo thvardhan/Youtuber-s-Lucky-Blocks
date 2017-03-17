@@ -11,8 +11,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.math.BlockPos;
+import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
@@ -34,11 +34,11 @@ public class CaptainSparkelzLuckyBlock extends Block {
         this.setCreativeTab(CommonProxy.tabYTStuffMod);
         this.setHardness(hardness);
         this.setResistance(resistance);
-        this.setBlockBounds(0, 0, 0, 1, 0.9F, 1);
+
     }
 
     public CaptainSparkelzLuckyBlock(String unlocalizedName, float hardness, float resistance) {
-        this(unlocalizedName, Material.rock, 0, 10000);
+        this(unlocalizedName, Material.ROCK, 0, 10000);
     }
 
     public CaptainSparkelzLuckyBlock(String unlocalizedName) {
@@ -46,10 +46,9 @@ public class CaptainSparkelzLuckyBlock extends Block {
     }
 
     @Override
-    public boolean isOpaqueCube() {
+    public boolean isVisuallyOpaque() {
         return false;
     }
-
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
         for (int i = 0; i < 3; ++i) {
@@ -61,21 +60,20 @@ public class CaptainSparkelzLuckyBlock extends Block {
             double d3 = (double) (rand.nextFloat() * (float) j);
             double d4 = ((double) rand.nextFloat() - 0.5D) * 0.125D;
             double d5 = (double) (rand.nextFloat() * (float) k);
-            worldIn.spawnParticle(EnumParticleTypes.PORTAL, d0, d1, d2, d3, d4, d5, new int[0]);
+            worldIn.spawnParticle(EnumParticleTypes.PORTAL, d0, d1, d2, d3, d4, d5);
         }
     }
 
     @Override
-    public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
-
+    public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
         if (!world.isRemote && player != null && !(player instanceof FakePlayer)) {
             world.setBlockToAir(pos);
             drops(world, pos, player);
         }
 
-        return true;
-
+        return false;
     }
+
 
     private void drops(World worldIn, BlockPos pos, EntityPlayer player) {
 
@@ -140,8 +138,8 @@ public class CaptainSparkelzLuckyBlock extends Block {
                 break;
             }
             case 13: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.anvil);
-                ExtraFunctions.chat(EnumChatFormatting.DARK_BLUE + "You Should Be Happy It Dint Fell On Ya", player);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.ANVIL);
+                ExtraFunctions.chat(ChatFormatting.DARK_BLUE + "You Should Be Happy It Dint Fell On Ya", player);
                 break;
             }
             case 14: {
@@ -157,7 +155,7 @@ public class CaptainSparkelzLuckyBlock extends Block {
                 break;
             }
             case 17: {
-                ExtraFunctions.summonItemWithLoop(worldIn, pos, Items.diamond, 12, 0, 0);
+                ExtraFunctions.summonItemWithLoop(worldIn, pos, Items.DIAMOND, 12, 0, 0);
                 break;
             }
             case 18: {
@@ -165,7 +163,7 @@ public class CaptainSparkelzLuckyBlock extends Block {
                 break;
             }
             case 19: {
-                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, ModItems.swordLogdotzip, EnumChatFormatting.RED + "LogDotZip's Best Sword", Enchantment.fireAspect, 7);
+                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, ModItems.swordLogdotzip, ChatFormatting.RED + "LogDotZip's Best Sword", Enchantment.getEnchantmentByID(20), 7);
                 break;
             }
             case 20: {
@@ -177,8 +175,8 @@ public class CaptainSparkelzLuckyBlock extends Block {
                 break;
             }
             case 22: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.command_block);
-                ExtraFunctions.chat(EnumChatFormatting.GREEN + "Try To Use This :D", player);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.COMMAND_BLOCK);
+                ExtraFunctions.chat(ChatFormatting.GREEN + "Try To Use This :D", player);
                 break;
             }
             case 23: {
@@ -204,7 +202,7 @@ public class CaptainSparkelzLuckyBlock extends Block {
                 break;
             }
             case 28: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.golden_apple), 64, 0, 0);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.GOLDEN_APPLE), 64, 0, 0);
                 break;
             }
             case 29: {
@@ -232,31 +230,31 @@ public class CaptainSparkelzLuckyBlock extends Block {
                 break;
             }
             case 35: {
-                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, ModItems.mic, "mic", Enchantment.fireAspect, 8);
+                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, ModItems.mic, "mic", Enchantment.getEnchantmentByID(20), 8);
                 break;
             }
             case 36: {
-                Enchantment[] e = {Enchantment.fireAspect, Enchantment.aquaAffinity, Enchantment.fireProtection, Enchantment.protection, Enchantment.respiration, Enchantment.projectileProtection, Enchantment.blastProtection};
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.diamond_boots), e, 8, worldIn, pos);
+                Enchantment[] e = {Enchantment.getEnchantmentByID(20), Enchantment.getEnchantmentByID(6), Enchantment.getEnchantmentByID(1), Enchantment.getEnchantmentByID(0), Enchantment.getEnchantmentByID(5), Enchantment.getEnchantmentByID(4), Enchantment.getEnchantmentByID(3)};
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.DIAMOND_BOOTS), e, 8, worldIn, pos);
                 break;
             }
             case 37: {
-                Enchantment[] e = {Enchantment.fireAspect, Enchantment.aquaAffinity, Enchantment.fireProtection, Enchantment.protection, Enchantment.respiration, Enchantment.projectileProtection, Enchantment.blastProtection};
+                Enchantment[] e = {Enchantment.getEnchantmentByID(20), Enchantment.getEnchantmentByID(6), Enchantment.getEnchantmentByID(1), Enchantment.getEnchantmentByID(0), Enchantment.getEnchantmentByID(5), Enchantment.getEnchantmentByID(4), Enchantment.getEnchantmentByID(3)};
 
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.diamond_leggings), e, 5, worldIn, pos);
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.DIAMOND_LEGGINGS), e, 5, worldIn, pos);
 
                 break;
             }
             case 38: {
-                Enchantment[] e = {Enchantment.fireAspect, Enchantment.aquaAffinity, Enchantment.fireProtection, Enchantment.protection, Enchantment.respiration, Enchantment.projectileProtection, Enchantment.blastProtection};
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.diamond_chestplate), e, 4, worldIn, pos);
+                Enchantment[] e = {Enchantment.getEnchantmentByID(20), Enchantment.getEnchantmentByID(6), Enchantment.getEnchantmentByID(1), Enchantment.getEnchantmentByID(0), Enchantment.getEnchantmentByID(5), Enchantment.getEnchantmentByID(4), Enchantment.getEnchantmentByID(3)};
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.DIAMOND_CHESTPLATE), e, 4, worldIn, pos);
 
                 break;
             }
             case 39: {
-                Enchantment[] e = {Enchantment.fireAspect, Enchantment.aquaAffinity, Enchantment.fireProtection, Enchantment.protection, Enchantment.respiration, Enchantment.projectileProtection, Enchantment.blastProtection};
+                Enchantment[] e = {Enchantment.getEnchantmentByID(20), Enchantment.getEnchantmentByID(6), Enchantment.getEnchantmentByID(1), Enchantment.getEnchantmentByID(0), Enchantment.getEnchantmentByID(5), Enchantment.getEnchantmentByID(4), Enchantment.getEnchantmentByID(3)};
 
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.diamond_helmet), e, 6, worldIn, pos);
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.DIAMOND_HELMET), e, 6, worldIn, pos);
                 break;
             }
             case 40: {
@@ -269,7 +267,7 @@ public class CaptainSparkelzLuckyBlock extends Block {
             }
             case 42: {
                 ExtraFunctions.endWellStruct(worldIn, pos, rand);
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.golden_apple), 44, 1, 50);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.GOLDEN_APPLE), 44, 1, 50);
                 break;
             }
             case 43: {
@@ -281,15 +279,15 @@ public class CaptainSparkelzLuckyBlock extends Block {
                 break;
             }
             case 45: {
-                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.beacon);
+                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.BEACON);
                 break;
             }
             case 46: {
-                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.cake);
+                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.CAKE);
                 break;
             }
             case 47: {
-                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.clay);
+                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.CLAY);
                 break;
             }
             case 48: {

@@ -10,11 +10,12 @@ import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.init.PotionTypes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.math.BlockPos;
+import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
@@ -35,11 +36,11 @@ public class LachlanLuckyBlock extends Block {
         this.setCreativeTab(CommonProxy.tabYTStuffMod);
         this.setHardness(hardness);
         this.setResistance(resistance);
-        this.setBlockBounds(0, 0, 0, 1, 0.9F, 1);
+
     }
 
     public LachlanLuckyBlock(String unlocalizedName, float hardness, float resistance) {
-        this(unlocalizedName, Material.rock, 0, 10000);
+        this(unlocalizedName, Material.ROCK, 0, 10000);
     }
 
     public LachlanLuckyBlock(String unlocalizedName) {
@@ -47,10 +48,9 @@ public class LachlanLuckyBlock extends Block {
     }
 
     @Override
-    public boolean isOpaqueCube() {
+    public boolean isVisuallyOpaque() {
         return false;
     }
-
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
         for (int i = 0; i < 3; ++i) {
@@ -62,13 +62,13 @@ public class LachlanLuckyBlock extends Block {
             double d3 = (double) (rand.nextFloat() * (float) j);
             double d4 = ((double) rand.nextFloat() - 0.5D) * 0.125D;
             double d5 = (double) (rand.nextFloat() * (float) k);
-            worldIn.spawnParticle(EnumParticleTypes.SPELL_WITCH, d0, d1, d2, d3, d4, d5, new int[0]);
+            worldIn.spawnParticle(EnumParticleTypes.SPELL_WITCH, d0, d1, d2, d3, d4, d5);
         }
     }
 
 
     @Override
-    public boolean removedByPlayer(World worldIn, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+    public boolean removedByPlayer(IBlockState state, World worldIn, BlockPos pos, EntityPlayer player, boolean willHarvest) {
         if (!worldIn.isRemote && player != null && !(player instanceof FakePlayer)) {
 
             worldIn.setBlockToAir(pos);
@@ -76,19 +76,18 @@ public class LachlanLuckyBlock extends Block {
 
             drops(worldIn, pos, player);
         }
-        return true;
+        return false;
 
-        //super.onBlockDestroyedByPlayer(worldIn, pos, state);
     }
 
     private void drops(World worldIn, BlockPos pos, EntityPlayer player) {
 
         Enchantment[] e = new Enchantment[5];
-        e[0] = Enchantment.flame;
-        e[1] = Enchantment.knockback;
-        e[2] = Enchantment.power;
-        e[3] = Enchantment.thorns;
-        e[4] = Enchantment.looting;
+        e[0] = Enchantment.getEnchantmentByID(50);
+        e[1] = Enchantment.getEnchantmentByID(19);
+        e[2] = Enchantment.getEnchantmentByID(48);
+        e[3] = Enchantment.getEnchantmentByID(7);
+        e[4] = Enchantment.getEnchantmentByID(21);
 
 
         Random rand = new Random();
@@ -97,7 +96,7 @@ public class LachlanLuckyBlock extends Block {
         switch (rand.nextInt(51)) {
 
             default: {
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.diamond_sword), e, 5, worldIn, pos);
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.DIAMOND_SWORD), e, 5, worldIn, pos);
             }
             case 0: {
                 ExtraFunctions.summonMobsNearby(new EntityLachlan(worldIn), 5, worldIn, pos, rand);
@@ -116,7 +115,7 @@ public class LachlanLuckyBlock extends Block {
                 break;
             }
             case 4: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.diamond_sword));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.DIAMOND_SWORD));
                 break;
             }
             case 5: {
@@ -124,15 +123,15 @@ public class LachlanLuckyBlock extends Block {
                 break;
             }
             case 6: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.wool);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.WOOL);
                 break;
             }
             case 7: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.diamond_axe));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.DIAMOND_AXE));
                 break;
             }
             case 8: {
-                ExtraFunctions.summonItemWithLoop(worldIn, pos, Items.apple, 10, 0, 0);
+                ExtraFunctions.summonItemWithLoop(worldIn, pos, Items.APPLE, 10, 0, 0);
                 break;
             }
             case 9: {
@@ -182,15 +181,15 @@ public class LachlanLuckyBlock extends Block {
                 break;
             }
             case 20: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.lead));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.LEAD));
                 break;
             }
             case 21: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.nether_star));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.NETHER_STAR));
                 break;
             }
             case 22: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.snowball), 64, 1, 1);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.SNOWBALL), 64, 1, 1);
                 break;
             }
             case 23: {
@@ -198,15 +197,15 @@ public class LachlanLuckyBlock extends Block {
                 break;
             }
             case 24: {
-                ExtraFunctions.setOneBlock(worldIn, new BlockPos(player.posX, player.posY, player.posZ), Blocks.flowing_lava);
+                ExtraFunctions.setOneBlock(worldIn, new BlockPos(player.posX, player.posY, player.posZ), Blocks.FLOWING_LAVA);
                 break;
             }
             case 25: {
-                ExtraFunctions.setOneBlock(worldIn, new BlockPos(player.posX, player.posY, player.posZ), Blocks.flowing_water);
+                ExtraFunctions.setOneBlock(worldIn, new BlockPos(player.posX, player.posY, player.posZ), Blocks.FLOWING_WATER);
                 break;
             }
             case 26: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.golden_apple));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.GOLDEN_APPLE));
                 break;
             }
             case 27: {
@@ -222,19 +221,19 @@ public class LachlanLuckyBlock extends Block {
                 break;
             }
             case 30: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.blaze_rod), 15, 0, 0);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.BLAZE_ROD), 15, 0, 0);
                 break;
             }
             case 31: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.diamond_block);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.DIAMOND_BLOCK);
                 break;
             }
             case 32: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.emerald_block);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.EMERALD_BLOCK);
                 break;
             }
             case 33: {
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.diamond_pickaxe), e, 3, worldIn, pos);
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.DIAMOND_PICKAXE), e, 3, worldIn, pos);
                 break;
             }
             case 34: {
@@ -242,7 +241,7 @@ public class LachlanLuckyBlock extends Block {
                 break;
             }
             case 35: {
-                ExtraFunctions.chat(EnumChatFormatting.AQUA + "Hello There ~", player);
+                ExtraFunctions.chat(ChatFormatting.AQUA + "Hello There ~", player);
                 break;
             }
             case 36: {
@@ -260,7 +259,7 @@ public class LachlanLuckyBlock extends Block {
                 break;
             }
             case 39: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.milk_bucket));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.MILK_BUCKET));
                 break;
             }
             case 40: {
@@ -276,11 +275,11 @@ public class LachlanLuckyBlock extends Block {
                 break;
             }
             case 43: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.bookshelf);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.BOOKSHELF);
                 break;
             }
             case 44: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.enchanting_table);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.ENCHANTING_TABLE);
                 break;
             }
             case 45: {
@@ -288,7 +287,7 @@ public class LachlanLuckyBlock extends Block {
                 break;
             }
             case 46: {
-                ExtraFunctions.effectPlayer(player, new PotionEffect(Potion.absorption.id, 10, 500));
+                ExtraFunctions.effectPlayer(player, new PotionEffect(PotionTypes.REGENERATION.getEffects().get(0).getPotion(), 10, 500));
                 break;
             }
             case 47: {

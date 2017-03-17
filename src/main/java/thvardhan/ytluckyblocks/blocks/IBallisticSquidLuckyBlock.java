@@ -13,8 +13,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.math.BlockPos;
+import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
@@ -37,11 +37,11 @@ public class IBallisticSquidLuckyBlock extends Block {
         this.setCreativeTab(CommonProxy.tabYTStuffMod);
         this.setHardness(hardness);
         this.setResistance(resistance);
-        this.setBlockBounds(0, 0, 0, 1, 0.9F, 1);
+
     }
 
     public IBallisticSquidLuckyBlock(String unlocalizedName, float hardness, float resistance) {
-        this(unlocalizedName, Material.rock, 0, 10000);
+        this(unlocalizedName, Material.ROCK, 0, 10000);
     }
 
     public IBallisticSquidLuckyBlock(String unlocalizedName) {
@@ -49,10 +49,9 @@ public class IBallisticSquidLuckyBlock extends Block {
     }
 
     @Override
-    public boolean isOpaqueCube() {
+    public boolean isVisuallyOpaque() {
         return false;
     }
-
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
         for (int i = 0; i < 3; ++i) {
@@ -64,20 +63,21 @@ public class IBallisticSquidLuckyBlock extends Block {
             double d3 = (double) (rand.nextFloat() * (float) j);
             double d4 = ((double) rand.nextFloat() - 0.5D) * 0.125D;
             double d5 = (double) (rand.nextFloat() * (float) k);
-            worldIn.spawnParticle(EnumParticleTypes.PORTAL, d0, d1, d2, d3, d4, d5, new int[0]);
+            worldIn.spawnParticle(EnumParticleTypes.PORTAL, d0, d1, d2, d3, d4, d5);
         }
     }
 
 
     @Override
-    public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+    public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
         if (!world.isRemote && player != null && !(player instanceof FakePlayer)) {
 
             world.setBlockToAir(pos);
             drops(world, pos, player);
         }
-        return true;
+        return false;
     }
+
 
 
     private void drops(World worldIn, BlockPos pos, EntityPlayer player) {
@@ -107,9 +107,9 @@ public class IBallisticSquidLuckyBlock extends Block {
                 break;
             }
             case 4: {
-                Enchantment[] e = {Enchantment.sharpness, Enchantment.baneOfArthropods, Enchantment.fireAspect, Enchantment.smite};
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.diamond_shovel), e, 9, worldIn, pos);
-                ExtraFunctions.chat("Someone Just Got " + EnumChatFormatting.DARK_AQUA + "GOD" + EnumChatFormatting.WHITE + " Shovel", player);
+                Enchantment[] e = {Enchantment.getEnchantmentByID(16), Enchantment.getEnchantmentByID(18), Enchantment.getEnchantmentByID(20), Enchantment.getEnchantmentByID(17)};
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.DIAMOND_SHOVEL), e, 9, worldIn, pos);
+                ExtraFunctions.chat("Someone Just Got " + ChatFormatting.DARK_AQUA + "GOD" + ChatFormatting.WHITE + " Shovel", player);
                 break;
             }
             case 5: {
@@ -187,12 +187,12 @@ public class IBallisticSquidLuckyBlock extends Block {
                 break;
             }
             case 23: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.enchanting_table);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.ENCHANTING_TABLE);
                 break;
             }
             case 24: {
                 ExtraFunctions.chat("You May Want To Craft Anything :3", player);
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.crafting_table);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.CRAFTING_TABLE);
                 break;
             }
             case 25: {
@@ -204,11 +204,11 @@ public class IBallisticSquidLuckyBlock extends Block {
                 break;
             }
             case 27: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.bedrock), 64, 0, 0);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.BEDROCK), 64, 0, 0);
                 break;
             }
             case 28: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.obsidian), 64, 0, 0);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.OBSIDIAN), 64, 0, 0);
                 break;
             }
             case 29: {
@@ -233,11 +233,11 @@ public class IBallisticSquidLuckyBlock extends Block {
                 break;
             }
             case 34: {
-                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.cake);
+                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.CAKE);
                 break;
             }
             case 35: {
-                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.dragon_egg);
+                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.DRAGON_EGG);
                 break;
             }
             case 36: {
@@ -245,11 +245,11 @@ public class IBallisticSquidLuckyBlock extends Block {
                 break;
             }
             case 37: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.diamond_boots));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.DIAMOND_BOOTS));
                 break;
             }
             case 38: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.brewing_stand);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.BREWING_STAND);
                 ExtraFunctions.potionKit(worldIn, pos, rand);
                 break;
             }
@@ -258,7 +258,7 @@ public class IBallisticSquidLuckyBlock extends Block {
                 break;
             }
             case 40: {
-                ExtraFunctions.summonBlockWithLoop(worldIn, pos, Blocks.emerald_block, 20, 0, 0);
+                ExtraFunctions.summonBlockWithLoop(worldIn, pos, Blocks.EMERALD_BLOCK, 20, 0, 0);
                 break;
             }
             case 41: {
@@ -274,7 +274,7 @@ public class IBallisticSquidLuckyBlock extends Block {
                 break;
             }
             case 44: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.diamond_block), 10, 0, 0);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.DIAMOND_BLOCK), 10, 0, 0);
                 break;
             }
             case 45: {

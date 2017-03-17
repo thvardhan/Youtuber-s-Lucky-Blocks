@@ -13,11 +13,13 @@ import net.minecraft.entity.passive.EntitySquid;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.init.PotionTypes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.potion.PotionType;
+import net.minecraft.util.math.BlockPos;
+import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
@@ -42,7 +44,7 @@ public class BajanCanadianLuckyBlock extends Block {
     }
 
     public BajanCanadianLuckyBlock(String unlocalizedName, float hardness, float resistance) {
-        this(unlocalizedName, Material.rock, 0, 10000);
+        this(unlocalizedName, Material.ROCK, 0, 10000);
     }
 
     public BajanCanadianLuckyBlock(String unlocalizedName) {
@@ -50,10 +52,9 @@ public class BajanCanadianLuckyBlock extends Block {
     }
 
     @Override
-    public boolean isOpaqueCube() {
+    public boolean isVisuallyOpaque() {
         return false;
     }
-
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
         for (int i = 0; i < 3; ++i) {
@@ -65,30 +66,27 @@ public class BajanCanadianLuckyBlock extends Block {
             double d3 = (double) (rand.nextFloat() * (float) j);
             double d4 = ((double) rand.nextFloat() - 0.5D) * 0.125D;
             double d5 = (double) (rand.nextFloat() * (float) k);
-            worldIn.spawnParticle(EnumParticleTypes.ENCHANTMENT_TABLE, d0, d1, d2, d3, d4, d5, new int[0]);
+            worldIn.spawnParticle(EnumParticleTypes.ENCHANTMENT_TABLE, d0, d1, d2, d3, d4, d5);
         }
     }
 
     @Override
-    public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+    public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
         if (!world.isRemote && player != null && !(player instanceof FakePlayer)) {
-
             world.setBlockToAir(pos);
             drops(world, pos, player);
         }
-        return true;
-
-        //super.onBlockDestroyedByPlayer(worldIn, pos, state);
+        return false;
     }
 
     private void drops(World worldIn, BlockPos pos, EntityPlayer player) {
 
 
         Enchantment[] e = new Enchantment[4];
-        e[0] = Enchantment.flame;
-        e[2] = Enchantment.power;
-        e[3] = Enchantment.thorns;
-        e[1] = Enchantment.looting;
+        e[0] = Enchantment.getEnchantmentByID(50);
+        e[2] = Enchantment.getEnchantmentByID(48);
+        e[3] = Enchantment.getEnchantmentByID(7);
+        e[1] = Enchantment.getEnchantmentByID(21);
 
 
         Random rand = new Random();
@@ -97,7 +95,7 @@ public class BajanCanadianLuckyBlock extends Block {
         switch (rand.nextInt(101)) {
 
             default: {
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.diamond_sword), e, 5, worldIn, pos);
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.DIAMOND_SWORD), e, 5, worldIn, pos);
             }
             case 0: {
                 ExtraFunctions.flyingIsle(worldIn, pos);
@@ -144,7 +142,7 @@ public class BajanCanadianLuckyBlock extends Block {
                 break;
             }
             case 10: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.yellow_flower);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.YELLOW_FLOWER);
                 break;
             }
             case 11: {
@@ -152,45 +150,45 @@ public class BajanCanadianLuckyBlock extends Block {
                 break;
             }
             case 12: {
-                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.diamond_axe, "Betty", Enchantment.sharpness, 2);
+                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.DIAMOND_AXE, "Betty", Enchantment.getEnchantmentByID(16), 2);
                 break;
             }
             case 13: {
-                ItemStack s = new ItemStack(Items.gold_ingot);
+                ItemStack s = new ItemStack(Items.GOLD_INGOT);
                 s.setStackDisplayName("Chicken Nugget Butter");
                 ExtraFunctions.summonItemStackWithLoop(worldIn, pos, s, 40, 1, 5);
                 break;
             }
             case 14: {
-                ItemStack s = new ItemStack(Items.dye, 1, 4);
+                ItemStack s = new ItemStack(Items.DYE, 1, 4);
                 s.setStackDisplayName("Blue Pickels");
                 ExtraFunctions.summonItemStackWithLoop(worldIn, pos, s, 64, 1, 5);
 
                 break;
             }
             case 15: {
-                ItemStack s = new ItemStack(Items.pumpkin_pie);
+                ItemStack s = new ItemStack(Items.PUMPKIN_PIE);
                 s.setStackDisplayName("Pumpkin Pie made by NoochM's Mom");
                 ExtraFunctions.summonItemStackWithLoop(worldIn, pos, s, 15, 0, 0);
                 break;
             }
             case 16: {
-                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.fishing_rod, "Spec Cannon", Enchantment.luckOfTheSea, 4);
+                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.FISHING_ROD, "Spec Cannon", Enchantment.getEnchantmentByID(61), 4);
                 break;
             }
             case 17: {
-                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.diamond_sword, "Big Bertha", Enchantment.sharpness, rand.nextInt(20) + 1);
+                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.DIAMOND_SWORD, "Big Bertha", Enchantment.getEnchantmentByID(16), rand.nextInt(20) + 1);
                 break;
             }
             case 18: {
-                ItemStack item = new ItemStack(Items.cooked_fish);
+                ItemStack item = new ItemStack(Items.COOKED_FISH);
                 item.setStackDisplayName("Vile Creature");
                 ExtraFunctions.summonItemStackWithLoop(worldIn, pos, item, 40, 0, 0);
                 break;
             }
             case 19: {
                 ExtraFunctions.materialKit(worldIn, pos, rand);
-                ExtraFunctions.chat(EnumChatFormatting.BOLD + "DIAMONDS?!", player);
+                ExtraFunctions.chat(ChatFormatting.BOLD + "DIAMONDS?!", player);
                 break;
             }
             case 20: {
@@ -207,7 +205,8 @@ public class BajanCanadianLuckyBlock extends Block {
                 break;
             }
             case 23: {
-                ExtraFunctions.effectPlayer(player, new PotionEffect(Potion.absorption.getId(), 1000, 4));
+
+                ExtraFunctions.effectPlayer(player, new PotionEffect(PotionTypes.REGENERATION.getEffects().get(0).getPotion(), 1000, 4));
                 break;
             }
             case 24: {
@@ -219,7 +218,7 @@ public class BajanCanadianLuckyBlock extends Block {
                 break;
             }
             case 26: {
-                ExtraFunctions.addRandomEnchtToRandomItems(worldIn, new ItemStack[]{new ItemStack(Items.bow)}, e, 10, pos, rand);
+                ExtraFunctions.addRandomEnchtToRandomItems(worldIn, new ItemStack[]{new ItemStack(Items.BOW)}, e, 10, pos, rand);
                 break;
             }
             case 27: {
@@ -326,11 +325,11 @@ public class BajanCanadianLuckyBlock extends Block {
                 break;
             }
             case 52: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.bed));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.BED));
                 break;
             }
             case 53: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.glowstone), 50, 0, 0);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.GLOWSTONE), 50, 0, 0);
                 break;
             }
             case 54: {
@@ -338,7 +337,7 @@ public class BajanCanadianLuckyBlock extends Block {
                 break;
             }
             case 55: {
-                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, ModItems.battleAxe, "BATTLE!", Enchantment.flame, 5);
+                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, ModItems.battleAxe, "BATTLE!", Enchantment.getEnchantmentByID(50), 5);
                 break;
             }
             case 56: {
@@ -382,17 +381,17 @@ public class BajanCanadianLuckyBlock extends Block {
                 break;
             }
             case 66: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.command_block);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.COMMAND_BLOCK);
                 break;
             }
             case 67: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.flowing_lava);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.FLOWING_LAVA);
                 break;
             }
             case 68: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.obsidian);
-                ExtraFunctions.chat(EnumChatFormatting.AQUA + "Try To Break Me :P", player);
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.diamond_pickaxe));
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.OBSIDIAN);
+                ExtraFunctions.chat(ChatFormatting.AQUA + "Try To Break Me :P", player);
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.DIAMOND_PICKAXE));
                 break;
             }
             case 69: {
@@ -412,7 +411,7 @@ public class BajanCanadianLuckyBlock extends Block {
                 break;
             }
             case 73: {
-                ExtraFunctions.summonItemWithLoop(worldIn, pos, Items.brewing_stand, 40, 1, 10);
+                ExtraFunctions.summonItemWithLoop(worldIn, pos, Items.BREWING_STAND, 40, 1, 10);
                 break;
             }
             case 74: {
@@ -424,7 +423,7 @@ public class BajanCanadianLuckyBlock extends Block {
                 break;
             }
             case 76: {
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.baked_potato), e, 1, worldIn, pos);
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.BAKED_POTATO), e, 1, worldIn, pos);
                 break;
             }
             case 77: {
@@ -452,15 +451,15 @@ public class BajanCanadianLuckyBlock extends Block {
                 break;
             }
             case 83: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.apple));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.APPLE));
                 break;
             }
             case 84: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.cooked_porkchop));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.COOKED_PORKCHOP));
                 break;
             }
             case 85: {
-                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.bow, "BOWWWW", Enchantment.punch, 4);
+                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.BOW, "BOWWWW", Enchantment.getEnchantmentByID(49), 4);
                 break;
             }
             case 86: {
@@ -468,7 +467,7 @@ public class BajanCanadianLuckyBlock extends Block {
                 break;
             }
             case 87: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.boat), 10, 1, 10);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.BOAT), 10, 1, 10);
                 break;
             }
             case 88: {
@@ -484,7 +483,7 @@ public class BajanCanadianLuckyBlock extends Block {
                 break;
             }
             case 91: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.blaze_powder));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.BLAZE_POWDER));
                 break;
             }
             case 92: {
@@ -504,11 +503,11 @@ public class BajanCanadianLuckyBlock extends Block {
                 break;
             }
             case 96: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.arrow));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.ARROW));
                 break;
             }
             case 97: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.mushroom_stew), 10, 0, 0);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.MUSHROOM_STEW), 10, 0, 0);
                 break;
             }
             case 98: {
@@ -520,7 +519,7 @@ public class BajanCanadianLuckyBlock extends Block {
                 break;
             }
             case 100: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.command_block);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.COMMAND_BLOCK);
                 break;
             }
 

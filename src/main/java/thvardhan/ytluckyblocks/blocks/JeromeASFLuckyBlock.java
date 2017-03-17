@@ -10,11 +10,12 @@ import net.minecraft.entity.passive.EntityRabbit;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.init.PotionTypes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.math.BlockPos;
+import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
@@ -39,7 +40,7 @@ public class JeromeASFLuckyBlock extends Block {
     }
 
     public JeromeASFLuckyBlock(String unlocalizedName, float hardness, float resistance) {
-        this(unlocalizedName, Material.rock, 0, 10000);
+        this(unlocalizedName, Material.ROCK, 0, 10000);
     }
 
     public JeromeASFLuckyBlock(String unlocalizedName) {
@@ -47,10 +48,9 @@ public class JeromeASFLuckyBlock extends Block {
     }
 
     @Override
-    public boolean isOpaqueCube() {
+    public boolean isVisuallyOpaque() {
         return false;
     }
-
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
         for (int i = 0; i < 3; ++i) {
@@ -62,33 +62,33 @@ public class JeromeASFLuckyBlock extends Block {
             double d3 = (double) (rand.nextFloat() * (float) j);
             double d4 = ((double) rand.nextFloat() - 0.5D) * 0.125D;
             double d5 = (double) (rand.nextFloat() * (float) k);
-            worldIn.spawnParticle(EnumParticleTypes.ENCHANTMENT_TABLE, d0, d1, d2, d3, d4, d5, new int[0]);
+            worldIn.spawnParticle(EnumParticleTypes.ENCHANTMENT_TABLE, d0, d1, d2, d3, d4, d5);
         }
     }
 
 
     @Override
-    public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+    public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
         if (!world.isRemote && player != null && !(player instanceof FakePlayer)) {
             world.setBlockToAir(pos);
             drops(world, pos, player);
 
         }
-        return true;
+        return false;
 
-        //super.onBlockDestroyedByPlayer(worldIn, pos, state);
     }
+
 
     private void drops(World worldIn, BlockPos pos, EntityPlayer player) {
 
         Enchantment[] e = new Enchantment[7];
-        e[0] = Enchantment.flame;
-        e[2] = Enchantment.power;
-        e[3] = Enchantment.thorns;
-        e[4] = Enchantment.looting;
-        e[5] = Enchantment.sharpness;
-        e[6] = Enchantment.blastProtection;
-        e[1] = Enchantment.baneOfArthropods;
+        e[0] = Enchantment.getEnchantmentByID(50);
+        e[2] = Enchantment.getEnchantmentByID(48);
+        e[3] = Enchantment.getEnchantmentByID(7);
+        e[4] = Enchantment.getEnchantmentByID(21);
+        e[5] = Enchantment.getEnchantmentByID(16);
+        e[6] = Enchantment.getEnchantmentByID(3);
+        e[1] = Enchantment.getEnchantmentByID(18);
 
         Random rand = new Random();
 
@@ -96,19 +96,19 @@ public class JeromeASFLuckyBlock extends Block {
         switch (rand.nextInt(101)) {
 
             default: {
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.diamond_sword), e, 5, worldIn, pos);
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.DIAMOND_SWORD), e, 5, worldIn, pos);
             }
             case 0: {
                 ExtraFunctions.addEnchantsMany(new ItemStack(ModItems.ytBoots), e, 10, worldIn, pos);
-                ExtraFunctions.chat(EnumChatFormatting.AQUA + "What is this? Defence or offence?", player);
+                ExtraFunctions.chat(ChatFormatting.AQUA + "What is this? Defence or offence?", player);
                 break;
             }
             case 1: {
-                ExtraFunctions.effectPlayer(player, new PotionEffect(Potion.nightVision.getId(), 1200, 1, true, true));
+                ExtraFunctions.effectPlayer(player, new PotionEffect(PotionTypes.NIGHT_VISION.getEffects().get(0).getPotion(), 1200, 1, true, true));
                 break;
             }
             case 2: {
-                ExtraFunctions.effectPlayer(player, new PotionEffect(Potion.moveSpeed.getId(), 2000, 100, true, true));
+                ExtraFunctions.effectPlayer(player, new PotionEffect(PotionTypes.STRONG_POISON.getEffects().get(0).getPotion(), 2000, 100, true, true));
                 break;
             }
             case 3: {
@@ -116,24 +116,24 @@ public class JeromeASFLuckyBlock extends Block {
                 break;
             }
             case 4: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.diamond_block);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.DIAMOND_BLOCK);
                 break;
             }
             case 5: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.gold_block);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.GOLD_BLOCK);
                 break;
             }
             case 6: {
-                ExtraFunctions.effectPlayer(player, new PotionEffect(Potion.moveSlowdown.getId(), 2000, 200, true, true));
+                ExtraFunctions.effectPlayer(player, new PotionEffect(PotionTypes.SLOWNESS.getEffects().get(0).getPotion(), 2000, 200, true, true));
                 break;
             }
             case 7: {
-                ExtraFunctions.effectPlayer(player, new PotionEffect(Potion.jump.getId(), 100, 200, true, true));
-                ExtraFunctions.chat(EnumChatFormatting.RED + "Hurry! JUMP! here will be lava in 2 seconds", player);
+                ExtraFunctions.effectPlayer(player, new PotionEffect(PotionTypes.LEAPING.getEffects().get(0).getPotion(), 100, 200, true, true));
+                ExtraFunctions.chat(ChatFormatting.RED + "Hurry! JUMP! here will be lava in 2 seconds", player);
                 break;
             }
             case 8: {
-                ExtraFunctions.effectPlayer(player, new PotionEffect(Potion.poison.getId(), 1000, 20, true, true));
+                ExtraFunctions.effectPlayer(player, new PotionEffect(PotionTypes.POISON.getEffects().get(0).getPotion(), 1000, 20, true, true));
                 break;
             }
             case 9: {
@@ -161,7 +161,7 @@ public class JeromeASFLuckyBlock extends Block {
                 break;
             }
             case 15: {
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.diamond_hoe), new Enchantment[]{Enchantment.knockback}, 4, worldIn, pos);
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.DIAMOND_HOE), new Enchantment[]{Enchantment.getEnchantmentByID(19)}, 4, worldIn, pos);
                 break;
             }
             case 16: {
@@ -177,7 +177,7 @@ public class JeromeASFLuckyBlock extends Block {
                 break;
             }
             case 19: {
-                ExtraFunctions.effectPlayer(player, new PotionEffect(Potion.blindness.getId(), 1400, 50, true, true));
+                ExtraFunctions.effectPlayer(player, new PotionEffect(PotionTypes.LONG_SLOWNESS.getEffects().get(0).getPotion(), 1400, 50, true, true));
                 break;
             }
             case 20: {
@@ -193,7 +193,7 @@ public class JeromeASFLuckyBlock extends Block {
                 break;
             }
             case 23: {
-                ExtraFunctions.chat(EnumChatFormatting.BOLD + "This One Was Empty", player);
+                ExtraFunctions.chat(ChatFormatting.BOLD + "This One Was Empty", player);
                 break;
             }
             case 24: {
@@ -213,7 +213,7 @@ public class JeromeASFLuckyBlock extends Block {
                 break;
             }
             case 28: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.bedrock);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.BEDROCK);
                 break;
             }
             case 29: {
@@ -237,7 +237,7 @@ public class JeromeASFLuckyBlock extends Block {
                 break;
             }
             case 34: {
-                ExtraFunctions.effectPlayer(player, new PotionEffect(Potion.damageBoost.getId(), 1000, 20, true, true));
+                ExtraFunctions.effectPlayer(player, new PotionEffect(PotionTypes.STRENGTH.getEffects().get(0).getPotion(), 1000, 20, true, true));
                 break;
             }
             case 35: {
@@ -249,7 +249,7 @@ public class JeromeASFLuckyBlock extends Block {
                 break;
             }
             case 37: {
-                ExtraFunctions.addEnchantsMany(new ItemStack(ModItems.devilSword), new Enchantment[]{Enchantment.sharpness}, rand.nextInt(50) + 40, worldIn, pos);
+                ExtraFunctions.addEnchantsMany(new ItemStack(ModItems.devilSword), new Enchantment[]{Enchantment.getEnchantmentByID(16)}, rand.nextInt(50) + 40, worldIn, pos);
                 break;
             }
             case 38: {
@@ -261,8 +261,8 @@ public class JeromeASFLuckyBlock extends Block {
                 break;
             }
             case 40: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.apple), 40, 0, 0);
-                ExtraFunctions.chat(EnumChatFormatting.GOLD + "Normal Apples ^^", player);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.APPLE), 40, 0, 0);
+                ExtraFunctions.chat(ChatFormatting.GOLD + "Normal Apples ^^", player);
                 break;
             }
             case 41: {
@@ -310,7 +310,7 @@ public class JeromeASFLuckyBlock extends Block {
                 break;
             }
             case 52: {
-                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, ModItems.jeromeBoots, "Boots", Enchantment.protection, 5);
+                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, ModItems.jeromeBoots, "Boots", Enchantment.getEnchantmentByID(0), 5);
                 break;
             }
             case 53: {
@@ -322,11 +322,11 @@ public class JeromeASFLuckyBlock extends Block {
                 break;
             }
             case 55: {
-                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, ModItems.snowSword, "Icy", Enchantment.smite, 10);
+                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, ModItems.snowSword, "Icy", Enchantment.getEnchantmentByID(17), 10);
                 break;
             }
             case 56: {
-                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, ModItems.megaSword, "MegaKilla", Enchantment.sharpness, 6);
+                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, ModItems.megaSword, "MegaKilla", Enchantment.getEnchantmentByID(16), 6);
                 break;
             }
             case 57: {
@@ -342,7 +342,7 @@ public class JeromeASFLuckyBlock extends Block {
                 break;
             }
             case 60: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.milk_bucket), 50, 1, 2);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.MILK_BUCKET), 50, 1, 2);
                 ExtraFunctions.chat("Use these to clean any bad effects you get while opening these lucky blocks", player);
                 break;
             }
@@ -359,20 +359,20 @@ public class JeromeASFLuckyBlock extends Block {
                 break;
             }
             case 64: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.baked_potato));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.BAKED_POTATO));
                 ExtraFunctions.chat("Here, take this one potato (which you cant even plant :v) for your efforts", player);
                 break;
             }
             case 65: {
-                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.poisonous_potato, "Eat Me!", Enchantment.knockback, 50);
+                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.POISONOUS_POTATO, "Eat Me!", Enchantment.getEnchantmentByID(19), 50);
                 break;
             }
             case 66: {
-                ExtraFunctions.effectPlayer(player, new PotionEffect(Potion.fireResistance.getId(), 1000, 20));
+                ExtraFunctions.effectPlayer(player, new PotionEffect(PotionTypes.FIRE_RESISTANCE.getEffects().get(0).getPotion(), 1000, 20));
                 break;
             }
             case 67: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.golden_apple, 1, 1));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.GOLDEN_APPLE, 1, 1));
                 break;
             }
             case 68: {
@@ -414,7 +414,7 @@ public class JeromeASFLuckyBlock extends Block {
                 break;
             }
             case 77: {
-                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.diamond_sword, "I AM NOT DIAMOND", Enchantment.sharpness, rand.nextInt(50) + 1);
+                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.DIAMOND_SWORD, "I AM NOT DIAMOND", Enchantment.getEnchantmentByID(16), rand.nextInt(50) + 1);
                 break;
             }
             case 78: {
@@ -434,11 +434,11 @@ public class JeromeASFLuckyBlock extends Block {
                 break;
             }
             case 82: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.water);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.WATER);
                 break;
             }
             case 83: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.enchanting_table);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.ENCHANTING_TABLE);
                 break;
             }
             case 84: {
@@ -467,8 +467,8 @@ public class JeromeASFLuckyBlock extends Block {
                 break;
             }
             case 90: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.tnt), 64, 1, 5);
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.flint_and_steel));
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.TNT), 64, 1, 5);
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.FLINT_AND_STEEL));
                 break;
             }
             case 91: {
@@ -480,23 +480,23 @@ public class JeromeASFLuckyBlock extends Block {
                 break;
             }
             case 93: {
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.bed), new Enchantment[]{Enchantment.sharpness, Enchantment.knockback}, 4, worldIn, pos);
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.BED), new Enchantment[]{Enchantment.getEnchantmentByID(16), Enchantment.getEnchantmentByID(19)}, 4, worldIn, pos);
                 break;
             }
             case 94: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.cake));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.CAKE));
                 break;
             }
             case 95: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.dragon_egg));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.DRAGON_EGG));
                 break;
             }
             case 96: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.bedrock));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.BEDROCK));
                 break;
             }
             case 97: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.obsidian), 64, 1, 50);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.OBSIDIAN), 64, 1, 50);
                 break;
             }
             case 98: {

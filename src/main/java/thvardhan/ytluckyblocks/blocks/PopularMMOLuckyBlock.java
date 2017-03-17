@@ -11,8 +11,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.math.BlockPos;
+import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
@@ -37,12 +37,12 @@ public class PopularMMOLuckyBlock extends Block {
         this.setCreativeTab(CommonProxy.tabYTStuffMod);
         this.setHardness(hardness);
         this.setResistance(resistance);
-        this.setBlockBounds(0, 0, 0, 1, 0.9F, 1);
+
 
     }
 
     public PopularMMOLuckyBlock(String unlocalizedName, float hardness, float resistance) {
-        this(unlocalizedName, Material.rock, 0, 10000);
+        this(unlocalizedName, Material.ROCK, 0, 10000);
     }
 
     public PopularMMOLuckyBlock(String unlocalizedName) {
@@ -50,10 +50,9 @@ public class PopularMMOLuckyBlock extends Block {
     }
 
     @Override
-    public boolean isOpaqueCube() {
+    public boolean isVisuallyOpaque() {
         return false;
     }
-
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
         for (int i = 0; i < 3; ++i) {
@@ -65,19 +64,21 @@ public class PopularMMOLuckyBlock extends Block {
             double d3 = (double) (rand.nextFloat() * (float) j);
             double d4 = ((double) rand.nextFloat() - 0.5D) * 0.125D;
             double d5 = (double) (rand.nextFloat() * (float) k);
-            worldIn.spawnParticle(EnumParticleTypes.PORTAL, d0, d1, d2, d3, d4, d5, new int[0]);
+            worldIn.spawnParticle(EnumParticleTypes.PORTAL, d0, d1, d2, d3, d4, d5);
         }
     }
 
 
     @Override
-    public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+    public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
         if (!world.isRemote && player != null && !(player instanceof FakePlayer)) {
             world.setBlockToAir(pos);
             drops(world, pos, player);
         }
         return true;
+
     }
+
 
 
     private void drops(World worldIn, BlockPos pos, EntityPlayer player) {
@@ -122,36 +123,36 @@ public class PopularMMOLuckyBlock extends Block {
                 break;
             }
             case 7: {
-                Enchantment[] e = {Enchantment.power, Enchantment.punch, Enchantment.infinity};
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.bow), e, rand.nextInt(5) + 1, worldIn, pos);
+                Enchantment[] e = {Enchantment.getEnchantmentByID(48), Enchantment.getEnchantmentByID(49), Enchantment.getEnchantmentByID(51)};
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.BOW), e, rand.nextInt(5) + 1, worldIn, pos);
                 break;
             }
             case 8: {
-                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.diamond_pickaxe, "Ore Eater", Enchantment.fortune, 20);
+                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.DIAMOND_PICKAXE, "Ore Eater", Enchantment.getEnchantmentByID(35), 20);
                 break;
             }
             case 9: {
-                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.diamond_pickaxe, "Ore Placer", Enchantment.efficiency, 30);
+                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.DIAMOND_PICKAXE, "Ore Placer", Enchantment.getEnchantmentByID(32), 30);
                 break;
             }
             case 10: {
-                Enchantment[] e = {Enchantment.sharpness, Enchantment.efficiency, Enchantment.silkTouch, Enchantment.sharpness};
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.shears), e, rand.nextInt(15) + 1, worldIn, pos);
+                Enchantment[] e = {Enchantment.getEnchantmentByID(16), Enchantment.getEnchantmentByID(32), Enchantment.getEnchantmentByID(33), Enchantment.getEnchantmentByID(16)};
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.SHEARS), e, rand.nextInt(15) + 1, worldIn, pos);
                 break;
             }
             case 11: {
-                Enchantment[] e = {Enchantment.protection, Enchantment.fireProtection, Enchantment.featherFalling, Enchantment.blastProtection, Enchantment.blastProtection, Enchantment.projectileProtection, Enchantment.thorns};
-                ItemStack[] s = {new ItemStack(Items.diamond_boots), new ItemStack(Items.diamond_chestplate)};
+                Enchantment[] e = {Enchantment.getEnchantmentByID(0), Enchantment.getEnchantmentByID(1), Enchantment.getEnchantmentByID(2), Enchantment.getEnchantmentByID(3), Enchantment.getEnchantmentByID(3), Enchantment.getEnchantmentByID(4), Enchantment.getEnchantmentByID(7)};
+                ItemStack[] s = {new ItemStack(Items.DIAMOND_BOOTS), new ItemStack(Items.DIAMOND_CHESTPLATE)};
                 ExtraFunctions.addRandomEnchtToRandomItems(worldIn, s, e, 10, pos, rand);
                 break;
             }
             case 12: {
-                Enchantment[] e = {Enchantment.sharpness, Enchantment.efficiency, Enchantment.silkTouch, Enchantment.sharpness};
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.diamond_sword), e, rand.nextInt(15) + 1, worldIn, pos);
+                Enchantment[] e = {Enchantment.getEnchantmentByID(16), Enchantment.getEnchantmentByID(32), Enchantment.getEnchantmentByID(33), Enchantment.getEnchantmentByID(16)};
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.DIAMOND_SWORD), e, rand.nextInt(15) + 1, worldIn, pos);
                 break;
             }
             case 13: {
-                Enchantment[] e = {Enchantment.sharpness, Enchantment.smite, Enchantment.baneOfArthropods, Enchantment.fireAspect, Enchantment.looting, Enchantment.unbreaking, Enchantment.unbreaking, Enchantment.unbreaking};
+                Enchantment[] e = {Enchantment.getEnchantmentByID(16), Enchantment.getEnchantmentByID(17), Enchantment.getEnchantmentByID(18), Enchantment.getEnchantmentByID(20), Enchantment.getEnchantmentByID(21), Enchantment.getEnchantmentByID(34), Enchantment.getEnchantmentByID(34), Enchantment.getEnchantmentByID(34)};
                 ExtraFunctions.addEnchantsMany(new ItemStack(ModItems.devilSword), e, 10, worldIn, pos);
                 break;
             }
@@ -168,7 +169,7 @@ public class PopularMMOLuckyBlock extends Block {
                 break;
             }
             case 17: {
-                ExtraFunctions.chat(EnumChatFormatting.AQUA + "Oh Well", player);
+                ExtraFunctions.chat(ChatFormatting.AQUA + "Oh Well", player);
                 break;
             }
             case 18: {
@@ -204,19 +205,19 @@ public class PopularMMOLuckyBlock extends Block {
                 break;
             }
             case 26: {
-                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.diamond_block);
+                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.DIAMOND_BLOCK);
                 break;
             }
             case 27: {
-                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.beacon);
+                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.BEACON);
                 break;
             }
             case 28: {
-                ExtraFunctions.summonBlockWithLoop(worldIn, pos, Blocks.emerald_block, 5, 0, 0);
+                ExtraFunctions.summonBlockWithLoop(worldIn, pos, Blocks.EMERALD_BLOCK, 5, 0, 0);
                 break;
             }
             case 29: {
-                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.dragon_egg);
+                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.DRAGON_EGG);
                 break;
             }
             case 30: {
@@ -240,7 +241,7 @@ public class PopularMMOLuckyBlock extends Block {
                 break;
             }
             case 35: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.beacon);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.BEACON);
                 break;
             }
             case 36: {
@@ -256,11 +257,11 @@ public class PopularMMOLuckyBlock extends Block {
                 break;
             }
             case 39: {
-                ExtraFunctions.summonItemWithLoop(worldIn, pos, Items.golden_apple, 64, 1, 30);
+                ExtraFunctions.summonItemWithLoop(worldIn, pos, Items.GOLDEN_APPLE, 64, 1, 30);
                 break;
             }
             case 40: {
-                ExtraFunctions.summonItemWithLoop(worldIn, pos, Items.golden_carrot, 5, 1, 5);
+                ExtraFunctions.summonItemWithLoop(worldIn, pos, Items.GOLDEN_CARROT, 5, 1, 5);
                 break;
             }
             case 41: {
@@ -272,11 +273,11 @@ public class PopularMMOLuckyBlock extends Block {
                 break;
             }
             case 43: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.cake);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.CAKE);
                 break;
             }
             case 44: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.saddle));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.SADDLE));
                 break;
             }
             case 45: {

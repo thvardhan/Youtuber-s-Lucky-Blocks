@@ -103,7 +103,7 @@ public class ExtraFunctions {
      * from location of block broken to x+5 x-5 z+5 z-5
      */
 
-    public static void setTNTWithBlock(World worldIn, BlockPos pos, Random rand) {
+    public static void setTntWithBlock(World worldIn, BlockPos pos, Random rand) {
 
         Block random;
         switch (rand.nextInt(5)) {
@@ -604,7 +604,7 @@ public class ExtraFunctions {
 
     //e.setRabbitType(99);
 
-    public static void TNTFix(World worldIn, BlockPos pos, int amOfTNT, EntityPlayer player) {
+    public static void tntFix(World worldIn, BlockPos pos, int amOfTNT, EntityPlayer player) {
 
         for (int i = 0; i < amOfTNT; i++) {
             EntityTNTPrimed entityTNTprimed = new EntityTNTPrimed(worldIn, (double) ((float) pos.getX() + 0.5F), (double) pos.getY(), (double) ((float) pos.getZ() + 0.5F), player);
@@ -615,7 +615,7 @@ public class ExtraFunctions {
 
     }
 
-    public static void TNTNearby(World worldIn, BlockPos pos, int amOfTNT, EntityPlayer player, Random rand) {
+    public static void tntNearby(World worldIn, BlockPos pos, int amOfTNT, EntityPlayer player, Random rand) {
         for (int i = 0; i < amOfTNT; i++) {
             EntityTNTPrimed entityTNTprimed = new EntityTNTPrimed(worldIn, (double) ((float) pos.getX() + 0.5F) + rand.nextInt(20), (double) pos.getY() + rand.nextInt(20), (double) ((float) pos.getZ() + 0.5F) + rand.nextInt(20), player);
             entityTNTprimed.setFuse(worldIn.rand.nextInt(entityTNTprimed.getFuse() / 4) + entityTNTprimed.getFuse() / 8);
@@ -625,7 +625,7 @@ public class ExtraFunctions {
 
     }
 
-    public static void TNTRain(World worldIn, BlockPos pos, int amOfTNT, int skip, EntityPlayer player) {
+    public static void tntRain(World worldIn, BlockPos pos, int amOfTNT, int skip, EntityPlayer player) {
 
         for (int i = 0; i < amOfTNT; i++) {
             EntityTNTPrimed entityTNTprimed = new EntityTNTPrimed(worldIn, (double) ((float) pos.getX() + 0.5F), (double) pos.getY() + (skip * i), (double) ((float) pos.getZ() + 0.5F), player);
@@ -861,7 +861,7 @@ public class ExtraFunctions {
     }
 
 
-    public static void TNTPlaceNearby(World worldIn, BlockPos pos, int amOfTNT, Random rand) {
+    public static void tntPlaceNearby(World worldIn, BlockPos pos, int amOfTNT, Random rand) {
         for (int i = 0; i < amOfTNT; i++) {
             worldIn.setBlockState(new BlockPos(pos.getX() + rand.nextInt(30), pos.getY() + rand.nextInt(30), pos.getZ() + rand.nextInt(30)), Blocks.TNT.getDefaultState(), 2);
         }
@@ -917,7 +917,7 @@ public class ExtraFunctions {
         return Item.getItemFromBlock(b[rand.nextInt(b.length)]);
     }
 
-    public static void FIRECamp(World worldIn, EntityPlayer player) {
+    public static void fireCamp(World worldIn, EntityPlayer player) {
         setOneBlock(worldIn, new BlockPos(player.posX, player.posY - 1, player.posZ), Blocks.NETHERRACK);
         setOneBlock(worldIn, new BlockPos(player.posX, player.posY, player.posZ), Blocks.FIRE);
         double x = player.posX;
@@ -933,7 +933,7 @@ public class ExtraFunctions {
             }
         }
 
-        TNTFix(worldIn, new BlockPos(x, y, z), 1, player);
+        tntFix(worldIn, new BlockPos(x, y, z), 1, player);
 
     }
 
@@ -944,7 +944,7 @@ public class ExtraFunctions {
 
     }
 
-    public static void OBSIDIANCageStruct(World worldIn, EntityPlayer player) {
+    public static void obsidianCageStruct(World worldIn, EntityPlayer player) {
         double x = player.posX;
         double y = player.posY;
         double z = player.posZ;

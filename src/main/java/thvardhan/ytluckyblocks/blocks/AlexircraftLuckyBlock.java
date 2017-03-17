@@ -1,5 +1,6 @@
 package thvardhan.ytluckyblocks.blocks;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -12,9 +13,9 @@ import net.minecraft.entity.passive.EntityRabbit;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.init.PotionTypes;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.potion.*;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -52,7 +53,7 @@ public class AlexircraftLuckyBlock extends Block {
     }
 
     @Override
-    public boolean isOpaqueCube() {
+    public boolean isVisuallyOpaque() {
         return false;
     }
 
@@ -67,55 +68,55 @@ public class AlexircraftLuckyBlock extends Block {
             double d3 = (double) (rand.nextFloat() * (float) j);
             double d4 = ((double) rand.nextFloat() - 0.5D) * 0.125D;
             double d5 = (double) (rand.nextFloat() * (float) k);
-            worldIn.spawnParticle(EnumParticleTypes.ENCHANTMENT_TABLE, d0, d1, d2, d3, d4, d5, new int[0]);
+            worldIn.spawnParticle(EnumParticleTypes.ENCHANTMENT_TABLE, d0, d1, d2, d3, d4, d5);
         }
     }
 
-    @Override
-    public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
-        if (!world.isRemote && player != null && !(player instanceof FakePlayer)) {
 
+    @Override
+    public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+        if (!world.isRemote && player != null && !(player instanceof FakePlayer)) {
             world.setBlockToAir(pos);
             drops(world, pos, player);
         }
-        return true;
-
-        //super.onBlockDestroyedByPlayer(worldIn, pos, state);
+        return false;
     }
 
     private void drops(World worldIn, BlockPos pos, EntityPlayer player) {
 
         Enchantment[] e = new Enchantment[4];
-        e[0] = Enchantment.flame;
-        e[2] = Enchantment.power;
-        e[3] = Enchantment.thorns;
-        e[1] = Enchantment.looting;
+        e[0] = Enchantment.getEnchantmentByID(50);
+        e[2] = Enchantment.getEnchantmentByID(48);
+        e[3] = Enchantment.getEnchantmentByID(7);
+        e[1] = Enchantment.getEnchantmentByID(21);
+
+
 
 
         switch (rand.nextInt(101)) {
 
             default: {
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.diamond_sword), e, 5, worldIn, pos);
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.DIAMOND_SWORD), e, 5, worldIn, pos);
             }
             case 0: {
                 ExtraFunctions.summonMobsOnBreakBlock(new EntityZombie(worldIn), rand.nextInt(50), worldIn, pos);
                 break;
             }
             case 1: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.flowing_lava);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.FLOWING_LAVA);
                 break;
             }
             case 2: {
                 ExtraFunctions.hellWellStructure(worldIn, pos, rand);
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.golden_apple, 1, 1), 64, 1, 50);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.GOLDEN_APPLE, 1, 1), 64, 1, 50);
                 break;
             }
             case 3: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.diamond_axe));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.DIAMOND_AXE));
                 break;
             }
             case 4: {
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.bow), new Enchantment[]{Enchantment.power, Enchantment.flame, Enchantment.punch}, 10, worldIn, pos);
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.BOW), new Enchantment[]{Enchantment.getEnchantmentByID(48), Enchantment.getEnchantmentByID(50), Enchantment.getEnchantmentByID(49)}, 10, worldIn, pos);
                 break;
             }
             case 5: {
@@ -155,7 +156,7 @@ public class AlexircraftLuckyBlock extends Block {
                 break;
             }
             case 14: {
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.egg), new Enchantment[]{Enchantment.fireAspect}, 2, worldIn, pos);
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.EGG), new Enchantment[]{Enchantment.getEnchantmentByID(20)}, 2, worldIn, pos);
                 break;
             }
             case 15: {
@@ -163,11 +164,11 @@ public class AlexircraftLuckyBlock extends Block {
                 break;
             }
             case 16: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.apple));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.APPLE));
                 break;
             }
             case 17: {
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.wooden_hoe), e, 10, worldIn, pos);
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.WOODEN_HOE), e, 10, worldIn, pos);
                 break;
             }
             case 18: {
@@ -187,7 +188,7 @@ public class AlexircraftLuckyBlock extends Block {
                 break;
             }
             case 22: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.sponge));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.SPONGE));
                 break;
             }
             case 23: {
@@ -232,7 +233,7 @@ public class AlexircraftLuckyBlock extends Block {
                 break;
             }
             case 33: {
-                ExtraFunctions.effectPlayer(player, new PotionEffect(Potion.jump.getId(), 10, 10));
+                ExtraFunctions.effectPlayer(player, new PotionEffect(PotionTypes.LEAPING.getEffects().get(0).getPotion(), 10, 10));
                 break;
             }
             case 34: {
@@ -256,8 +257,8 @@ public class AlexircraftLuckyBlock extends Block {
                 break;
             }
             case 39: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.tnt);
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.flint_and_steel));
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.TNT);
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.FLINT_AND_STEEL));
                 break;
             }
             case 40: {
@@ -273,7 +274,7 @@ public class AlexircraftLuckyBlock extends Block {
                 break;
             }
             case 43: {
-                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, ModItems.rainbowBlade, "RAINBOW", Enchantment.sharpness, 6);
+                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, ModItems.rainbowBlade, "RAINBOW", Enchantment.getEnchantmentByID(16), 6);
                 break;
             }
             case 44: {
@@ -295,14 +296,17 @@ public class AlexircraftLuckyBlock extends Block {
                 break;
             }
             case 48: {
-                Enchantment[] a = {Enchantment.aquaAffinity, Enchantment.baneOfArthropods, Enchantment.blastProtection, Enchantment.knockback, Enchantment.power, Enchantment.looting, Enchantment.fireAspect, Enchantment.sharpness};
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.diamond_axe), a, 3, worldIn, pos);
+                Enchantment[] a = {Enchantment.getEnchantmentByID(6), Enchantment.getEnchantmentByID(18),
+                        Enchantment.getEnchantmentByID(3), Enchantment.getEnchantmentByID(19), Enchantment.getEnchantmentByID(48),
+                        Enchantment.getEnchantmentByID(21), Enchantment.getEnchantmentByID(20), Enchantment.getEnchantmentByID(16)};
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.DIAMOND_AXE), a, 3, worldIn, pos);
 
                 break;
             }
             case 49: {
-                Enchantment[] a = {Enchantment.aquaAffinity, Enchantment.baneOfArthropods, Enchantment.blastProtection, Enchantment.power, Enchantment.looting, Enchantment.fireAspect, Enchantment.sharpness, Enchantment.efficiency, Enchantment.featherFalling};
-                ItemStack[] stack = {new ItemStack(Items.diamond_axe), new ItemStack(Items.diamond_hoe), new ItemStack(Items.diamond_sword), new ItemStack(Items.diamond_shovel)};
+                Enchantment[] a = {Enchantment.getEnchantmentByID(6), Enchantment.getEnchantmentByID(18), Enchantment.getEnchantmentByID(3), Enchantment.getEnchantmentByID(48), Enchantment.getEnchantmentByID(21),
+                        Enchantment.getEnchantmentByID(20), Enchantment.getEnchantmentByID(16), Enchantment.getEnchantmentByID(32), Enchantment.getEnchantmentByID(2)};
+                ItemStack[] stack = {new ItemStack(Items.DIAMOND_AXE), new ItemStack(Items.DIAMOND_HOE), new ItemStack(Items.DIAMOND_SWORD), new ItemStack(Items.DIAMOND_SHOVEL)};
                 ExtraFunctions.addRandomEnchtToRandomItems(worldIn, stack, a, 8, pos, rand);
                 break;
             }
@@ -317,15 +321,15 @@ public class AlexircraftLuckyBlock extends Block {
                 break;
             }
             case 52: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.emerald_block), 64, 0, 0);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.EMERALD_BLOCK), 64, 0, 0);
                 break;
             }
             case 53: {
-                ExtraFunctions.chat(EnumChatFormatting.AQUA + "Hello" + EnumChatFormatting.BLACK + " Just" + EnumChatFormatting.BLUE + " For" + EnumChatFormatting.BOLD + " Your" + EnumChatFormatting.DARK_AQUA + " Info " + EnumChatFormatting.DARK_BLUE + "This" + EnumChatFormatting.DARK_GRAY + " Is" + EnumChatFormatting.DARK_GREEN + " Made" + EnumChatFormatting.DARK_PURPLE + " By" + EnumChatFormatting.DARK_RED + " thvardhan", player);
+                ExtraFunctions.chat(ChatFormatting.AQUA + "Hello" + ChatFormatting.BLACK + " Just" + ChatFormatting.BLUE + " For" + ChatFormatting.BOLD + " Your" + ChatFormatting.DARK_AQUA + " Info " + ChatFormatting.DARK_BLUE + "This" + ChatFormatting.DARK_GRAY + " Is" + ChatFormatting.DARK_GREEN + " Made" + ChatFormatting.DARK_PURPLE + " By" + ChatFormatting.DARK_RED + " thvardhan", player);
                 break;
             }
             case 54: {
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.wooden_hoe), e, 60, worldIn, pos);
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.WOODEN_HOE), e, 60, worldIn, pos);
                 ExtraFunctions.chat("You Just Got A God Hoe", player);
                 break;
             }
@@ -355,15 +359,15 @@ public class AlexircraftLuckyBlock extends Block {
             }
             case 61: {
                 ExtraFunctions.chat("You May Want To Craft Anything :3", player);
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.crafting_table);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.CRAFTING_TABLE);
                 break;
             }
             case 62: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.bedrock), 64, 0, 0);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.BEDROCK), 64, 0, 0);
                 break;
             }
             case 63: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.obsidian), 64, 0, 0);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.OBSIDIAN), 64, 0, 0);
                 break;
             }
             case 64: {
@@ -375,12 +379,12 @@ public class AlexircraftLuckyBlock extends Block {
                 break;
             }
             case 66: {
-                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.cake);
+                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.CAKE);
 
                 break;
             }
             case 67: {
-                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.dragon_egg);
+                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.DRAGON_EGG);
 
                 break;
             }
@@ -410,7 +414,7 @@ public class AlexircraftLuckyBlock extends Block {
                 break;
             }
             case 73: {
-                Enchantment[] a = {Enchantment.sharpness, Enchantment.knockback, Enchantment.smite, Enchantment.baneOfArthropods};
+                Enchantment[] a = {Enchantment.getEnchantmentByID(16), Enchantment.getEnchantmentByID(19), Enchantment.getEnchantmentByID(17), Enchantment.getEnchantmentByID(18)};
                 ExtraFunctions.addEnchantsMany(new ItemStack(ModItems.devilSword), a, 3, worldIn, pos);
 
                 break;
@@ -421,7 +425,7 @@ public class AlexircraftLuckyBlock extends Block {
                 break;
             }
             case 75: {
-                ExtraFunctions.summonBlockWithLoop(worldIn, pos, Blocks.gold_block, 64, 1, 25);
+                ExtraFunctions.summonBlockWithLoop(worldIn, pos, Blocks.GOLD_BLOCK, 64, 1, 25);
 
                 break;
             }
@@ -446,30 +450,31 @@ public class AlexircraftLuckyBlock extends Block {
                 break;
             }
             case 80: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.cake);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.CAKE);
 
                 break;
             }
             case 81: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.anvil);
-                ExtraFunctions.chat(EnumChatFormatting.DARK_BLUE + "You Should Be Happy It Dint Fell On Ya", player);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.ANVIL);
+                ExtraFunctions.chat(ChatFormatting.DARK_BLUE + "You Should Be Happy It Dint Fell On Ya", player);
 
                 break;
             }
             case 82: {
-                ExtraFunctions.summonItemWithLoop(worldIn, pos, Items.diamond, 12, 0, 0);
+                ExtraFunctions.summonItemWithLoop(worldIn, pos, Items.DIAMOND, 12, 0, 0);
 
                 break;
             }
             case 83: {
-                Enchantment[] a = {Enchantment.fireAspect, Enchantment.aquaAffinity, Enchantment.fireProtection, Enchantment.protection, Enchantment.respiration, Enchantment.projectileProtection, Enchantment.blastProtection};
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.diamond_boots), a, 5, worldIn, pos);
+                Enchantment[] a = {Enchantment.getEnchantmentByID(20), Enchantment.getEnchantmentByID(6),
+                        Enchantment.getEnchantmentByID(1), Enchantment.getEnchantmentByID(0), Enchantment.getEnchantmentByID(5), Enchantment.getEnchantmentByID(4), Enchantment.getEnchantmentByID(3)};
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.DIAMOND_BOOTS), a, 5, worldIn, pos);
 
                 break;
             }
             case 84: {
-                Enchantment[] a = {Enchantment.fireAspect, Enchantment.aquaAffinity, Enchantment.fireProtection, Enchantment.protection, Enchantment.respiration, Enchantment.projectileProtection, Enchantment.blastProtection};
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.diamond_chestplate), a, 4, worldIn, pos);
+                Enchantment[] a = {Enchantment.getEnchantmentByID(20), Enchantment.getEnchantmentByID(6), Enchantment.getEnchantmentByID(1), Enchantment.getEnchantmentByID(0), Enchantment.getEnchantmentByID(5), Enchantment.getEnchantmentByID(4), Enchantment.getEnchantmentByID(3)};
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.DIAMOND_CHESTPLATE), a, 4, worldIn, pos);
 
                 break;
             }
@@ -486,19 +491,19 @@ public class AlexircraftLuckyBlock extends Block {
                 break;
             }
             case 88: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.coal_block);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.COAL_BLOCK);
                 break;
             }
             case 89: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.monster_egg);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.MONSTER_EGG);
                 break;
             }
             case 90: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.paper));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.PAPER));
                 break;
             }
             case 91: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.melon_block));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.MELON_BLOCK));
                 break;
             }
             case 92: {
@@ -522,19 +527,19 @@ public class AlexircraftLuckyBlock extends Block {
                 break;
             }
             case 97: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.potionitem));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.POTIONITEM));
                 break;
             }
             case 98: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.stone_button));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.STONE_BUTTON));
                 break;
             }
             case 99: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.diamond_axe));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.DIAMOND_AXE));
                 break;
             }
             case 100: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.diamond_sword));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.DIAMOND_SWORD));
                 break;
             }
 

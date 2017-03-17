@@ -13,10 +13,11 @@ import net.minecraft.entity.passive.EntityRabbit;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.init.PotionTypes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
@@ -41,7 +42,7 @@ public class LDShadowLadyLuckyBlock extends Block {
     }
 
     public LDShadowLadyLuckyBlock(String unlocalizedName, float hardness, float resistance) {
-        this(unlocalizedName, Material.rock, 0, 10000);
+        this(unlocalizedName, Material.ROCK, 0, 10000);
     }
 
     public LDShadowLadyLuckyBlock(String unlocalizedName) {
@@ -49,10 +50,9 @@ public class LDShadowLadyLuckyBlock extends Block {
     }
 
     @Override
-    public boolean isOpaqueCube() {
+    public boolean isVisuallyOpaque() {
         return false;
     }
-
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
         for (int i = 0; i < 3; ++i) {
@@ -64,29 +64,26 @@ public class LDShadowLadyLuckyBlock extends Block {
             double d3 = (double) (rand.nextFloat() * (float) j);
             double d4 = ((double) rand.nextFloat() - 0.5D) * 0.125D;
             double d5 = (double) (rand.nextFloat() * (float) k);
-            worldIn.spawnParticle(EnumParticleTypes.SPELL_MOB, d0, d1, d2, d3, d4, d5, new int[0]);
+            worldIn.spawnParticle(EnumParticleTypes.SPELL_MOB, d0, d1, d2, d3, d4, d5);
         }
     }
 
     @Override
-    public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+    public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
         if (!world.isRemote && player != null && !(player instanceof FakePlayer)) {
-
             world.setBlockToAir(pos);
             drops(world, pos, player);
         }
-        return true;
-
-        //super.onBlockDestroyedByPlayer(worldIn, pos, state);
+        return false;
     }
 
     private void drops(World worldIn, BlockPos pos, EntityPlayer player) {
 
         Enchantment[] e = new Enchantment[4];
-        e[0] = Enchantment.flame;
-        e[2] = Enchantment.power;
-        e[3] = Enchantment.thorns;
-        e[1] = Enchantment.looting;
+        e[0] = Enchantment.getEnchantmentByID(50);
+        e[2] = Enchantment.getEnchantmentByID(48);
+        e[3] = Enchantment.getEnchantmentByID(7);
+        e[1] = Enchantment.getEnchantmentByID(21);
 
 
         Random rand = new Random();
@@ -95,7 +92,7 @@ public class LDShadowLadyLuckyBlock extends Block {
         switch (rand.nextInt(101)) {
 
             default: {
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.diamond_sword), e, 5, worldIn, pos);
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.DIAMOND_SWORD), e, 5, worldIn, pos);
             }
             case 0: {
                 ExtraFunctions.slimeFort(worldIn, player);
@@ -242,7 +239,7 @@ public class LDShadowLadyLuckyBlock extends Block {
                 break;
             }
             case 36: {
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.wooden_sword), e, 2, worldIn, pos);
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.WOODEN_SWORD), e, 2, worldIn, pos);
                 break;
             }
             case 37: {
@@ -262,19 +259,19 @@ public class LDShadowLadyLuckyBlock extends Block {
                 break;
             }
             case 41: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.dragon_egg));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.DRAGON_EGG));
                 break;
             }
             case 42: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.cake));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.CAKE));
                 break;
             }
             case 43: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.command_block));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.COMMAND_BLOCK));
                 break;
             }
             case 44: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.arrow), 64, 0, 0);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.ARROW), 64, 0, 0);
                 break;
             }
             case 45: {
@@ -282,7 +279,7 @@ public class LDShadowLadyLuckyBlock extends Block {
                 break;
             }
             case 46: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.diamond_horse_armor));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.DIAMOND_HORSE_ARMOR));
                 break;
             }
             case 47: {
@@ -290,15 +287,15 @@ public class LDShadowLadyLuckyBlock extends Block {
                 break;
             }
             case 48: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.diamond_sword));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.DIAMOND_SWORD));
                 break;
             }
             case 49: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.enchanting_table);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.ENCHANTING_TABLE);
                 break;
             }
             case 50: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.bedrock);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.BEDROCK);
                 break;
             }
             case 51: {
@@ -319,11 +316,11 @@ public class LDShadowLadyLuckyBlock extends Block {
                 break;
             }
             case 55: {
-                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, ModItems.snowSword, "Icy", Enchantment.smite, 10);
+                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, ModItems.snowSword, "Icy", Enchantment.getEnchantmentByID(17), 10);
                 break;
             }
             case 56: {
-                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, ModItems.megaSword, "MegaKilla", Enchantment.sharpness, 6);
+                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, ModItems.megaSword, "MegaKilla", Enchantment.getEnchantmentByID(16), 6);
                 break;
             }
             case 57: {
@@ -339,7 +336,7 @@ public class LDShadowLadyLuckyBlock extends Block {
                 break;
             }
             case 60: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.milk_bucket), 50, 1, 2);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.MILK_BUCKET), 50, 1, 2);
                 break;
             }
             case 61: {
@@ -355,20 +352,20 @@ public class LDShadowLadyLuckyBlock extends Block {
                 break;
             }
             case 64: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.baked_potato));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.BAKED_POTATO));
                 ExtraFunctions.chat("Here, take this one potato (which you cant even plant :v) for your efforts", player);
                 break;
             }
             case 65: {
-                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.poisonous_potato, "Eat Me!", Enchantment.knockback, 50);
+                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.POISONOUS_POTATO, "Eat Me!", Enchantment.getEnchantmentByID(19), 50);
                 break;
             }
             case 66: {
-                ExtraFunctions.effectPlayer(player, new PotionEffect(Potion.fireResistance.getId(), 1000, 20));
+                ExtraFunctions.effectPlayer(player, new PotionEffect(PotionTypes.FIRE_RESISTANCE.getEffects().get(0).getPotion(), 1000, 20));
                 break;
             }
             case 67: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.golden_apple, 1, 1));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.GOLDEN_APPLE, 1, 1));
                 break;
             }
             case 68: {
@@ -410,7 +407,7 @@ public class LDShadowLadyLuckyBlock extends Block {
                 break;
             }
             case 77: {
-                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.diamond_sword, "I AM NOT DIAMOND", Enchantment.sharpness, rand.nextInt(50) + 1);
+                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.DIAMOND_SWORD, "I AM NOT DIAMOND", Enchantment.getEnchantmentByID(16), rand.nextInt(50) + 1);
                 break;
             }
             case 78: {
@@ -426,7 +423,7 @@ public class LDShadowLadyLuckyBlock extends Block {
                 break;
             }
             case 81: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.cake));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.CAKE));
                 break;
             }
             case 82: {
@@ -442,11 +439,11 @@ public class LDShadowLadyLuckyBlock extends Block {
                 break;
             }
             case 85: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.bucket));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.BUCKET));
                 break;
             }
             case 86: {
-                ExtraFunctions.effectPlayer(player, new PotionEffect(Potion.damageBoost.getId(), 1000, 24));
+                ExtraFunctions.effectPlayer(player, new PotionEffect(PotionTypes.STRENGTH.getEffects().get(0).getPotion(), 1000, 24));
                 break;
             }
             case 87: {
@@ -458,7 +455,7 @@ public class LDShadowLadyLuckyBlock extends Block {
                 break;
             }
             case 89: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.command_block);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.COMMAND_BLOCK);
                 break;
             }
             case 90: {
@@ -482,7 +479,7 @@ public class LDShadowLadyLuckyBlock extends Block {
                 break;
             }
             case 95: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.anvil);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.ANVIL);
                 break;
             }
             case 96: {

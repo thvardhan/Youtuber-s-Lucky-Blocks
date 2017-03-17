@@ -9,10 +9,11 @@ import net.minecraft.entity.monster.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.init.PotionTypes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
@@ -37,7 +38,7 @@ public class IHasCupcakeLuckyBlock extends Block {
     }
 
     public IHasCupcakeLuckyBlock(String unlocalizedName, float hardness, float resistance) {
-        this(unlocalizedName, Material.rock, 0, 10000);
+        this(unlocalizedName, Material.ROCK, 0, 10000);
     }
 
     public IHasCupcakeLuckyBlock(String unlocalizedName) {
@@ -45,10 +46,9 @@ public class IHasCupcakeLuckyBlock extends Block {
     }
 
     @Override
-    public boolean isOpaqueCube() {
+    public boolean isVisuallyOpaque() {
         return false;
     }
-
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
         for (int i = 0; i < 3; ++i) {
@@ -60,12 +60,13 @@ public class IHasCupcakeLuckyBlock extends Block {
             double d3 = (double) (rand.nextFloat() * (float) j);
             double d4 = ((double) rand.nextFloat() - 0.5D) * 0.125D;
             double d5 = (double) (rand.nextFloat() * (float) k);
-            worldIn.spawnParticle(EnumParticleTypes.SPELL_MOB, d0, d1, d2, d3, d4, d5, new int[0]);
+            worldIn.spawnParticle(EnumParticleTypes.SPELL_MOB, d0, d1, d2, d3, d4, d5);
         }
     }
 
     @Override
-    public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+    public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+
         if (!world.isRemote && player != null && !(player instanceof FakePlayer)) {
 
             world.setBlockToAir(pos);
@@ -73,7 +74,7 @@ public class IHasCupcakeLuckyBlock extends Block {
 
 
         }
-        return true;
+        return false;
 
         //super.onBlockDestroyedByPlayer(worldIn, pos, state);
     }
@@ -82,10 +83,10 @@ public class IHasCupcakeLuckyBlock extends Block {
     private void drops(World worldIn, BlockPos pos, EntityPlayer player) {
 
         Enchantment[] e = new Enchantment[4];
-        e[0] = Enchantment.flame;
-        e[2] = Enchantment.power;
-        e[3] = Enchantment.thorns;
-        e[1] = Enchantment.looting;
+        e[0] = Enchantment.getEnchantmentByID(50);
+        e[2] = Enchantment.getEnchantmentByID(48);
+        e[3] = Enchantment.getEnchantmentByID(7);
+        e[1] = Enchantment.getEnchantmentByID(21);
 
 
         Random rand = new Random();
@@ -94,7 +95,7 @@ public class IHasCupcakeLuckyBlock extends Block {
         switch (rand.nextInt(101)) {
 
             default: {
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.diamond_sword), e, 5, worldIn, pos);
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.DIAMOND_SWORD), e, 5, worldIn, pos);
             }
             case 0: {
                 ExtraFunctions.parabolaStruct(worldIn, pos);
@@ -146,16 +147,16 @@ public class IHasCupcakeLuckyBlock extends Block {
                 break;
             }
             case 12: {
-                ExtraFunctions.effectPlayer(player, new PotionEffect(Potion.blindness.id, 1000, 24));
+                ExtraFunctions.effectPlayer(player, new PotionEffect(PotionTypes.FIRE_RESISTANCE.getEffects().get(0).getPotion(), 1000, 24));
                 break;
             }
             case 13: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.arrow), 40, 1, 40);
-                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.bow, "KnockBow", Enchantment.punch, 4);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.ARROW), 40, 1, 40);
+                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.BOW, "KnockBow", Enchantment.getEnchantmentByID(49), 4);
                 break;
             }
             case 14: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.snowball));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.SNOWBALL));
                 ExtraFunctions.chat("<3 Snowballs", player);
                 break;
             }
@@ -202,15 +203,15 @@ public class IHasCupcakeLuckyBlock extends Block {
                 break;
             }
             case 25: {
-                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.iron_ore);
+                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.IRON_ORE);
                 break;
             }
             case 26: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.diamond_block);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.DIAMOND_BLOCK);
                 break;
             }
             case 27: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.activator_rail);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.ACTIVATOR_RAIL);
                 break;
             }
             case 28: {
@@ -262,12 +263,12 @@ public class IHasCupcakeLuckyBlock extends Block {
                 break;
             }
             case 40: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.baked_potato), 1, 0, 0);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.BAKED_POTATO), 1, 0, 0);
                 ExtraFunctions.chat("Take this for your affords :D", player);
                 break;
             }
             case 41: {
-                ExtraFunctions.effectPlayer(player, new PotionEffect(Potion.absorption.id, 1200, 5));
+                ExtraFunctions.effectPlayer(player, new PotionEffect(PotionTypes.REGENERATION.getEffects().get(0).getPotion(), 1200, 5));
                 break;
             }
             case 42: {
@@ -279,7 +280,7 @@ public class IHasCupcakeLuckyBlock extends Block {
                 break;
             }
             case 44: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.ender_pearl));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.ENDER_PEARL));
                 break;
             }
             case 45: {
@@ -288,7 +289,7 @@ public class IHasCupcakeLuckyBlock extends Block {
 
             }
             case 46: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.map));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.MAP));
                 break;
             }
             case 47: {
@@ -308,7 +309,7 @@ public class IHasCupcakeLuckyBlock extends Block {
                 break;
             }
             case 51: {
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.apple), e, 4, worldIn, pos);
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.APPLE), e, 4, worldIn, pos);
                 break;
             }
             case 52: {
@@ -316,8 +317,8 @@ public class IHasCupcakeLuckyBlock extends Block {
                 break;
             }
             case 53: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.tnt);
-                ExtraFunctions.setOneBlock(worldIn, new BlockPos(pos.getX(), pos.getY() + 1, pos.getZ()), Blocks.fire);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.TNT);
+                ExtraFunctions.setOneBlock(worldIn, new BlockPos(pos.getX(), pos.getY() + 1, pos.getZ()), Blocks.FIRE);
                 break;
             }
             case 54: {
@@ -382,7 +383,7 @@ public class IHasCupcakeLuckyBlock extends Block {
                 break;
             }
             case 69: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.flower_pot);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.FLOWER_POT);
                 break;
             }
             case 70: {
@@ -422,7 +423,7 @@ public class IHasCupcakeLuckyBlock extends Block {
                 break;
             }
             case 79: {
-                ExtraFunctions.summonItemWithLoop(worldIn, pos, Items.arrow, 40, 0, 0);
+                ExtraFunctions.summonItemWithLoop(worldIn, pos, Items.ARROW, 40, 0, 0);
                 break;
             }
             case 80: {
@@ -430,7 +431,7 @@ public class IHasCupcakeLuckyBlock extends Block {
                 break;
             }
             case 81: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.cake));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.CAKE));
                 break;
             }
             case 82: {
@@ -446,11 +447,12 @@ public class IHasCupcakeLuckyBlock extends Block {
                 break;
             }
             case 85: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.bucket));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.BUCKET));
                 break;
             }
             case 86: {
-                ExtraFunctions.effectPlayer(player, new PotionEffect(Potion.damageBoost.getId(), 1000, 24));
+
+                ExtraFunctions.effectPlayer(player, new PotionEffect(PotionTypes.STRENGTH.getEffects().get(0).getPotion(), 1000, 24));
                 break;
             }
             case 87: {
@@ -462,7 +464,7 @@ public class IHasCupcakeLuckyBlock extends Block {
                 break;
             }
             case 89: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.command_block);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.COMMAND_BLOCK);
                 break;
             }
             case 90: {
@@ -486,7 +488,7 @@ public class IHasCupcakeLuckyBlock extends Block {
                 break;
             }
             case 95: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.anvil);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.ANVIL);
                 break;
             }
             case 96: {

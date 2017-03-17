@@ -11,8 +11,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.math.BlockPos;
+import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
@@ -40,7 +40,7 @@ public class LittleKellyMcLuckyBlock extends Block {
     }
 
     public LittleKellyMcLuckyBlock(String unlocalizedName, float hardness, float resistance) {
-        this(unlocalizedName, Material.rock, 0, 10000);
+        this(unlocalizedName, Material.ROCK, 0, 10000);
     }
 
     public LittleKellyMcLuckyBlock(String unlocalizedName) {
@@ -48,10 +48,9 @@ public class LittleKellyMcLuckyBlock extends Block {
     }
 
     @Override
-    public boolean isOpaqueCube() {
+    public boolean isVisuallyOpaque() {
         return false;
     }
-
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
         for (int i = 0; i < 3; ++i) {
@@ -63,31 +62,28 @@ public class LittleKellyMcLuckyBlock extends Block {
             double d3 = (double) (rand.nextFloat() * (float) j);
             double d4 = ((double) rand.nextFloat() - 0.5D) * 0.125D;
             double d5 = (double) (rand.nextFloat() * (float) k);
-            worldIn.spawnParticle(EnumParticleTypes.CRIT_MAGIC, d0, d1, d2, d3, d4, d5, new int[0]);
+            worldIn.spawnParticle(EnumParticleTypes.CRIT_MAGIC, d0, d1, d2, d3, d4, d5);
         }
     }
 
 
     @Override
-    public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+    public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
         if (!world.isRemote && player != null && !(player instanceof FakePlayer)) {
-
             world.setBlockToAir(pos);
             drops(world, pos, player);
         }
-        return true;
-
-        //super.onBlockDestroyedByPlayer(worldIn, pos, state);
+        return false;
     }
 
     private void drops(World worldIn, BlockPos pos, EntityPlayer player) {
 
         Enchantment[] e = new Enchantment[5];
-        e[0] = Enchantment.flame;
-        e[1] = Enchantment.knockback;
-        e[2] = Enchantment.power;
-        e[3] = Enchantment.thorns;
-        e[4] = Enchantment.looting;
+        e[0] = Enchantment.getEnchantmentByID(50);
+        e[1] = Enchantment.getEnchantmentByID(19);
+        e[2] = Enchantment.getEnchantmentByID(48);
+        e[3] = Enchantment.getEnchantmentByID(7);
+        e[4] = Enchantment.getEnchantmentByID(21);
 
 
         Random rand = new Random();
@@ -96,7 +92,7 @@ public class LittleKellyMcLuckyBlock extends Block {
         switch (rand.nextInt(51)) {
 
             default: {
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.diamond_sword), e, 5, worldIn, pos);
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.DIAMOND_SWORD), e, 5, worldIn, pos);
             }
             case 0: {
 
@@ -116,9 +112,9 @@ public class LittleKellyMcLuckyBlock extends Block {
                 break;
             }
             case 4: {
-                Enchantment[] e1 = {Enchantment.sharpness, Enchantment.baneOfArthropods, Enchantment.fireAspect, Enchantment.smite};
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.diamond_shovel), e1, 9, worldIn, pos);
-                ExtraFunctions.chat("Someone Just Got " + EnumChatFormatting.DARK_AQUA + "GOD" + EnumChatFormatting.WHITE + " Shovel", player);
+                Enchantment[] e1 = {Enchantment.getEnchantmentByID(16), Enchantment.getEnchantmentByID(18), Enchantment.getEnchantmentByID(20), Enchantment.getEnchantmentByID(17)};
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.DIAMOND_SHOVEL), e1, 9, worldIn, pos);
+                ExtraFunctions.chat("Someone Just Got " + ChatFormatting.DARK_AQUA + "GOD" + ChatFormatting.WHITE + " Shovel", player);
                 break;
             }
             case 5: {
@@ -196,12 +192,12 @@ public class LittleKellyMcLuckyBlock extends Block {
                 break;
             }
             case 23: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.enchanting_table);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.ENCHANTING_TABLE);
                 break;
             }
             case 24: {
                 ExtraFunctions.chat("You May Want To Craft Anything :3", player);
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.crafting_table);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.CRAFTING_TABLE);
                 break;
             }
             case 25: {
@@ -225,7 +221,7 @@ public class LittleKellyMcLuckyBlock extends Block {
                 break;
             }
             case 30: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.flowing_lava);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.FLOWING_LAVA);
                 break;
             }
             case 31: {
@@ -233,15 +229,15 @@ public class LittleKellyMcLuckyBlock extends Block {
                 break;
             }
             case 32: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.bone), 50, 1, 4);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.BONE), 50, 1, 4);
                 break;
             }
             case 33: {
-                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.bedrock);
+                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.BEDROCK);
                 break;
             }
             case 34: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.saddle));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.SADDLE));
                 break;
             }
             case 35: {
@@ -262,11 +258,11 @@ public class LittleKellyMcLuckyBlock extends Block {
                 break;
             }
             case 39: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.end_portal);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.END_PORTAL);
                 break;
             }
             case 40: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.nether_brick);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.NETHER_BRICK);
                 break;
             }
             case 41: {
@@ -274,15 +270,15 @@ public class LittleKellyMcLuckyBlock extends Block {
                 break;
             }
             case 42: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.command_block_minecart));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.COMMAND_BLOCK_MINECART));
                 break;
             }
             case 43: {
-                ItemStack[] stack = {new ItemStack(Items.diamond_sword), new ItemStack(Items.diamond_axe)
-                        , new ItemStack(Items.wooden_sword), new ItemStack(Items.bone), new ItemStack(Items.golden_boots),
-                        new ItemStack(Items.diamond_pickaxe)};
-                Enchantment[] ench = {Enchantment.fortune, Enchantment.fireAspect, Enchantment.punch, Enchantment.efficiency, Enchantment.flame
-                        , Enchantment.unbreaking, Enchantment.infinity, Enchantment.looting};
+                ItemStack[] stack = {new ItemStack(Items.DIAMOND_SWORD), new ItemStack(Items.DIAMOND_AXE)
+                        , new ItemStack(Items.WOODEN_SWORD), new ItemStack(Items.BONE), new ItemStack(Items.GOLDEN_BOOTS),
+                        new ItemStack(Items.DIAMOND_PICKAXE)};
+                Enchantment[] ench = {Enchantment.getEnchantmentByID(35), Enchantment.getEnchantmentByID(20), Enchantment.getEnchantmentByID(49), Enchantment.getEnchantmentByID(32), Enchantment.getEnchantmentByID(50)
+                        , Enchantment.getEnchantmentByID(34), Enchantment.getEnchantmentByID(51), Enchantment.getEnchantmentByID(21)};
 
 
                 ExtraFunctions.addRandomEnchtToRandomItems(worldIn, stack, ench, 8, pos, rand);
@@ -298,11 +294,11 @@ public class LittleKellyMcLuckyBlock extends Block {
                 break;
             }
             case 45: {
-                ItemStack[] s = {new ItemStack(Items.stone_axe), new ItemStack(Items.stone_hoe)
-                        , new ItemStack(Items.stone_pickaxe), new ItemStack(Items.stone_sword), new ItemStack(Items.diamond_chestplate),
-                        new ItemStack(Items.acacia_door)};
-                Enchantment[] ench = {Enchantment.fortune, Enchantment.fireAspect, Enchantment.punch, Enchantment.efficiency, Enchantment.flame
-                        , Enchantment.unbreaking, Enchantment.infinity, Enchantment.looting};
+                ItemStack[] s = {new ItemStack(Items.STONE_AXE), new ItemStack(Items.STONE_HOE)
+                        , new ItemStack(Items.STONE_PICKAXE), new ItemStack(Items.STONE_SWORD), new ItemStack(Items.DIAMOND_CHESTPLATE),
+                        new ItemStack(Items.ACACIA_DOOR)};
+                Enchantment[] ench = {Enchantment.getEnchantmentByID(35), Enchantment.getEnchantmentByID(20), Enchantment.getEnchantmentByID(49), Enchantment.getEnchantmentByID(32), Enchantment.getEnchantmentByID(50)
+                        , Enchantment.getEnchantmentByID(34), Enchantment.getEnchantmentByID(51), Enchantment.getEnchantmentByID(21)};
 
 
                 ExtraFunctions.addRandomEnchtToRandomItems(worldIn, s, ench, 8, pos, rand);

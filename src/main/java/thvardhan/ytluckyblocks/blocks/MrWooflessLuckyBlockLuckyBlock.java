@@ -12,8 +12,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.math.BlockPos;
+import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
@@ -35,11 +35,11 @@ public class MrWooflessLuckyBlockLuckyBlock extends Block {
         this.setCreativeTab(CommonProxy.tabYTStuffMod);
         this.setHardness(hardness);
         this.setResistance(resistance);
-        this.setBlockBounds(0, 0, 0, 1, 0.9F, 1);
+
     }
 
     public MrWooflessLuckyBlockLuckyBlock(String unlocalizedName, float hardness, float resistance) {
-        this(unlocalizedName, Material.rock, 0, 10000);
+        this(unlocalizedName, Material.ROCK, 0, 10000);
     }
 
     public MrWooflessLuckyBlockLuckyBlock(String unlocalizedName) {
@@ -47,10 +47,9 @@ public class MrWooflessLuckyBlockLuckyBlock extends Block {
     }
 
     @Override
-    public boolean isOpaqueCube() {
+    public boolean isVisuallyOpaque() {
         return false;
     }
-
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
         for (int i = 0; i < 3; ++i) {
@@ -62,31 +61,28 @@ public class MrWooflessLuckyBlockLuckyBlock extends Block {
             double d3 = (double) (rand.nextFloat() * (float) j);
             double d4 = ((double) rand.nextFloat() - 0.5D) * 0.125D;
             double d5 = (double) (rand.nextFloat() * (float) k);
-            worldIn.spawnParticle(EnumParticleTypes.SPELL_WITCH, d0, d1, d2, d3, d4, d5, new int[0]);
+            worldIn.spawnParticle(EnumParticleTypes.SPELL_WITCH, d0, d1, d2, d3, d4, d5);
         }
     }
 
 
     @Override
-    public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+    public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
         if (!world.isRemote && player != null && !(player instanceof FakePlayer)) {
-
             world.setBlockToAir(pos);
             drops(world, pos, player);
         }
-        return true;
-
-        //super.onBlockDestroyedByPlayer(worldIn, pos, state);
+        return false;
     }
 
     private void drops(World worldIn, BlockPos pos, EntityPlayer player) {
 
         Enchantment[] e = new Enchantment[5];
-        e[0] = Enchantment.flame;
-        e[1] = Enchantment.knockback;
-        e[2] = Enchantment.power;
-        e[3] = Enchantment.thorns;
-        e[4] = Enchantment.looting;
+        e[0] = Enchantment.getEnchantmentByID(50);
+        e[1] = Enchantment.getEnchantmentByID(19);
+        e[2] = Enchantment.getEnchantmentByID(48);
+        e[3] = Enchantment.getEnchantmentByID(7);
+        e[4] = Enchantment.getEnchantmentByID(21);
 
 
         Random rand = new Random();
@@ -95,10 +91,10 @@ public class MrWooflessLuckyBlockLuckyBlock extends Block {
         switch (rand.nextInt(51)) {
 
             default: {
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.diamond_sword), e, 5, worldIn, pos);
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.DIAMOND_SWORD), e, 5, worldIn, pos);
             }
             case 0: {
-                ExtraFunctions.chat(EnumChatFormatting.RED + "Passive Aggression. We win games. With no kills.", player);
+                ExtraFunctions.chat(ChatFormatting.RED + "Passive Aggression. We win games. With no kills.", player);
                 break;
             }
             case 1: {
@@ -110,7 +106,7 @@ public class MrWooflessLuckyBlockLuckyBlock extends Block {
                 break;
             }
             case 3: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.soul_sand);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.SOUL_SAND);
                 break;
             }
             case 4: {
@@ -135,7 +131,7 @@ public class MrWooflessLuckyBlockLuckyBlock extends Block {
                 break;
             }
             case 9: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.apple));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.APPLE));
                 break;
             }
             case 10: {
@@ -143,7 +139,7 @@ public class MrWooflessLuckyBlockLuckyBlock extends Block {
                 break;
             }
             case 11: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.emerald), 64, 1, 4);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.EMERALD), 64, 1, 4);
                 break;
             }
             case 12: {
@@ -163,7 +159,7 @@ public class MrWooflessLuckyBlockLuckyBlock extends Block {
                 break;
             }
             case 16: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.diamond_axe));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.DIAMOND_AXE));
                 break;
             }
             case 17: {
@@ -180,11 +176,11 @@ public class MrWooflessLuckyBlockLuckyBlock extends Block {
                 break;
             }
             case 20: {
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.arrow), e, 5, worldIn, pos);
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.ARROW), e, 5, worldIn, pos);
                 break;
             }
             case 21: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.cake);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.CAKE);
                 break;
             }
             case 22: {
@@ -196,7 +192,7 @@ public class MrWooflessLuckyBlockLuckyBlock extends Block {
                 break;
             }
             case 24: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.fire);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.FIRE);
                 break;
 
             }
@@ -222,7 +218,7 @@ public class MrWooflessLuckyBlockLuckyBlock extends Block {
                 break;
             }
             case 30: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.flowing_lava);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.FLOWING_LAVA);
                 break;
             }
             case 31: {
@@ -230,15 +226,15 @@ public class MrWooflessLuckyBlockLuckyBlock extends Block {
                 break;
             }
             case 32: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.bone), 50, 1, 4);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.BONE), 50, 1, 4);
                 break;
             }
             case 33: {
-                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.bedrock);
+                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.BEDROCK);
                 break;
             }
             case 34: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.saddle));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.SADDLE));
                 break;
             }
             case 35: {
@@ -259,11 +255,11 @@ public class MrWooflessLuckyBlockLuckyBlock extends Block {
                 break;
             }
             case 39: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.end_portal);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.END_PORTAL);
                 break;
             }
             case 40: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.nether_brick);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.NETHER_BRICK);
                 break;
             }
             case 41: {
@@ -271,7 +267,7 @@ public class MrWooflessLuckyBlockLuckyBlock extends Block {
                 break;
             }
             case 42: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.command_block_minecart));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.COMMAND_BLOCK_MINECART));
                 break;
             }
             case 43: {
@@ -287,7 +283,7 @@ public class MrWooflessLuckyBlockLuckyBlock extends Block {
                 break;
             }
             case 46: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.diamond_sword));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.DIAMOND_SWORD));
                 break;
             }
             case 47: {

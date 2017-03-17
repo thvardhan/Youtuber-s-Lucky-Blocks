@@ -3,7 +3,7 @@ package thvardhan.ytluckyblocks.blocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thvardhan.ytluckyblocks.CommonProxy;
 import thvardhan.ytluckyblocks.functions.ExtraFunctions;
@@ -22,7 +22,7 @@ public class YoutubeBlock extends Block {
     }
 
     public YoutubeBlock(String unlocalizedName, float hardness, float resistance) {
-        this(unlocalizedName, Material.rock, 0, 10000);
+        this(unlocalizedName, Material.ROCK, 0, 10000);
     }
 
     public YoutubeBlock(String unlocalizedName) {

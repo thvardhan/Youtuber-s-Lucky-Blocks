@@ -10,8 +10,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.math.BlockPos;
+import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
@@ -39,7 +39,7 @@ public class DonutTheDogLuckyBlock extends Block {
     }
 
     public DonutTheDogLuckyBlock(String unlocalizedName, float hardness, float resistance) {
-        this(unlocalizedName, Material.rock, 0, 10000);
+        this(unlocalizedName, Material.ROCK, 0, 10000);
     }
 
     public DonutTheDogLuckyBlock(String unlocalizedName) {
@@ -47,10 +47,9 @@ public class DonutTheDogLuckyBlock extends Block {
     }
 
     @Override
-    public boolean isOpaqueCube() {
+    public boolean isVisuallyOpaque() {
         return false;
     }
-
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
         for (int i = 0; i < 3; ++i) {
@@ -62,31 +61,28 @@ public class DonutTheDogLuckyBlock extends Block {
             double d3 = (double) (rand.nextFloat() * (float) j);
             double d4 = ((double) rand.nextFloat() - 0.5D) * 0.125D;
             double d5 = (double) (rand.nextFloat() * (float) k);
-            worldIn.spawnParticle(EnumParticleTypes.CRIT_MAGIC, d0, d1, d2, d3, d4, d5, new int[0]);
+            worldIn.spawnParticle(EnumParticleTypes.CRIT_MAGIC, d0, d1, d2, d3, d4, d5);
         }
     }
 
 
     @Override
-    public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+    public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
         if (!world.isRemote && player != null && !(player instanceof FakePlayer)) {
-
             world.setBlockToAir(pos);
             drops(world, pos, player);
         }
-        return true;
-
-        //super.onBlockDestroyedByPlayer(worldIn, pos, state);
+        return false;
     }
 
     private void drops(World worldIn, BlockPos pos, EntityPlayer player) {
 
         Enchantment[] e = new Enchantment[5];
-        e[0] = Enchantment.flame;
-        e[1] = Enchantment.knockback;
-        e[2] = Enchantment.power;
-        e[3] = Enchantment.thorns;
-        e[4] = Enchantment.looting;
+        e[0] = Enchantment.getEnchantmentByID(50);
+        e[1] = Enchantment.getEnchantmentByID(19);
+        e[2] = Enchantment.getEnchantmentByID(48);
+        e[3] = Enchantment.getEnchantmentByID(7);
+        e[4] = Enchantment.getEnchantmentByID(21);
 
 
         Random rand = new Random();
@@ -108,12 +104,12 @@ public class DonutTheDogLuckyBlock extends Block {
                 break;
             }
             case 2: {
-                ExtraFunctions.chat(EnumChatFormatting.BLACK + "Special Troll", player);
+                ExtraFunctions.chat(ChatFormatting.BLACK + "Special Troll", player);
                 break;
             }
             case 3: {
-                Enchantment[] e1 = {Enchantment.protection, Enchantment.fireProtection, Enchantment.blastProtection, Enchantment.featherFalling, Enchantment.fireProtection};
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.diamond_boots), e1, 5, worldIn, pos);
+                Enchantment[] e1 = {Enchantment.getEnchantmentByID(0), Enchantment.getEnchantmentByID(1), Enchantment.getEnchantmentByID(3), Enchantment.getEnchantmentByID(2), Enchantment.getEnchantmentByID(1)};
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.DIAMOND_BOOTS), e1, 5, worldIn, pos);
                 break;
             }
             case 4: {
@@ -149,7 +145,7 @@ public class DonutTheDogLuckyBlock extends Block {
                 break;
             }
             case 12: {
-                ExtraFunctions.summonItemWithLoop(worldIn, pos, Items.golden_apple, 15, 1, 5);
+                ExtraFunctions.summonItemWithLoop(worldIn, pos, Items.GOLDEN_APPLE, 15, 1, 5);
                 break;
             }
             case 13: {
@@ -165,11 +161,11 @@ public class DonutTheDogLuckyBlock extends Block {
                 break;
             }
             case 16: {
-                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.dragon_egg);
+                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.DRAGON_EGG);
                 break;
             }
             case 17: {
-                ExtraFunctions.summonBlockWithLoop(worldIn, pos, Blocks.cake, 20, 0, 0);
+                ExtraFunctions.summonBlockWithLoop(worldIn, pos, Blocks.CAKE, 20, 0, 0);
                 break;
             }
             case 18: {
@@ -189,22 +185,22 @@ public class DonutTheDogLuckyBlock extends Block {
                 break;
             }
             case 22: {
-                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.diamond_boots, EnumChatFormatting.BLUE + "Log.zip Not So Lucky Boots", Enchantment.featherFalling, 30);
+                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.DIAMOND_BOOTS, ChatFormatting.BLUE + "Log.zip Not So Lucky Boots", Enchantment.getEnchantmentByID(2), 30);
                 break;
             }
             case 23: {
-                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.diamond_chestplate, EnumChatFormatting.BLUE + "Log.zip Not So Lucky Chestplate", Enchantment.thorns, 10);
+                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.DIAMOND_CHESTPLATE, ChatFormatting.BLUE + "Log.zip Not So Lucky Chestplate", Enchantment.getEnchantmentByID(7), 10);
                 break;
             }
             case 24: {
-                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.diamond_leggings, EnumChatFormatting.BLUE + "Log.zip Not So Lucky Leggings", Enchantment.blastProtection, 6);
+                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.DIAMOND_LEGGINGS, ChatFormatting.BLUE + "Log.zip Not So Lucky Leggings", Enchantment.getEnchantmentByID(3), 6);
             }
             case 25: {
-                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.diamond_helmet, EnumChatFormatting.BLUE + "Log.zip Not So Lucky Helmet", Enchantment.projectileProtection, 15);
+                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.DIAMOND_HELMET, ChatFormatting.BLUE + "Log.zip Not So Lucky Helmet", Enchantment.getEnchantmentByID(4), 15);
                 break;
             }
             case 26: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.beacon));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.BEACON));
                 break;
             }
             case 27: {

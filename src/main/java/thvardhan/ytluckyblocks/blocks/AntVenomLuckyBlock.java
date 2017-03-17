@@ -1,5 +1,6 @@
 package thvardhan.ytluckyblocks.blocks;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -11,8 +12,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.math.BlockPos;
+//import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
@@ -38,11 +39,11 @@ public class AntVenomLuckyBlock extends Block {
         this.setCreativeTab(CommonProxy.tabYTStuffMod);
         this.setHardness(hardness);
         this.setResistance(resistance);
-        this.setBlockBounds(0, 0, 0, 1, 0.9F, 1);
+
     }
 
     public AntVenomLuckyBlock(String unlocalizedName, float hardness, float resistance) {
-        this(unlocalizedName, Material.rock, 0, 10000);
+        this(unlocalizedName, Material.ROCK, 0, 10000);
     }
 
     public AntVenomLuckyBlock(String unlocalizedName) {
@@ -67,12 +68,12 @@ public class AntVenomLuckyBlock extends Block {
                 break;
             }
             case 2: {
-                ExtraFunctions.chat(EnumChatFormatting.BLACK + "Special Troll", player);
+                ExtraFunctions.chat(ChatFormatting.BLACK + "Special Troll", player);
                 break;
             }
             case 3: {
-                Enchantment[] e = {Enchantment.protection, Enchantment.fireProtection, Enchantment.blastProtection, Enchantment.featherFalling, Enchantment.fireProtection};
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.diamond_boots), e, 5, worldIn, pos);
+                Enchantment[] e = {Enchantment.getEnchantmentByID(0), Enchantment.getEnchantmentByID(1), Enchantment.getEnchantmentByID(3), Enchantment.getEnchantmentByID(2), Enchantment.getEnchantmentByID(1)};
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.DIAMOND_BOOTS), e, 5, worldIn, pos);
                 break;
             }
             case 4: {
@@ -108,11 +109,11 @@ public class AntVenomLuckyBlock extends Block {
                 break;
             }
             case 12: {
-                ExtraFunctions.summonItemWithLoop(worldIn, pos, Items.golden_apple, 15, 1, 5);
+                ExtraFunctions.summonItemWithLoop(worldIn, pos, Items.GOLDEN_APPLE, 15, 1, 5);
                 break;
             }
             case 13: {
-                ExtraFunctions.summonItemWithLoop(worldIn, pos, Items.apple, 64, 0, 0);
+                ExtraFunctions.summonItemWithLoop(worldIn, pos, Items.APPLE, 64, 0, 0);
                 break;
             }
             case 14: {
@@ -146,16 +147,16 @@ public class AntVenomLuckyBlock extends Block {
                 break;
             }
             case 21: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.flowing_lava);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.FLOWING_LAVA);
                 break;
             }
             case 22: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.bedrock);
-                ExtraFunctions.chat(EnumChatFormatting.BLACK + "Try to break me :V", player);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.BEDROCK);
+                ExtraFunctions.chat(ChatFormatting.BLACK + "Try to break me :V", player);
                 break;
             }
             case 23: {
-                ExtraFunctions.chat(EnumChatFormatting.AQUA + "This Lucky Block You Just Opened Is Buged -_- Please Open Other One :D", player);
+                ExtraFunctions.chat(ChatFormatting.AQUA + "This Lucky Block You Just Opened Is Buged -_- Please Open Other One :D", player);
                 break;
             }
             case 24: {
@@ -163,7 +164,7 @@ public class AntVenomLuckyBlock extends Block {
                 break;
             }
             case 25: {
-                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.wooden_sword, EnumChatFormatting.BLUE + "Mama", Enchantment.featherFalling, 100);
+                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.WOODEN_SWORD, ChatFormatting.BLUE + "Mama", Enchantment.getEnchantmentByID(2), 100);
                 break;
             }
             case 26: {
@@ -179,11 +180,11 @@ public class AntVenomLuckyBlock extends Block {
                 break;
             }
             case 29: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.cake);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.CAKE);
                 break;
             }
             case 30: {
-                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.iron_block);
+                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.IRON_BLOCK);
                 break;
             }
             case 31: {
@@ -205,15 +206,15 @@ public class AntVenomLuckyBlock extends Block {
                 break;
             }
             case 35: {
-                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.cake);
+                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.CAKE);
                 break;
             }
             case 36: {
-                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.dragon_egg);
+                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.DRAGON_EGG);
                 break;
             }
             case 37: {
-                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.bed);
+                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.BED);
                 break;
             }
             case 38: {
@@ -233,15 +234,15 @@ public class AntVenomLuckyBlock extends Block {
                 break;
             }
             case 42: {
-                ExtraFunctions.summonItemWithLoop(worldIn, pos, Items.diamond, 64, 0, 0);
+                ExtraFunctions.summonItemWithLoop(worldIn, pos, Items.DIAMOND, 64, 0, 0);
                 break;
             }
             case 43: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.gold_block), 55, 1, 5);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.GOLD_BLOCK), 55, 1, 5);
                 break;
             }
             case 44: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.emerald), 54, 0, 0);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.EMERALD), 54, 0, 0);
                 break;
             }
             case 45: {
@@ -290,7 +291,7 @@ public class AntVenomLuckyBlock extends Block {
     }
 
     @Override
-    public boolean isOpaqueCube() {
+    public boolean isVisuallyOpaque() {
         return false;
     }
 
@@ -305,23 +306,18 @@ public class AntVenomLuckyBlock extends Block {
             double d3 = (double) (rand.nextFloat() * (float) j);
             double d4 = ((double) rand.nextFloat() - 0.5D) * 0.125D;
             double d5 = (double) (rand.nextFloat() * (float) k);
-            worldIn.spawnParticle(EnumParticleTypes.PORTAL, d0, d1, d2, d3, d4, d5, new int[0]);
+            worldIn.spawnParticle(EnumParticleTypes.PORTAL, d0, d1, d2, d3, d4, d5);
         }
     }
 
+
     @Override
-    public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
-
-
+    public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
         if (!world.isRemote && player != null && !(player instanceof FakePlayer)) {
-            ExtraFunctions.setOneBlock(world, pos, Blocks.air);
+            ExtraFunctions.setOneBlock(world, pos, Blocks.AIR);
             drops(world, pos, player);
         }
-
-
-        return true;
-
-
+        return false;
     }
 
 

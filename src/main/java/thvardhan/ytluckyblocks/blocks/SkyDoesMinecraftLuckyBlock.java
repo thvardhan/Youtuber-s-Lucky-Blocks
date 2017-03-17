@@ -13,8 +13,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.math.BlockPos;
+import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
@@ -35,11 +35,11 @@ public class SkyDoesMinecraftLuckyBlock extends Block {
         this.setCreativeTab(CommonProxy.tabYTStuffMod);
         this.setHardness(hardness);
         this.setResistance(resistance);
-        this.setBlockBounds(0, 0, 0, 1, 0.9F, 1);
+
     }
 
     public SkyDoesMinecraftLuckyBlock(String unlocalizedName, float hardness, float resistance) {
-        this(unlocalizedName, Material.rock, 0, 10000);
+        this(unlocalizedName, Material.ROCK, 0, 10000);
     }
 
     public SkyDoesMinecraftLuckyBlock(String unlocalizedName) {
@@ -47,10 +47,9 @@ public class SkyDoesMinecraftLuckyBlock extends Block {
     }
 
     @Override
-    public boolean isOpaqueCube() {
+    public boolean isVisuallyOpaque() {
         return false;
     }
-
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
         for (int i = 0; i < 3; ++i) {
@@ -62,19 +61,19 @@ public class SkyDoesMinecraftLuckyBlock extends Block {
             double d3 = (double) (rand.nextFloat() * (float) j);
             double d4 = ((double) rand.nextFloat() - 0.5D) * 0.125D;
             double d5 = (double) (rand.nextFloat() * (float) k);
-            worldIn.spawnParticle(EnumParticleTypes.PORTAL, d0, d1, d2, d3, d4, d5, new int[0]);
+            worldIn.spawnParticle(EnumParticleTypes.PORTAL, d0, d1, d2, d3, d4, d5);
         }
     }
 
 
     @Override
-    public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+    public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
         if (!world.isRemote && player != null && !(player instanceof FakePlayer)) {
 
             world.setBlockToAir(pos);
             drops(world, pos, player);
         }
-        return true;
+        return false;
     }
 
     private void drops(World worldIn, BlockPos pos, EntityPlayer player) {
@@ -98,11 +97,11 @@ public class SkyDoesMinecraftLuckyBlock extends Block {
                 break;
             }
             case 2: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.diamond_block);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.DIAMOND_BLOCK);
                 break;
             }
             case 3: {
-                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.gold_ingot, EnumChatFormatting.GOLD + "Butter", Enchantment.knockback, 10);
+                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.GOLD_INGOT, ChatFormatting.GOLD + "Butter", Enchantment.getEnchantmentByID(19), 10);
                 break;
             }
             case 4: {
@@ -146,11 +145,11 @@ public class SkyDoesMinecraftLuckyBlock extends Block {
                 break;
             }
             case 14: {
-                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.cake);
+                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.CAKE);
                 break;
             }
             case 15: {
-                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.dragon_egg);
+                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.DRAGON_EGG);
                 break;
             }
             case 16: {
@@ -206,7 +205,7 @@ public class SkyDoesMinecraftLuckyBlock extends Block {
                 break;
             }
             case 29: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.bed);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.BED);
                 break;
             }
             case 30: {
@@ -218,7 +217,7 @@ public class SkyDoesMinecraftLuckyBlock extends Block {
                 break;
             }
             case 32: {
-                Enchantment[] e = {Enchantment.sharpness, Enchantment.knockback, Enchantment.smite, Enchantment.baneOfArthropods};
+                Enchantment[] e = {Enchantment.getEnchantmentByID(16), Enchantment.getEnchantmentByID(19), Enchantment.getEnchantmentByID(17), Enchantment.getEnchantmentByID(18)};
                 ExtraFunctions.addEnchantsMany(new ItemStack(ModItems.devilSword), e, 4, worldIn, pos);
                 break;
             }
@@ -235,7 +234,7 @@ public class SkyDoesMinecraftLuckyBlock extends Block {
                 break;
             }
             case 36: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.flowing_lava);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.FLOWING_LAVA);
                 break;
             }
             case 37: {
@@ -271,8 +270,8 @@ public class SkyDoesMinecraftLuckyBlock extends Block {
                 break;
             }
             case 45: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.tnt);
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.flint_and_steel));
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.TNT);
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.FLINT_AND_STEEL));
                 break;
             }
             case 46: {
@@ -284,7 +283,7 @@ public class SkyDoesMinecraftLuckyBlock extends Block {
                 break;
             }
             case 48: {
-                ExtraFunctions.summonBlockWithLoop(worldIn, pos, Blocks.gold_block, 64, 1, 25);
+                ExtraFunctions.summonBlockWithLoop(worldIn, pos, Blocks.GOLD_BLOCK, 64, 1, 25);
                 break;
             }
             case 49: {

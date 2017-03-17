@@ -13,12 +13,12 @@ public class DiamondButton extends Block {
         this.setCreativeTab(CommonProxy.tabYTStuffMod);
         this.setHardness(hardness);
         this.setResistance(resistance);
-        this.setBlockBounds(0, 0.1F, 0.5F, 1, 0.8F, 0.6F);
+        //  this.setBlockBounds(0, 0.1F, 0.5F, 1, 0.8F, 0.6F);
         this.setLightLevel(1F);
     }
 
     public DiamondButton(String unlocalizedName, float hardness, float resistance) {
-        this(unlocalizedName, Material.rock, 20, 10000);
+        this(unlocalizedName, Material.ROCK, 20, 10000);
     }
 
     public DiamondButton(String unlocalizedName) {
@@ -26,9 +26,8 @@ public class DiamondButton extends Block {
     }
 
     @Override
-    public boolean isOpaqueCube() {
+    public boolean isVisuallyOpaque() {
         return false;
     }
-
 
 }

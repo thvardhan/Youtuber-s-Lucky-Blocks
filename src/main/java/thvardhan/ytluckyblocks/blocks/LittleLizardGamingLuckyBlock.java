@@ -10,8 +10,8 @@ import net.minecraft.entity.passive.EntityRabbit;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.math.BlockPos;
+import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
@@ -39,7 +39,7 @@ public class LittleLizardGamingLuckyBlock extends Block {
     }
 
     public LittleLizardGamingLuckyBlock(String unlocalizedName, float hardness, float resistance) {
-        this(unlocalizedName, Material.rock, 0, 10000);
+        this(unlocalizedName, Material.ROCK, 0, 10000);
     }
 
     public LittleLizardGamingLuckyBlock(String unlocalizedName) {
@@ -47,10 +47,9 @@ public class LittleLizardGamingLuckyBlock extends Block {
     }
 
     @Override
-    public boolean isOpaqueCube() {
+    public boolean isVisuallyOpaque() {
         return false;
     }
-
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
         for (int i = 0; i < 3; ++i) {
@@ -62,31 +61,28 @@ public class LittleLizardGamingLuckyBlock extends Block {
             double d3 = (double) (rand.nextFloat() * (float) j);
             double d4 = ((double) rand.nextFloat() - 0.5D) * 0.125D;
             double d5 = (double) (rand.nextFloat() * (float) k);
-            worldIn.spawnParticle(EnumParticleTypes.CRIT_MAGIC, d0, d1, d2, d3, d4, d5, new int[0]);
+            worldIn.spawnParticle(EnumParticleTypes.CRIT_MAGIC, d0, d1, d2, d3, d4, d5);
         }
     }
 
 
     @Override
-    public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+    public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
         if (!world.isRemote && player != null && !(player instanceof FakePlayer)) {
-
             world.setBlockToAir(pos);
             drops(world, pos, player);
         }
-        return true;
-
-        //super.onBlockDestroyedByPlayer(worldIn, pos, state);
+        return false;
     }
 
     private void drops(World worldIn, BlockPos pos, EntityPlayer player) {
 
         Enchantment[] e = new Enchantment[5];
-        e[0] = Enchantment.flame;
-        e[1] = Enchantment.knockback;
-        e[2] = Enchantment.power;
-        e[3] = Enchantment.thorns;
-        e[4] = Enchantment.looting;
+        e[0] = Enchantment.getEnchantmentByID(50);
+        e[1] = Enchantment.getEnchantmentByID(19);
+        e[2] = Enchantment.getEnchantmentByID(48);
+        e[3] = Enchantment.getEnchantmentByID(7);
+        e[4] = Enchantment.getEnchantmentByID(21);
 
 
         Random rand = new Random();
@@ -95,7 +91,7 @@ public class LittleLizardGamingLuckyBlock extends Block {
         switch (rand.nextInt(51)) {
 
             default: {
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.diamond_sword), e, 5, worldIn, pos);
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.DIAMOND_SWORD), e, 5, worldIn, pos);
             }
             case 0: {
                 ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(ModItems.littlelizardBoots));
@@ -177,8 +173,8 @@ public class LittleLizardGamingLuckyBlock extends Block {
                 break;
             }
             case 19: {
-                Enchantment[] e1 = {Enchantment.fireAspect, Enchantment.knockback};
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.bed), e1, 10, worldIn, pos);
+                Enchantment[] e1 = {Enchantment.getEnchantmentByID(20), Enchantment.getEnchantmentByID(19)};
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.BED), e1, 10, worldIn, pos);
                 break;
             }
             case 20: {
@@ -194,7 +190,7 @@ public class LittleLizardGamingLuckyBlock extends Block {
                 break;
             }
             case 23: {
-                ExtraFunctions.chat(EnumChatFormatting.DARK_RED + "BEEP BEEP NUKE =WARNING=", player);
+                ExtraFunctions.chat(ChatFormatting.DARK_RED + "BEEP BEEP NUKE =WARNING=", player);
                 ExtraFunctions.tntNearby(worldIn, pos, 200, player, rand);
                 break;
             }
@@ -243,12 +239,12 @@ public class LittleLizardGamingLuckyBlock extends Block {
                 break;
             }
             case 35: {
-                ExtraFunctions.summonItemWithLoop(worldIn, pos, Items.baked_potato, 50, 1, 10);
+                ExtraFunctions.summonItemWithLoop(worldIn, pos, Items.BAKED_POTATO, 50, 1, 10);
                 ExtraFunctions.chat("ItS PoTaT RaIn!", player);
                 break;
             }
             case 36: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.iron_axe), 5, 1, 50);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.IRON_AXE), 5, 1, 50);
                 break;
             }
             case 37: {

@@ -10,11 +10,12 @@ import net.minecraft.entity.monster.EntityGuardian;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.init.PotionTypes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.math.BlockPos;
+import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
@@ -35,11 +36,11 @@ public class PinkSheepYTLuckyBlock extends Block {
         this.setCreativeTab(CommonProxy.tabYTStuffMod);
         this.setHardness(hardness);
         this.setResistance(resistance);
-        this.setBlockBounds(0, 0, 0, 1, 0.9F, 1);
+
     }
 
     public PinkSheepYTLuckyBlock(String unlocalizedName, float hardness, float resistance) {
-        this(unlocalizedName, Material.rock, 0, 10000);
+        this(unlocalizedName, Material.ROCK, 0, 10000);
     }
 
     public PinkSheepYTLuckyBlock(String unlocalizedName) {
@@ -47,10 +48,9 @@ public class PinkSheepYTLuckyBlock extends Block {
     }
 
     @Override
-    public boolean isOpaqueCube() {
+    public boolean isVisuallyOpaque() {
         return false;
     }
-
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
         for (int i = 0; i < 3; ++i) {
@@ -62,13 +62,13 @@ public class PinkSheepYTLuckyBlock extends Block {
             double d3 = (double) (rand.nextFloat() * (float) j);
             double d4 = ((double) rand.nextFloat() - 0.5D) * 0.125D;
             double d5 = (double) (rand.nextFloat() * (float) k);
-            worldIn.spawnParticle(EnumParticleTypes.SPELL_WITCH, d0, d1, d2, d3, d4, d5, new int[0]);
+            worldIn.spawnParticle(EnumParticleTypes.SPELL_WITCH, d0, d1, d2, d3, d4, d5);
         }
     }
 
 
     @Override
-    public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+    public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
         if (!world.isRemote && player != null && !(player instanceof FakePlayer)) {
 
 
@@ -77,17 +77,17 @@ public class PinkSheepYTLuckyBlock extends Block {
         }
         return true;
 
-        //super.onBlockDestroyedByPlayer(worldIn, pos, state);
     }
+
 
     private void drops(World worldIn, BlockPos pos, EntityPlayer player) {
 
         Enchantment[] e = new Enchantment[5];
-        e[0] = Enchantment.flame;
-        e[1] = Enchantment.knockback;
-        e[2] = Enchantment.power;
-        e[3] = Enchantment.thorns;
-        e[4] = Enchantment.looting;
+        e[0] = Enchantment.getEnchantmentByID(50);
+        e[1] = Enchantment.getEnchantmentByID(19);
+        e[2] = Enchantment.getEnchantmentByID(48);
+        e[3] = Enchantment.getEnchantmentByID(7);
+        e[4] = Enchantment.getEnchantmentByID(21);
 
 
         Random rand = new Random();
@@ -96,7 +96,7 @@ public class PinkSheepYTLuckyBlock extends Block {
         switch (rand.nextInt(51)) {
 
             default: {
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.diamond_sword), e, 5, worldIn, pos);
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.DIAMOND_SWORD), e, 5, worldIn, pos);
             }
             case 0: {
                 ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(ModItems.ytBoots));
@@ -147,7 +147,7 @@ public class PinkSheepYTLuckyBlock extends Block {
                         }
 
 
-                        worldIn.setBlockState(new BlockPos(pos.getX() + j, pos.getY() + i, pos.getZ()), Blocks.coal_block.getDefaultState(), 2);
+                        worldIn.setBlockState(new BlockPos(pos.getX() + j, pos.getY() + i, pos.getZ()), Blocks.COAL_BLOCK.getDefaultState(), 2);
                     }
 
                 break;
@@ -165,19 +165,19 @@ public class PinkSheepYTLuckyBlock extends Block {
                 break;
             }
             case 14: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.apple));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.APPLE));
                 break;
             }
             case 15: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.quartz_block);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.QUARTZ_BLOCK);
                 break;
             }
             case 16: {
-                ExtraFunctions.effectPlayer(player, new PotionEffect(Potion.blindness.getId(), 50, 500));
+                ExtraFunctions.effectPlayer(player, new PotionEffect(PotionTypes.LONG_SLOWNESS.getEffects().get(0).getPotion(), 50, 500));
                 break;
             }
             case 17: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.flowing_lava);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.FLOWING_LAVA);
                 break;
             }
             case 18: {
@@ -193,7 +193,7 @@ public class PinkSheepYTLuckyBlock extends Block {
                 break;
             }
             case 21: {
-                ExtraFunctions.chat(EnumChatFormatting.DARK_PURPLE + "THE MOD MAKER AND " + player.getName() + " " + EnumChatFormatting.DARK_PURPLE + "ARE PRANKSTER GANGSTER", player);
+                ExtraFunctions.chat(ChatFormatting.DARK_PURPLE + "THE MOD MAKER AND " + player.getName() + " " + ChatFormatting.DARK_PURPLE + "ARE PRANKSTER GANGSTER", player);
                 break;
             }
             case 22: {
@@ -201,7 +201,7 @@ public class PinkSheepYTLuckyBlock extends Block {
                 break;
             }
             case 23: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.carpet);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.CARPET);
                 break;
             }
             case 24: {
@@ -281,7 +281,7 @@ public class PinkSheepYTLuckyBlock extends Block {
                 break;
             }
             case 42: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.cauldron);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.CAULDRON);
                 break;
             }
             case 43: {
@@ -297,11 +297,11 @@ public class PinkSheepYTLuckyBlock extends Block {
                 break;
             }
             case 46: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.golden_apple));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.GOLDEN_APPLE));
                 break;
             }
             case 47: {
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.diamond_sword), e, 4, worldIn, pos);
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.DIAMOND_SWORD), e, 4, worldIn, pos);
                 break;
             }
             case 48: {
@@ -312,13 +312,13 @@ public class PinkSheepYTLuckyBlock extends Block {
                         }
 
 
-                        worldIn.setBlockState(new BlockPos(pos.getX() + j, pos.getY() + i, pos.getZ()), Blocks.coal_block.getDefaultState(), 2);
+                        worldIn.setBlockState(new BlockPos(pos.getX() + j, pos.getY() + i, pos.getZ()), Blocks.COAL_BLOCK.getDefaultState(), 2);
                     }
 
                 break;
             }
             case 49: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.ice), 64, 1, 1);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.ICE), 64, 1, 1);
                 break;
             }
             case 50: {

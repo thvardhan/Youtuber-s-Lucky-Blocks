@@ -13,11 +13,11 @@
 	private void drops(World worldIn,BlockPos pos,EntityPlayer player){
 		
 		Enchantment[] e=new Enchantment[5];
-		e[0]=Enchantment.flame;
-		e[1]=Enchantment.knockback;
-		e[2]=Enchantment.power;
-		e[3]=Enchantment.thorns;
-		e[4]=Enchantment.looting;
+		e[0]=Enchantment.getEnchantmentByID(50);
+		e[1]=Enchantment.getEnchantmentByID(19);
+		e[2]=Enchantment.getEnchantmentByID(48);
+		e[3]=Enchantment.getEnchantmentByID(7);
+		e[4]=Enchantment.getEnchantmentByID(21);
 		
 	
 		Random rand = new Random();
@@ -26,7 +26,7 @@
     	switch(rand.nextInt(101)){
 		
     	default:{
-        	ExtraFunctions.addEnchantsMany(new ItemStack(Items.diamond_sword), e,5, worldIn, pos);}
+        	ExtraFunctions.addEnchantsMany(new ItemStack(Items.DIAMOND_SWORD), e,5, worldIn, pos);}
     	case 0:
     	{
     	
@@ -419,11 +419,11 @@
 	private void drops(World worldIn,BlockPos pos,EntityPlayer player){
 		
 		Enchantment[] e=new Enchantment[5];
-		e[0]=Enchantment.flame;
-		e[1]=Enchantment.knockback;
-		e[2]=Enchantment.power;
-		e[3]=Enchantment.thorns;
-		e[4]=Enchantment.looting;
+		e[0]=Enchantment.getEnchantmentByID(50);
+		e[1]=Enchantment.getEnchantmentByID(19);
+		e[2]=Enchantment.getEnchantmentByID(48);
+		e[3]=Enchantment.getEnchantmentByID(7);
+		e[4]=Enchantment.getEnchantmentByID(21);
 		
 	
 		Random rand = new Random();
@@ -432,7 +432,7 @@
     	switch(rand.nextInt(51)){
 		
     	default:{
-        	ExtraFunctions.addEnchantsMany(new ItemStack(Items.diamond_sword), e,5, worldIn, pos);}
+        	ExtraFunctions.addEnchantsMany(new ItemStack(Items.DIAMOND_SWORD), e,5, worldIn, pos);}
     	case 0:
     	{
     	
