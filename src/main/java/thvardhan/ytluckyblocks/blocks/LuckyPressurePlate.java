@@ -37,9 +37,13 @@ public class LuckyPressurePlate extends Block {
     public LuckyPressurePlate(String unlocalizedName, float hardness, float resistance) {
         this(unlocalizedName, Material.ROCK, 0, 10000);
     }
-
     public LuckyPressurePlate(String unlocalizedName) {
         this(unlocalizedName, 2.0f, 10.0f);
+    }
+
+    @Override
+    public boolean isOpaqueCube(IBlockState state) {
+        return false;
     }
 
     @Override

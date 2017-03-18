@@ -2,6 +2,7 @@ package thvardhan.ytluckyblocks.blocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import thvardhan.ytluckyblocks.CommonProxy;
 
 public class IronButton extends Block {
@@ -30,4 +31,8 @@ public class IronButton extends Block {
         return false;
     }
 
+    @Override
+    public boolean isOpaqueCube(IBlockState state) {
+        return false;
+    }
 }

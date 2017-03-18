@@ -2,6 +2,7 @@ package thvardhan.ytluckyblocks.blocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import thvardhan.ytluckyblocks.CommonProxy;
 
 public class GoldButton extends Block {
@@ -25,6 +26,10 @@ public class GoldButton extends Block {
         this(unlocalizedName, 2.0f, 10.0f);
     }
 
+    @Override
+    public boolean isOpaqueCube(IBlockState state) {
+        return false;
+    }
     @Override
     public boolean isVisuallyOpaque() {
         return false;

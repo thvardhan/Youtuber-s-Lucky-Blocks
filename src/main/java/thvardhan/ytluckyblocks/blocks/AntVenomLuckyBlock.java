@@ -12,9 +12,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-//import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.relauncher.Side;
@@ -28,6 +27,8 @@ import thvardhan.ytluckyblocks.functions.ExtraFunctions;
 import thvardhan.ytluckyblocks.items.ModItems;
 
 import java.util.Random;
+
+//import com.mojang.realmsclient.gui.ChatFormatting;
 
 public class AntVenomLuckyBlock extends Block {
 
@@ -288,6 +289,11 @@ public class AntVenomLuckyBlock extends Block {
             }
 
         }
+    }
+
+    @Override
+    public boolean isOpaqueCube(IBlockState state) {
+        return false;
     }
 
     @Override

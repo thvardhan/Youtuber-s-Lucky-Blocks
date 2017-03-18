@@ -29,7 +29,10 @@ public class YoutubeBlock extends Block {
         this(unlocalizedName, 2.0f, 10.0f);
     }
 
-
+    @Override
+    public boolean isOpaqueCube(IBlockState state) {
+        return false;
+    }
     @Override
     public void onBlockDestroyedByPlayer(World worldIn, BlockPos pos, IBlockState state) {
         if (!worldIn.isRemote) {
