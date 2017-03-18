@@ -11,7 +11,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import thvardhan.ytluckyblocks.CommonProxy;
 import thvardhan.ytluckyblocks.functions.ExtraFunctions;
@@ -31,6 +33,11 @@ public class LuckyPressurePlate extends Block {
         this.setResistance(resistance);
         this.setLightLevel(0F);
         //      this.setBlockBounds(0.03f, 0, 0.03f, 0.93F, 0.2F, 0.93F);
+    }
+
+    @Override
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+        return new AxisAlignedBB(0.03f, 0, 0.03f, 0.93F, 0.2F, 0.93F);
     }
 
 
