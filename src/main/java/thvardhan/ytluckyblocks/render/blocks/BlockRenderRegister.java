@@ -2,7 +2,7 @@ package thvardhan.ytluckyblocks.render.blocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import thvardhan.ytluckyblocks.Main;
 import thvardhan.ytluckyblocks.blocks.ModBlocks;

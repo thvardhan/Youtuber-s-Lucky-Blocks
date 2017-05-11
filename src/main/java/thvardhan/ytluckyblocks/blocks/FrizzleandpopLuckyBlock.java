@@ -9,11 +9,11 @@ import net.minecraft.entity.monster.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.init.PotionTypes;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.relauncher.Side;
@@ -37,7 +37,7 @@ public class FrizzleandpopLuckyBlock extends Block {
     }
 
     public FrizzleandpopLuckyBlock(String unlocalizedName, float hardness, float resistance) {
-        this(unlocalizedName, Material.rock, 0, 10000);
+        this(unlocalizedName, Material.ROCK, 0, 10000);
     }
 
     public FrizzleandpopLuckyBlock(String unlocalizedName) {
@@ -45,10 +45,13 @@ public class FrizzleandpopLuckyBlock extends Block {
     }
 
     @Override
-    public boolean isOpaqueCube() {
+    public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
-
+    @Override
+    public boolean isVisuallyOpaque() {
+        return false;
+    }
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
         for (int i = 0; i < 3; ++i) {
@@ -60,38 +63,38 @@ public class FrizzleandpopLuckyBlock extends Block {
             double d3 = (double) (rand.nextFloat() * (float) j);
             double d4 = ((double) rand.nextFloat() - 0.5D) * 0.125D;
             double d5 = (double) (rand.nextFloat() * (float) k);
-            worldIn.spawnParticle(EnumParticleTypes.ENCHANTMENT_TABLE, d0, d1, d2, d3, d4, d5, new int[0]);
+            worldIn.spawnParticle(EnumParticleTypes.ENCHANTMENT_TABLE, d0, d1, d2, d3, d4, d5);
         }
     }
 
+
     @Override
-    public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+    public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
         if (!world.isRemote && player != null && !(player instanceof FakePlayer)) {
 
 
             world.setBlockToAir(pos);
             drops(world, pos, player);
         }
-        return true;
-
-        //super.onBlockDestroyedByPlayer(worldIn, pos, state);
+        return false;
     }
+
 
     private void drops(World worldIn, BlockPos pos, EntityPlayer player) {
 
 
         Enchantment[] e = new Enchantment[4];
-        e[0] = Enchantment.flame;
-        e[2] = Enchantment.power;
-        e[3] = Enchantment.thorns;
-        e[1] = Enchantment.looting;
+        e[0] = Enchantment.getEnchantmentByID(50);
+        e[2] = Enchantment.getEnchantmentByID(48);
+        e[3] = Enchantment.getEnchantmentByID(7);
+        e[1] = Enchantment.getEnchantmentByID(21);
 
 
         Random rand = new Random();
         switch (rand.nextInt(101)) {
 
             default: {
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.diamond_sword), e, 5, worldIn, pos);
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.DIAMOND_SWORD), e, 5, worldIn, pos);
             }
             case 0: {
                 ExtraFunctions.summonMobsOnBreakBlock(new EntityWither(worldIn), rand.nextInt(5) + 1, worldIn, pos);
@@ -119,68 +122,68 @@ public class FrizzleandpopLuckyBlock extends Block {
                 break;
             }
             case 6: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.diamond_pickaxe));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.DIAMOND_PICKAXE));
                 break;
             }
             case 7: {
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.diamond_pickaxe), new Enchantment[]{Enchantment.fortune, Enchantment.unbreaking}, 4, worldIn, pos);
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.DIAMOND_PICKAXE), new Enchantment[]{Enchantment.getEnchantmentByID(35), Enchantment.getEnchantmentByID(34)}, 4, worldIn, pos);
                 break;
             }
             case 8: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.diamond_chestplate));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.DIAMOND_CHESTPLATE));
                 break;
             }
             case 9: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.beacon));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.BEACON));
                 break;
             }
             case 10: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.end_portal_frame), 8, 0, 0);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.END_PORTAL_FRAME), 8, 0, 0);
                 break;
             }
             case 11: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.rabbit_stew), 10, 1, 50);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.RABBIT_STEW), 10, 1, 50);
                 break;
             }
             case 12: {
-                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.ender_chest);
+                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.ENDER_CHEST);
                 break;
             }
             case 13: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.golden_apple), 4, 0, 0);
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.golden_apple, 1, 1), 2, 0, 0);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.GOLDEN_APPLE), 4, 0, 0);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.GOLDEN_APPLE, 1, 1), 2, 0, 0);
                 break;
             }
             case 14: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.diamond_helmet));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.DIAMOND_HELMET));
                 break;
             }
             case 15: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.diamond_leggings));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.DIAMOND_LEGGINGS));
                 break;
             }
             case 16: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.diamond_boots));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.DIAMOND_BOOTS));
                 break;
             }
             case 17: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.saddle));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.SADDLE));
                 break;
             }
             case 18: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.dragon_egg));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.DRAGON_EGG));
                 break;
             }
             case 19: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.cake));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.CAKE));
                 break;
             }
             case 20: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.quartz_block), 40, 1, 1);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.QUARTZ_BLOCK), 40, 1, 1);
                 break;
             }
             case 21: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.flower_pot));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.FLOWER_POT));
                 break;
             }
             case 22: {
@@ -188,27 +191,27 @@ public class FrizzleandpopLuckyBlock extends Block {
                 break;
             }
             case 23: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.skull));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.SKULL));
                 break;
             }
             case 24: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.wooden_axe));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.WOODEN_AXE));
                 break;
             }
             case 25: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.wooden_hoe));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.WOODEN_HOE));
                 break;
             }
             case 26: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.wooden_pickaxe));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.WOODEN_PICKAXE));
                 break;
             }
             case 27: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.wooden_sword));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.WOODEN_SWORD));
                 break;
             }
             case 28: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.wooden_sword));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.WOODEN_SWORD));
                 break;
             }
             case 29: {
@@ -244,11 +247,11 @@ public class FrizzleandpopLuckyBlock extends Block {
                 break;
             }
             case 37: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.milk_bucket));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.MILK_BUCKET));
                 break;
             }
             case 38: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.carrot_on_a_stick));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.CARROT_ON_A_STICK));
                 break;
             }
             case 39: {
@@ -260,7 +263,7 @@ public class FrizzleandpopLuckyBlock extends Block {
                 break;
             }
             case 41: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.blaze_rod));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.BLAZE_ROD));
                 break;
             }
             case 42: {
@@ -268,7 +271,7 @@ public class FrizzleandpopLuckyBlock extends Block {
                 break;
             }
             case 43: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.slime_block), 40, 1, 1);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.SLIME_BLOCK), 40, 1, 1);
                 break;
             }
             case 44: {
@@ -292,7 +295,7 @@ public class FrizzleandpopLuckyBlock extends Block {
                 break;
             }
             case 49: {
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.wooden_sword), new Enchantment[]{Enchantment.flame, Enchantment.fireAspect, Enchantment.sharpness, Enchantment.smite, Enchantment.baneOfArthropods}, 5, worldIn, pos);
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.WOODEN_SWORD), new Enchantment[]{Enchantment.getEnchantmentByID(50), Enchantment.getEnchantmentByID(20), Enchantment.getEnchantmentByID(16), Enchantment.getEnchantmentByID(17), Enchantment.getEnchantmentByID(18)}, 5, worldIn, pos);
                 break;
             }
             case 50: {
@@ -304,8 +307,8 @@ public class FrizzleandpopLuckyBlock extends Block {
                 break;
             }
             case 52: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.tnt);
-                worldIn.setBlockState(new BlockPos(pos.getX(), pos.getY(), pos.getZ()), Blocks.flowing_lava.getDefaultState());
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.TNT);
+                worldIn.setBlockState(new BlockPos(pos.getX(), pos.getY(), pos.getZ()), Blocks.FLOWING_LAVA.getDefaultState());
                 break;
             }
             case 53: {
@@ -321,7 +324,7 @@ public class FrizzleandpopLuckyBlock extends Block {
                 break;
             }
             case 56: {
-                ExtraFunctions.effectPlayer(player, new PotionEffect(Potion.absorption.getId(), 1000, 10));
+                ExtraFunctions.effectPlayer(player, new PotionEffect(PotionTypes.REGENERATION.getEffects().get(0).getPotion(), 1000, 10));
                 break;
             }
             case 57: {
@@ -329,15 +332,15 @@ public class FrizzleandpopLuckyBlock extends Block {
                 break;
             }
             case 58: {
-                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.bedrock);
+                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.BEDROCK);
                 break;
             }
             case 59: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.obsidian), 40, 0, 0);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.OBSIDIAN), 40, 0, 0);
                 break;
             }
             case 60: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.stained_glass), 40, 1, 50);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.STAINED_GLASS), 40, 1, 50);
                 break;
             }
             case 61: {
@@ -373,31 +376,31 @@ public class FrizzleandpopLuckyBlock extends Block {
                 break;
             }
             case 69: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.flint_and_steel));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.FLINT_AND_STEEL));
                 break;
             }
             case 70: {
-                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.monster_egg);
+                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.MONSTER_EGG);
                 break;
             }
             case 71: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.reeds));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.REEDS));
                 break;
             }
             case 72: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.redstone_ore);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.REDSTONE_ORE);
                 break;
             }
             case 73: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.glowstone);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.GLOWSTONE);
                 break;
             }
             case 74: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.flowing_lava);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.FLOWING_LAVA);
                 break;
             }
             case 75: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.baked_potato));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.BAKED_POTATO));
                 break;
             }
             case 76: {
@@ -406,23 +409,23 @@ public class FrizzleandpopLuckyBlock extends Block {
                 break;
             }
             case 77: {
-                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.end_portal_frame);
+                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.END_PORTAL_FRAME);
                 break;
             }
             case 78: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.gold_block);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.GOLD_BLOCK);
                 break;
             }
             case 79: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.iron_block);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.IRON_BLOCK);
                 break;
             }
             case 80: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.coal_block);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.COAL_BLOCK);
                 break;
             }
             case 81: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.enchanting_table);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.ENCHANTING_TABLE);
                 break;
             }
             case 82: {
@@ -450,7 +453,7 @@ public class FrizzleandpopLuckyBlock extends Block {
                 break;
             }
             case 88: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.monster_egg));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.MONSTER_EGG));
                 break;
             }
             case 89: {
@@ -474,31 +477,31 @@ public class FrizzleandpopLuckyBlock extends Block {
                 break;
             }
             case 94: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.bedrock);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.BEDROCK);
                 break;
             }
             case 95: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.apple), 64, 1, 40);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.APPLE), 64, 1, 40);
                 break;
             }
             case 96: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.bedrock), 64, 1, 40);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.BEDROCK), 64, 1, 40);
                 break;
             }
             case 97: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.redstone), 120, 0, 0);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.REDSTONE), 120, 0, 0);
                 break;
             }
             case 98: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.arrow));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.ARROW));
                 break;
             }
             case 99: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.sponge));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.SPONGE));
                 break;
             }
             case 100: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.gold_ingot));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.GOLD_INGOT));
                 break;
             }
 

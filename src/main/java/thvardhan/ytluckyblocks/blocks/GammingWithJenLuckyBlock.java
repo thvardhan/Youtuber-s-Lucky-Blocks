@@ -1,5 +1,6 @@
 package thvardhan.ytluckyblocks.blocks;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -13,9 +14,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.relauncher.Side;
@@ -38,11 +38,11 @@ public class GammingWithJenLuckyBlock extends Block {
         this.setCreativeTab(CommonProxy.tabYTStuffMod);
         this.setHardness(hardness);
         this.setResistance(resistance);
-        this.setBlockBounds(0, 0, 0, 1, 0.9F, 1);
+
     }
 
     public GammingWithJenLuckyBlock(String unlocalizedName, float hardness, float resistance) {
-        this(unlocalizedName, Material.rock, 0, 10000);
+        this(unlocalizedName, Material.ROCK, 0, 10000);
     }
 
     public GammingWithJenLuckyBlock(String unlocalizedName) {
@@ -50,10 +50,13 @@ public class GammingWithJenLuckyBlock extends Block {
     }
 
     @Override
-    public boolean isOpaqueCube() {
+    public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
-
+    @Override
+    public boolean isVisuallyOpaque() {
+        return false;
+    }
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
         for (int i = 0; i < 3; ++i) {
@@ -65,19 +68,20 @@ public class GammingWithJenLuckyBlock extends Block {
             double d3 = (double) (rand.nextFloat() * (float) j);
             double d4 = ((double) rand.nextFloat() - 0.5D) * 0.125D;
             double d5 = (double) (rand.nextFloat() * (float) k);
-            worldIn.spawnParticle(EnumParticleTypes.PORTAL, d0, d1, d2, d3, d4, d5, new int[0]);
+            worldIn.spawnParticle(EnumParticleTypes.PORTAL, d0, d1, d2, d3, d4, d5);
         }
     }
 
 
     @Override
-    public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+    public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
         if (!world.isRemote && player != null && !(player instanceof FakePlayer)) {
-            ExtraFunctions.setOneBlock(world, pos, Blocks.air);
+            ExtraFunctions.setOneBlock(world, pos, Blocks.AIR);
             drops(world, pos, player);
         }
-        return true;
+        return false;
     }
+
 
 
     private void drops(World worldIn, BlockPos pos, EntityPlayer player) {
@@ -137,8 +141,8 @@ public class GammingWithJenLuckyBlock extends Block {
             case 11: {
                 ExtraFunctions.summonTammedWolfs(worldIn, player, 25, pos);
                 ExtraFunctions.chat("Tame Them If You Want Them.", player);
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.bone), 64, 0, 0);
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.bone), 64, 1, 10);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.BONE), 64, 0, 0);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.BONE), 64, 1, 10);
                 break;
             }
             case 12: {
@@ -154,7 +158,7 @@ public class GammingWithJenLuckyBlock extends Block {
                 break;
             }
             case 15: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.command_block));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.COMMAND_BLOCK));
                 ExtraFunctions.chat("If You Are On Creative Then Nice Else Its Waste.", player);
                 break;
             }
@@ -171,8 +175,8 @@ public class GammingWithJenLuckyBlock extends Block {
                 break;
             }
             case 19: {
-                Enchantment[] e1 = {Enchantment.fireAspect, Enchantment.knockback};
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.bed), e1, 10, worldIn, pos);
+                Enchantment[] e1 = {Enchantment.getEnchantmentByID(20), Enchantment.getEnchantmentByID(19)};
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.BED), e1, 10, worldIn, pos);
                 break;
             }
             case 20: {
@@ -188,7 +192,7 @@ public class GammingWithJenLuckyBlock extends Block {
                 break;
             }
             case 23: {
-                ExtraFunctions.chat(EnumChatFormatting.DARK_RED + "BEEP BEEP NUKE =WARNING=", player);
+                ExtraFunctions.chat(ChatFormatting.DARK_RED + "BEEP BEEP NUKE =WARNING=", player);
                 ExtraFunctions.tntNearby(worldIn, pos, 200, player, rand);
                 break;
             }
@@ -285,11 +289,11 @@ public class GammingWithJenLuckyBlock extends Block {
                 break;
             }
             case 47: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.cake);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.CAKE);
                 break;
             }
             case 48: {
-                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.cake);
+                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.CAKE);
                 break;
             }
             case 49: {

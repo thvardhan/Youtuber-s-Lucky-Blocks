@@ -3,7 +3,7 @@ package thvardhan.ytluckyblocks.blocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thvardhan.ytluckyblocks.CommonProxy;
 import thvardhan.ytluckyblocks.functions.ExtraFunctions;
@@ -11,7 +11,7 @@ import thvardhan.ytluckyblocks.functions.ExtraFunctions;
 import java.util.Random;
 
 public class YoutubeBlock extends Block {
-
+    //push
     public YoutubeBlock(String unlocalizedName, Material material, float hardness, float resistance) {
         super(material);
         this.setUnlocalizedName(unlocalizedName);
@@ -22,14 +22,17 @@ public class YoutubeBlock extends Block {
     }
 
     public YoutubeBlock(String unlocalizedName, float hardness, float resistance) {
-        this(unlocalizedName, Material.rock, 0, 10000);
+        this(unlocalizedName, Material.ROCK, 0, 10000);
     }
 
     public YoutubeBlock(String unlocalizedName) {
         this(unlocalizedName, 2.0f, 10.0f);
     }
 
-
+    @Override
+    public boolean isOpaqueCube(IBlockState state) {
+        return false;
+    }
     @Override
     public void onBlockDestroyedByPlayer(World worldIn, BlockPos pos, IBlockState state) {
         if (!worldIn.isRemote) {

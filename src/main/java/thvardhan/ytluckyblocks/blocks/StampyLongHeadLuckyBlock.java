@@ -12,11 +12,11 @@ import net.minecraft.entity.passive.EntityRabbit;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.init.PotionTypes;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.relauncher.Side;
@@ -40,7 +40,7 @@ public class StampyLongHeadLuckyBlock extends Block {
     }
 
     public StampyLongHeadLuckyBlock(String unlocalizedName, float hardness, float resistance) {
-        this(unlocalizedName, Material.rock, 0, 10000);
+        this(unlocalizedName, Material.ROCK, 0, 10000);
     }
 
     public StampyLongHeadLuckyBlock(String unlocalizedName) {
@@ -48,10 +48,13 @@ public class StampyLongHeadLuckyBlock extends Block {
     }
 
     @Override
-    public boolean isOpaqueCube() {
+    public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
-
+    @Override
+    public boolean isVisuallyOpaque() {
+        return false;
+    }
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
         for (int i = 0; i < 3; ++i) {
@@ -63,30 +66,27 @@ public class StampyLongHeadLuckyBlock extends Block {
             double d3 = (double) (rand.nextFloat() * (float) j);
             double d4 = ((double) rand.nextFloat() - 0.5D) * 0.125D;
             double d5 = (double) (rand.nextFloat() * (float) k);
-            worldIn.spawnParticle(EnumParticleTypes.SPELL_MOB, d0, d1, d2, d3, d4, d5, new int[0]);
+            worldIn.spawnParticle(EnumParticleTypes.SPELL_MOB, d0, d1, d2, d3, d4, d5);
         }
     }
 
     @Override
-    public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+    public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
         if (!world.isRemote && player != null && !(player instanceof FakePlayer)) {
-
             world.setBlockToAir(pos);
             drops(world, pos, player);
         }
-        return true;
-
-        //super.onBlockDestroyedByPlayer(worldIn, pos, state);
+        return false;
     }
 
     private void drops(World worldIn, BlockPos pos, EntityPlayer player) {
 
         Enchantment[] e = new Enchantment[5];
-        e[0] = Enchantment.flame;
-        e[1] = Enchantment.knockback;
-        e[2] = Enchantment.power;
-        e[3] = Enchantment.thorns;
-        e[4] = Enchantment.looting;
+        e[0] = Enchantment.getEnchantmentByID(50);
+        e[1] = Enchantment.getEnchantmentByID(19);
+        e[2] = Enchantment.getEnchantmentByID(48);
+        e[3] = Enchantment.getEnchantmentByID(7);
+        e[4] = Enchantment.getEnchantmentByID(21);
 
 
         Random rand = new Random();
@@ -95,7 +95,7 @@ public class StampyLongHeadLuckyBlock extends Block {
         switch (rand.nextInt(101)) {
 
             default: {
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.diamond_sword), e, 5, worldIn, pos);
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.DIAMOND_SWORD), e, 5, worldIn, pos);
             }
             case 0: {
                 ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(ModItems.stampy_Boots));
@@ -146,11 +146,11 @@ public class StampyLongHeadLuckyBlock extends Block {
                 break;
             }
             case 12: {
-                ExtraFunctions.summonItemWithLoop(worldIn, pos, Items.golden_apple, 15, 1, 5);
+                ExtraFunctions.summonItemWithLoop(worldIn, pos, Items.GOLDEN_APPLE, 15, 1, 5);
                 break;
             }
             case 13: {
-                ExtraFunctions.summonItemWithLoop(worldIn, pos, Items.apple, 64, 0, 0);
+                ExtraFunctions.summonItemWithLoop(worldIn, pos, Items.APPLE, 64, 0, 0);
                 break;
             }
             case 14: {
@@ -184,7 +184,7 @@ public class StampyLongHeadLuckyBlock extends Block {
                 break;
             }
             case 21: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.flowing_lava);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.FLOWING_LAVA);
                 break;
             }
             case 22: {
@@ -208,7 +208,7 @@ public class StampyLongHeadLuckyBlock extends Block {
                 break;
             }
             case 27: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.obsidian), 30, 0, 0);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.OBSIDIAN), 30, 0, 0);
                 break;
             }
             case 28: {
@@ -220,19 +220,19 @@ public class StampyLongHeadLuckyBlock extends Block {
                 break;
             }
             case 30: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.diamond_chestplate));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.DIAMOND_CHESTPLATE));
                 break;
             }
             case 31: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.diamond_helmet));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.DIAMOND_HELMET));
                 break;
             }
             case 32: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.diamond_leggings));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.DIAMOND_LEGGINGS));
                 break;
             }
             case 33: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.diamond_boots));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.DIAMOND_BOOTS));
                 break;
             }
             case 34: {
@@ -248,7 +248,7 @@ public class StampyLongHeadLuckyBlock extends Block {
                 break;
             }
             case 37: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.dark_oak_door);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.DARK_OAK_DOOR);
                 break;
             }
             case 38: {
@@ -256,8 +256,8 @@ public class StampyLongHeadLuckyBlock extends Block {
                 break;
             }
             case 39: {
-                Enchantment[] ea = {Enchantment.sharpness, Enchantment.knockback, Enchantment.fireAspect};
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.wooden_hoe), ea, 60, worldIn, pos);
+                Enchantment[] ea = {Enchantment.getEnchantmentByID(16), Enchantment.getEnchantmentByID(19), Enchantment.getEnchantmentByID(20)};
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.WOODEN_HOE), ea, 60, worldIn, pos);
                 ExtraFunctions.chat("Someone Just Got A God Hoe", player);
                 break;
             }
@@ -310,7 +310,7 @@ public class StampyLongHeadLuckyBlock extends Block {
                 break;
             }
             case 52: {
-                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, ModItems.stampy_Boots, "Boots", Enchantment.protection, 5);
+                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, ModItems.stampy_Boots, "Boots", Enchantment.getEnchantmentByID(0), 5);
                 break;
             }
             case 53: {
@@ -322,11 +322,11 @@ public class StampyLongHeadLuckyBlock extends Block {
                 break;
             }
             case 55: {
-                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, ModItems.snowSword, "Icy", Enchantment.smite, 10);
+                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, ModItems.snowSword, "Icy", Enchantment.getEnchantmentByID(17), 10);
                 break;
             }
             case 56: {
-                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, ModItems.megaSword, "MegaKilla", Enchantment.sharpness, 6);
+                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, ModItems.megaSword, "MegaKilla", Enchantment.getEnchantmentByID(16), 6);
                 break;
             }
             case 57: {
@@ -342,7 +342,7 @@ public class StampyLongHeadLuckyBlock extends Block {
                 break;
             }
             case 60: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.milk_bucket), 50, 1, 2);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.MILK_BUCKET), 50, 1, 2);
                 ExtraFunctions.chat("Use these to clean any bad effects you get while opening these lucky blocks", player);
                 break;
             }
@@ -359,20 +359,20 @@ public class StampyLongHeadLuckyBlock extends Block {
                 break;
             }
             case 64: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.baked_potato));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.BAKED_POTATO));
                 ExtraFunctions.chat("Here, take this one potato (which you cant even plant :v) for your efforts", player);
                 break;
             }
             case 65: {
-                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.poisonous_potato, "Eat Me!", Enchantment.knockback, 50);
+                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.POISONOUS_POTATO, "Eat Me!", Enchantment.getEnchantmentByID(19), 50);
                 break;
             }
             case 66: {
-                ExtraFunctions.effectPlayer(player, new PotionEffect(Potion.fireResistance.getId(), 1000, 20));
+                ExtraFunctions.effectPlayer(player, new PotionEffect(PotionTypes.FIRE_RESISTANCE.getEffects().get(0).getPotion(), 1000, 20));
                 break;
             }
             case 67: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.golden_apple, 1, 1));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.GOLDEN_APPLE, 1, 1));
                 break;
             }
             case 68: {
@@ -414,23 +414,23 @@ public class StampyLongHeadLuckyBlock extends Block {
                 break;
             }
             case 77: {
-                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.end_portal_frame);
+                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.END_PORTAL_FRAME);
                 break;
             }
             case 78: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.gold_block);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.GOLD_BLOCK);
                 break;
             }
             case 79: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.iron_block);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.IRON_BLOCK);
                 break;
             }
             case 80: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.coal_block);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.COAL_BLOCK);
                 break;
             }
             case 81: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.enchanting_table);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.ENCHANTING_TABLE);
                 break;
             }
             case 82: {
@@ -458,7 +458,7 @@ public class StampyLongHeadLuckyBlock extends Block {
                 break;
             }
             case 88: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.monster_egg));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.MONSTER_EGG));
                 break;
             }
             case 89: {
@@ -482,31 +482,31 @@ public class StampyLongHeadLuckyBlock extends Block {
                 break;
             }
             case 94: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.bedrock);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.BEDROCK);
                 break;
             }
             case 95: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.apple), 64, 1, 40);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.APPLE), 64, 1, 40);
                 break;
             }
             case 96: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.bedrock), 64, 1, 40);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.BEDROCK), 64, 1, 40);
                 break;
             }
             case 97: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.redstone), 120, 0, 0);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.REDSTONE), 120, 0, 0);
                 break;
             }
             case 98: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.arrow));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.ARROW));
                 break;
             }
             case 99: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.sponge));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.SPONGE));
                 break;
             }
             case 100: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.gold_ingot));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.GOLD_INGOT));
                 break;
             }
 

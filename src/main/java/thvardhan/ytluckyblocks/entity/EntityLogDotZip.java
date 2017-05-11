@@ -9,13 +9,13 @@ import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.EntityPigZombie;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.PathNavigateGround;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
+import thvardhan.ytluckyblocks.items.ModItems;
 
 public class EntityLogDotZip extends EntityMob {
 
@@ -26,14 +26,13 @@ public class EntityLogDotZip extends EntityMob {
         super(worldIn);
         ((PathNavigateGround) this.getNavigator()).setBreakDoors(true);
         this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(2, new EntityAIAttackOnCollide(this, EntityPlayer.class, 1.0D, false));
-        this.tasks.addTask(5, new EntityAIMoveTowardsRestriction(this, 1.0D));
+         this.tasks.addTask(5, new EntityAIMoveTowardsRestriction(this, 1.0D));
         this.tasks.addTask(7, new EntityAIWander(this, 1.0D));
         this.tasks.addTask(8, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
         this.tasks.addTask(8, new EntityAILookIdle(this));
         this.applyEntityAI();
         this.setSize(0.6F, 1.95F);
-        this.setCurrentItemOrArmor(0, new ItemStack(Items.golden_sword));
+        this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.m_sword));
 
         this.setAlwaysRenderNameTag(alwaysRenderNameTag);
         this.setCustomNameTag(name);
@@ -42,22 +41,22 @@ public class EntityLogDotZip extends EntityMob {
 
 
     protected void applyEntityAI() {
-        this.tasks.addTask(4, new EntityAIAttackOnCollide(this, EntityVillager.class, 1.0D, true));
-        this.tasks.addTask(4, new EntityAIAttackOnCollide(this, EntityIronGolem.class, 1.0D, true));
+        this.tasks.addTask(2, new EntityAIAttackMelee(this, 1.0D, false));
+
         this.tasks.addTask(6, new EntityAIMoveThroughVillage(this, 1.0D, false));
-        this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, true, new Class[]{EntityPigZombie.class}));
+        this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, true, EntityPigZombie.class));
         this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityPlayer.class, true));
-        this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityVillager.class, false));
-        this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityIronGolem.class, true));
+        this.targetTasks.addTask(3, new EntityAINearestAttackableTarget(this, EntityVillager.class, false));
+        this.targetTasks.addTask(3, new EntityAINearestAttackableTarget(this, EntityIronGolem.class, true));
     }
 
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
-        this.getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(100.0D);
-        this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.3D);
-        this.getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(30.0D);
-        this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(100D);
-        this.getEntityAttribute(SharedMonsterAttributes.knockbackResistance).setBaseValue(5D);
+        this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(20.0D);
+        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
+        this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(10.0D);
+        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(80D);
+        this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(2D);
     }
 
     @Override
@@ -95,11 +94,6 @@ public class EntityLogDotZip extends EntityMob {
         return super.attackEntityAsMob(entityIn);
     }
 
-
-    @Override
-    public float getBlockPathWeight(BlockPos pos) {
-        return super.getBlockPathWeight(pos);
-    }
 
 
     @Override

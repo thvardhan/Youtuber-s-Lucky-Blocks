@@ -1,5 +1,6 @@
 package thvardhan.ytluckyblocks.blocks;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -10,9 +11,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.relauncher.Side;
@@ -38,7 +38,7 @@ public class ScubaSteveLuckyBlock extends Block {
     }
 
     public ScubaSteveLuckyBlock(String unlocalizedName, float hardness, float resistance) {
-        this(unlocalizedName, Material.rock, 0, 10000);
+        this(unlocalizedName, Material.ROCK, 0, 10000);
     }
 
     public ScubaSteveLuckyBlock(String unlocalizedName) {
@@ -46,10 +46,13 @@ public class ScubaSteveLuckyBlock extends Block {
     }
 
     @Override
-    public boolean isOpaqueCube() {
+    public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
-
+    @Override
+    public boolean isVisuallyOpaque() {
+        return false;
+    }
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
         for (int i = 0; i < 3; ++i) {
@@ -61,31 +64,28 @@ public class ScubaSteveLuckyBlock extends Block {
             double d3 = (double) (rand.nextFloat() * (float) j);
             double d4 = ((double) rand.nextFloat() - 0.5D) * 0.125D;
             double d5 = (double) (rand.nextFloat() * (float) k);
-            worldIn.spawnParticle(EnumParticleTypes.SPELL, d0, d1, d2, d3, d4, d5, new int[0]);
+            worldIn.spawnParticle(EnumParticleTypes.SPELL, d0, d1, d2, d3, d4, d5);
         }
     }
 
 
     @Override
-    public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+    public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
         if (!world.isRemote && player != null && !(player instanceof FakePlayer)) {
-
             world.setBlockToAir(pos);
             drops(world, pos, player);
         }
-        return true;
-
-        //super.onBlockDestroyedByPlayer(worldIn, pos, state);
+        return false;
     }
 
     private void drops(World worldIn, BlockPos pos, EntityPlayer player) {
 
         Enchantment[] e = new Enchantment[5];
-        e[0] = Enchantment.flame;
-        e[1] = Enchantment.knockback;
-        e[2] = Enchantment.power;
-        e[3] = Enchantment.thorns;
-        e[4] = Enchantment.looting;
+        e[0] = Enchantment.getEnchantmentByID(50);
+        e[1] = Enchantment.getEnchantmentByID(19);
+        e[2] = Enchantment.getEnchantmentByID(48);
+        e[3] = Enchantment.getEnchantmentByID(7);
+        e[4] = Enchantment.getEnchantmentByID(21);
 
 
         Random rand = new Random();
@@ -94,7 +94,7 @@ public class ScubaSteveLuckyBlock extends Block {
         switch (rand.nextInt(51)) {
 
             default: {
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.diamond_sword), e, 5, worldIn, pos);
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.DIAMOND_SWORD), e, 5, worldIn, pos);
             }
             case 0: {
 
@@ -146,7 +146,7 @@ public class ScubaSteveLuckyBlock extends Block {
                 break;
             }
             case 12: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.ghast_tear));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.GHAST_TEAR));
                 break;
             }
             case 13: {
@@ -154,7 +154,7 @@ public class ScubaSteveLuckyBlock extends Block {
                 break;
             }
             case 14: {
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.egg), new Enchantment[]{Enchantment.fireAspect}, 2, worldIn, pos);
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.EGG), new Enchantment[]{Enchantment.getEnchantmentByID(20)}, 2, worldIn, pos);
                 break;
             }
             case 15: {
@@ -162,11 +162,11 @@ public class ScubaSteveLuckyBlock extends Block {
                 break;
             }
             case 16: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.apple));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.APPLE));
                 break;
             }
             case 17: {
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.wooden_hoe), e, 10, worldIn, pos);
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.WOODEN_HOE), e, 10, worldIn, pos);
                 break;
             }
             case 18: {
@@ -186,7 +186,7 @@ public class ScubaSteveLuckyBlock extends Block {
                 break;
             }
             case 22: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.sponge));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.SPONGE));
                 break;
             }
             case 23: {
@@ -195,7 +195,7 @@ public class ScubaSteveLuckyBlock extends Block {
             }
             case 24: {
                 ExtraFunctions.musicKit(worldIn, pos);
-                ExtraFunctions.chat(EnumChatFormatting.GREEN + "Go Listen To Some Music...", player);
+                ExtraFunctions.chat(ChatFormatting.GREEN + "Go Listen To Some Music...", player);
                 break;
             }
             case 25: {
@@ -207,8 +207,8 @@ public class ScubaSteveLuckyBlock extends Block {
                 break;
             }
             case 27: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.tnt);
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.flint_and_steel));
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.TNT);
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.FLINT_AND_STEEL));
 
                 break;
             }
@@ -230,12 +230,12 @@ public class ScubaSteveLuckyBlock extends Block {
             }
             case 32: {
 
-                Enchantment[] a = {Enchantment.aquaAffinity, Enchantment.baneOfArthropods, Enchantment.blastProtection, Enchantment.knockback, Enchantment.power, Enchantment.looting, Enchantment.fireAspect, Enchantment.sharpness};
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.diamond_axe), a, 3, worldIn, pos);
+                Enchantment[] a = {Enchantment.getEnchantmentByID(6), Enchantment.getEnchantmentByID(18), Enchantment.getEnchantmentByID(3), Enchantment.getEnchantmentByID(19), Enchantment.getEnchantmentByID(48), Enchantment.getEnchantmentByID(21), Enchantment.getEnchantmentByID(20), Enchantment.getEnchantmentByID(16)};
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.DIAMOND_AXE), a, 3, worldIn, pos);
                 break;
             }
             case 33: {
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.wooden_sword), e, 2, worldIn, pos);
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.WOODEN_SWORD), e, 2, worldIn, pos);
                 break;
             }
             case 34: {
@@ -255,7 +255,7 @@ public class ScubaSteveLuckyBlock extends Block {
                 break;
             }
             case 38: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.nether_star));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.NETHER_STAR));
                 break;
             }
             case 39: {
@@ -267,19 +267,19 @@ public class ScubaSteveLuckyBlock extends Block {
                 break;
             }
             case 41: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.dragon_egg));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.DRAGON_EGG));
                 break;
             }
             case 42: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.cake));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.CAKE));
                 break;
             }
             case 43: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.command_block));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.COMMAND_BLOCK));
                 break;
             }
             case 44: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.arrow), 64, 0, 0);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.ARROW), 64, 0, 0);
                 break;
             }
             case 45: {
@@ -287,7 +287,7 @@ public class ScubaSteveLuckyBlock extends Block {
                 break;
             }
             case 46: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.diamond_horse_armor));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.DIAMOND_HORSE_ARMOR));
                 break;
             }
             case 47: {
@@ -295,15 +295,15 @@ public class ScubaSteveLuckyBlock extends Block {
                 break;
             }
             case 48: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.diamond_sword));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.DIAMOND_SWORD));
                 break;
             }
             case 49: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.enchanting_table);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.ENCHANTING_TABLE);
                 break;
             }
             case 50: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.bedrock);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.BEDROCK);
                 break;
             }
 

@@ -11,10 +11,10 @@ import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.PathNavigateGround;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.DifficultyInstance;
@@ -29,14 +29,13 @@ public class EntityGhost extends EntityMob {
         super(worldIn);
         ((PathNavigateGround) this.getNavigator()).setBreakDoors(true);
         this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(2, new EntityAIAttackOnCollide(this, EntityPlayer.class, 1.0D, false));
-        this.tasks.addTask(5, new EntityAIMoveTowardsRestriction(this, 1.0D));
+         this.tasks.addTask(5, new EntityAIMoveTowardsRestriction(this, 1.0D));
         this.tasks.addTask(7, new EntityAIWander(this, 1.0D));
         this.tasks.addTask(8, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
         this.tasks.addTask(8, new EntityAILookIdle(this));
         this.applyEntityAI();
         this.setSize(0.8F, 2.0F);
-        this.setCurrentItemOrArmor(0, new ItemStack(Blocks.pumpkin));
+        this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Blocks.PUMPKIN));
 
         this.setAlwaysRenderNameTag(alwaysRenderNameTag);
         this.setCustomNameTag(name);
@@ -44,22 +43,23 @@ public class EntityGhost extends EntityMob {
     }
 
     protected void applyEntityAI() {
-        this.tasks.addTask(4, new EntityAIAttackOnCollide(this, EntityVillager.class, 1.0D, true));
-        this.tasks.addTask(4, new EntityAIAttackOnCollide(this, EntityIronGolem.class, 1.0D, true));
+        this.tasks.addTask(2, new EntityAIAttackMelee(this, 1.0D, false));
+
+
         this.tasks.addTask(6, new EntityAIMoveThroughVillage(this, 1.0D, false));
-        this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, true, new Class[]{EntityPigZombie.class}));
+        this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, true, EntityPigZombie.class));
         this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityPlayer.class, true));
-        this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityVillager.class, false));
-        this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityIronGolem.class, true));
+        this.targetTasks.addTask(3, new EntityAINearestAttackableTarget(this, EntityVillager.class, false));
+        this.targetTasks.addTask(3, new EntityAINearestAttackableTarget(this, EntityIronGolem.class, true));
     }
 
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
-        this.getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(20.0D);
-        this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.4D);
-        this.getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(8.0D);
-        this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(10D);
-        this.getEntityAttribute(SharedMonsterAttributes.knockbackResistance).setBaseValue(2D);
+        this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(20.0D);
+        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.4D);
+        this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(10.0D);
+        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(10D);
+        this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(2D);
     }
 
     @Override
@@ -75,7 +75,7 @@ public class EntityGhost extends EntityMob {
         if (this.worldObj.isRemote) {
             if (rand.nextBoolean() && rand.nextBoolean()) {
                 for (int i = 0; i < 2; ++i) {
-                    this.worldObj.spawnParticle(EnumParticleTypes.DRIP_LAVA, this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.width, this.posY + this.rand.nextDouble() * (double) this.height - 0.25D, this.posZ + (this.rand.nextDouble() - 0.5D) * (double) this.width, (this.rand.nextDouble() - 0.5D) * 2.0D, -this.rand.nextDouble(), (this.rand.nextDouble() - 0.5D) * 2.0D, new int[0]);
+                    this.worldObj.spawnParticle(EnumParticleTypes.DRIP_LAVA, this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.width, this.posY + this.rand.nextDouble() * (double) this.height - 0.25D, this.posZ + (this.rand.nextDouble() - 0.5D) * (double) this.width, (this.rand.nextDouble() - 0.5D) * 2.0D, -this.rand.nextDouble(), (this.rand.nextDouble() - 0.5D) * 2.0D);
                 }
             }
         }
@@ -88,7 +88,7 @@ public class EntityGhost extends EntityMob {
     @Override
     protected Item getDropItem() {
 
-        return Items.pumpkin_seeds;
+        return Items.PUMPKIN_SEEDS;
         //return super.getDropItem();
     }
 
@@ -115,11 +115,6 @@ public class EntityGhost extends EntityMob {
         return super.attackEntityAsMob(entityIn);
     }
 
-
-    @Override
-    public float getBlockPathWeight(BlockPos pos) {
-        return super.getBlockPathWeight(pos);
-    }
 
 
     @Override

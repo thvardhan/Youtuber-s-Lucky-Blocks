@@ -1,5 +1,6 @@
 package thvardhan.ytluckyblocks.blocks;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -12,12 +13,11 @@ import net.minecraft.entity.passive.EntityRabbit;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.init.PotionTypes;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.relauncher.Side;
@@ -36,11 +36,11 @@ public class ExploadingTNTLuckyBlock extends Block {
         this.setCreativeTab(CommonProxy.tabYTStuffMod);
         this.setHardness(hardness);
         this.setResistance(resistance);
-        this.setBlockBounds(0, 0, 0, 1, 0.9F, 1);
+
     }
 
     public ExploadingTNTLuckyBlock(String unlocalizedName, float hardness, float resistance) {
-        this(unlocalizedName, Material.rock, 0, 10000);
+        this(unlocalizedName, Material.ROCK, 0, 10000);
     }
 
     public ExploadingTNTLuckyBlock(String unlocalizedName) {
@@ -48,10 +48,13 @@ public class ExploadingTNTLuckyBlock extends Block {
     }
 
     @Override
-    public boolean isOpaqueCube() {
+    public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
-
+    @Override
+    public boolean isVisuallyOpaque() {
+        return false;
+    }
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
         for (int i = 0; i < 3; ++i) {
@@ -63,13 +66,13 @@ public class ExploadingTNTLuckyBlock extends Block {
             double d3 = (double) (rand.nextFloat() * (float) j);
             double d4 = ((double) rand.nextFloat() - 0.5D) * 0.125D;
             double d5 = (double) (rand.nextFloat() * (float) k);
-            worldIn.spawnParticle(EnumParticleTypes.SPELL_WITCH, d0, d1, d2, d3, d4, d5, new int[0]);
+            worldIn.spawnParticle(EnumParticleTypes.SPELL_WITCH, d0, d1, d2, d3, d4, d5);
         }
     }
 
 
     @Override
-    public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+    public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
         if (!world.isRemote && player != null && !(player instanceof FakePlayer)) {
 
             world.setBlockToAir(pos);
@@ -77,19 +80,18 @@ public class ExploadingTNTLuckyBlock extends Block {
 
             drops(world, pos, player);
         }
-        return true;
-
-        //super.onBlockDestroyedByPlayer(worldIn, pos, state);
+        return false;
     }
+
 
     private void drops(World worldIn, BlockPos pos, EntityPlayer player) {
 
         Enchantment[] e = new Enchantment[5];
-        e[0] = Enchantment.flame;
-        e[1] = Enchantment.knockback;
-        e[2] = Enchantment.power;
-        e[3] = Enchantment.thorns;
-        e[4] = Enchantment.looting;
+        e[0] = Enchantment.getEnchantmentByID(50);
+        e[1] = Enchantment.getEnchantmentByID(19);
+        e[2] = Enchantment.getEnchantmentByID(48);
+        e[3] = Enchantment.getEnchantmentByID(7);
+        e[4] = Enchantment.getEnchantmentByID(21);
 
 
         Random rand = new Random();
@@ -98,7 +100,7 @@ public class ExploadingTNTLuckyBlock extends Block {
         switch (rand.nextInt(51)) {
 
             default: {
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.diamond_sword), e, 5, worldIn, pos);
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.DIAMOND_SWORD), e, 5, worldIn, pos);
             }
             case 0: {
                 ExtraFunctions.summonMobsNearby(new EntityExplodingTNT(worldIn), 15, worldIn, pos, rand);
@@ -113,7 +115,8 @@ public class ExploadingTNTLuckyBlock extends Block {
                 break;
             }
             case 3: {
-                ExtraFunctions.effectPlayer(player, new PotionEffect(Potion.blindness.getId(), 1, 500));
+
+                ExtraFunctions.effectPlayer(player, new PotionEffect(PotionTypes.LONG_SLOWNESS.getEffects().get(0).getPotion(), 1, 500));
                 break;
             }
             case 4: {
@@ -131,7 +134,7 @@ public class ExploadingTNTLuckyBlock extends Block {
             case 7: {
                 ExtraFunctions.tntPlaceNearby(worldIn, pos, 150, rand);
                 ExtraFunctions.tntFix(worldIn, pos, 1, player);
-                ExtraFunctions.chat(EnumChatFormatting.DARK_RED + "BLAST LIKE TNT :)", player);
+                ExtraFunctions.chat(ChatFormatting.DARK_RED + "BLAST LIKE TNT :)", player);
                 break;
             }
             case 8: {
@@ -166,7 +169,7 @@ public class ExploadingTNTLuckyBlock extends Block {
                 break;
             }
             case 15: {
-                ExtraFunctions.chat(EnumChatFormatting.RED + "I AM A MOUSE ~!", player);
+                ExtraFunctions.chat(ChatFormatting.RED + "I AM A MOUSE ~!", player);
                 break;
             }
             case 16: {
@@ -176,15 +179,15 @@ public class ExploadingTNTLuckyBlock extends Block {
                 break;
             }
             case 17: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.gunpowder));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.GUNPOWDER));
                 break;
             }
             case 18: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.tnt_minecart), 15, 0, 0);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.TNT_MINECART), 15, 0, 0);
                 break;
             }
             case 19: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.tnt), 15, 0, 0);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.TNT), 15, 0, 0);
                 break;
             }
             case 20: {
@@ -192,7 +195,7 @@ public class ExploadingTNTLuckyBlock extends Block {
                 break;
             }
             case 21: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.tnt);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.TNT);
 
                 break;
             }
@@ -209,11 +212,11 @@ public class ExploadingTNTLuckyBlock extends Block {
                 break;
             }
             case 25: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.redstone), 64, 0, 0);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.REDSTONE), 64, 0, 0);
                 break;
             }
             case 26: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.golden_apple), 25, 0, 0);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.GOLDEN_APPLE), 25, 0, 0);
                 break;
             }
             case 27: {
@@ -221,7 +224,7 @@ public class ExploadingTNTLuckyBlock extends Block {
                 break;
             }
             case 28: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.dragon_egg);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.DRAGON_EGG);
                 break;
             }
             case 29: {
@@ -229,19 +232,19 @@ public class ExploadingTNTLuckyBlock extends Block {
                 break;
             }
             case 30: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.diamond_sword));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.DIAMOND_SWORD));
                 break;
             }
             case 31: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.red_flower);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.RED_FLOWER);
                 break;
             }
             case 32: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.redstone_block);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.REDSTONE_BLOCK);
                 break;
             }
             case 33: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.cake);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.CAKE);
                 break;
             }
             case 34: {
@@ -261,7 +264,7 @@ public class ExploadingTNTLuckyBlock extends Block {
                 break;
             }
             case 38: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.sponge));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.SPONGE));
                 break;
             }
             case 39: {
@@ -287,7 +290,7 @@ public class ExploadingTNTLuckyBlock extends Block {
                 break;
             }
             case 44: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.tnt), 30, 1, 2);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.TNT), 30, 1, 2);
                 break;
             }
             case 45: {
@@ -295,7 +298,7 @@ public class ExploadingTNTLuckyBlock extends Block {
                 break;
             }
             case 46: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.flint_and_steel));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.FLINT_AND_STEEL));
                 break;
             }
             case 47: {

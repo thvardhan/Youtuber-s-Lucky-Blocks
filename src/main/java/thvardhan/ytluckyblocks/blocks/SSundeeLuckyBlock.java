@@ -9,8 +9,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.relauncher.Side;
@@ -35,7 +35,7 @@ public class SSundeeLuckyBlock extends Block {
     }
 
     public SSundeeLuckyBlock(String unlocalizedName, float hardness, float resistance) {
-        this(unlocalizedName, Material.rock, 0, 10000);
+        this(unlocalizedName, Material.ROCK, 0, 10000);
     }
 
     public SSundeeLuckyBlock(String unlocalizedName) {
@@ -43,10 +43,13 @@ public class SSundeeLuckyBlock extends Block {
     }
 
     @Override
-    public boolean isOpaqueCube() {
+    public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
-
+    @Override
+    public boolean isVisuallyOpaque() {
+        return false;
+    }
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
         for (int i = 0; i < 3; ++i) {
@@ -58,30 +61,27 @@ public class SSundeeLuckyBlock extends Block {
             double d3 = (double) (rand.nextFloat() * (float) j);
             double d4 = ((double) rand.nextFloat() - 0.5D) * 0.125D;
             double d5 = (double) (rand.nextFloat() * (float) k);
-            worldIn.spawnParticle(EnumParticleTypes.SPELL_MOB, d0, d1, d2, d3, d4, d5, new int[0]);
+            worldIn.spawnParticle(EnumParticleTypes.SPELL_MOB, d0, d1, d2, d3, d4, d5);
         }
     }
 
     @Override
-    public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+    public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
         if (!world.isRemote && player != null && !(player instanceof FakePlayer)) {
-
             world.setBlockToAir(pos);
             drops(world, pos, player);
         }
-        return true;
-
-        //super.onBlockDestroyedByPlayer(worldIn, pos, state);
+        return false;
     }
 
     private void drops(World worldIn, BlockPos pos, EntityPlayer player) {
 
         Enchantment[] e = new Enchantment[5];
-        e[0] = Enchantment.flame;
-        e[1] = Enchantment.knockback;
-        e[2] = Enchantment.power;
-        e[3] = Enchantment.thorns;
-        e[4] = Enchantment.looting;
+        e[0] = Enchantment.getEnchantmentByID(50);
+        e[1] = Enchantment.getEnchantmentByID(19);
+        e[2] = Enchantment.getEnchantmentByID(48);
+        e[3] = Enchantment.getEnchantmentByID(7);
+        e[4] = Enchantment.getEnchantmentByID(21);
 
 
         Random rand = new Random();
@@ -90,10 +90,10 @@ public class SSundeeLuckyBlock extends Block {
         switch (rand.nextInt(101)) {
 
             default: {
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.diamond_sword), e, 5, worldIn, pos);
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.DIAMOND_SWORD), e, 5, worldIn, pos);
             }
             case 0: {
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.diamond_sword), e, 5, worldIn, pos);
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.DIAMOND_SWORD), e, 5, worldIn, pos);
                 break;
             }
             case 1: {
@@ -198,7 +198,7 @@ public class SSundeeLuckyBlock extends Block {
                 break;
             }
             case 23: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.dragon_egg), 50, 1, 5);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.DRAGON_EGG), 50, 1, 5);
                 ExtraFunctions.chat("How Are You Going To Train These Many Dragons?", player);
                 break;
             }
@@ -215,11 +215,11 @@ public class SSundeeLuckyBlock extends Block {
                 break;
             }
             case 27: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.bedrock), 64, 0, 0);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.BEDROCK), 64, 0, 0);
                 break;
             }
             case 28: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.obsidian), 64, 0, 0);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.OBSIDIAN), 64, 0, 0);
                 break;
             }
             case 29: {
@@ -244,11 +244,11 @@ public class SSundeeLuckyBlock extends Block {
                 break;
             }
             case 34: {
-                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.cake);
+                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.CAKE);
                 break;
             }
             case 35: {
-                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.dragon_egg);
+                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.DRAGON_EGG);
                 break;
             }
             case 36: {
@@ -256,11 +256,11 @@ public class SSundeeLuckyBlock extends Block {
                 break;
             }
             case 37: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.diamond_boots));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.DIAMOND_BOOTS));
                 break;
             }
             case 38: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.brewing_stand);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.BREWING_STAND);
                 ExtraFunctions.potionKit(worldIn, pos, rand);
                 break;
             }
@@ -269,7 +269,7 @@ public class SSundeeLuckyBlock extends Block {
                 break;
             }
             case 40: {
-                ExtraFunctions.summonBlockWithLoop(worldIn, pos, Blocks.emerald_block, 20, 0, 0);
+                ExtraFunctions.summonBlockWithLoop(worldIn, pos, Blocks.EMERALD_BLOCK, 20, 0, 0);
                 break;
             }
             case 41: {
@@ -285,7 +285,7 @@ public class SSundeeLuckyBlock extends Block {
                 break;
             }
             case 44: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.diamond_block), 10, 0, 0);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.DIAMOND_BLOCK), 10, 0, 0);
                 break;
             }
             case 45: {
@@ -353,7 +353,7 @@ public class SSundeeLuckyBlock extends Block {
                 break;
             }
             case 61: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.obsidian);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.OBSIDIAN);
                 break;
             }
             case 62: {
@@ -413,7 +413,7 @@ public class SSundeeLuckyBlock extends Block {
                 break;
             }
             case 76: {
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.baked_potato), e, 1, worldIn, pos);
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.BAKED_POTATO), e, 1, worldIn, pos);
                 break;
             }
             case 77: {
@@ -441,15 +441,15 @@ public class SSundeeLuckyBlock extends Block {
                 break;
             }
             case 83: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.apple));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.APPLE));
                 break;
             }
             case 84: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.cooked_porkchop));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.COOKED_PORKCHOP));
                 break;
             }
             case 85: {
-                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.bow, "BOWWWW", Enchantment.punch, 4);
+                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.BOW, "BOWWWW", Enchantment.getEnchantmentByID(49), 4);
                 break;
             }
             case 86: {
@@ -457,7 +457,7 @@ public class SSundeeLuckyBlock extends Block {
                 break;
             }
             case 87: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.boat), 10, 1, 10);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.BOAT), 10, 1, 10);
                 break;
             }
             case 88: {
@@ -473,7 +473,7 @@ public class SSundeeLuckyBlock extends Block {
                 break;
             }
             case 91: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.blaze_powder));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.BLAZE_POWDER));
                 break;
             }
             case 92: {
@@ -493,11 +493,11 @@ public class SSundeeLuckyBlock extends Block {
                 break;
             }
             case 96: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.arrow));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.ARROW));
                 break;
             }
             case 97: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.mushroom_stew), 10, 0, 0);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.MUSHROOM_STEW), 10, 0, 0);
                 break;
             }
             case 98: {
@@ -509,7 +509,7 @@ public class SSundeeLuckyBlock extends Block {
                 break;
             }
             case 100: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.command_block);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.COMMAND_BLOCK);
                 break;
             }
 

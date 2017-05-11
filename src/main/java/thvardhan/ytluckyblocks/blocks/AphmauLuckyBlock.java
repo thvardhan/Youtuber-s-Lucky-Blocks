@@ -7,8 +7,8 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.relauncher.Side;
@@ -37,7 +37,7 @@ public class AphmauLuckyBlock extends Block {
     }
 
     public AphmauLuckyBlock(String unlocalizedName, float hardness, float resistance) {
-        this(unlocalizedName, Material.rock, 0, 10000);
+        this(unlocalizedName, Material.ROCK, 0, 10000);
     }
 
     public AphmauLuckyBlock(String unlocalizedName) {
@@ -45,10 +45,14 @@ public class AphmauLuckyBlock extends Block {
     }
 
     @Override
-    public boolean isOpaqueCube() {
+    public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
 
+    @Override
+    public boolean isVisuallyOpaque() {
+        return false;
+    }
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
         for (int i = 0; i < 3; ++i) {
@@ -60,31 +64,28 @@ public class AphmauLuckyBlock extends Block {
             double d3 = (double) (rand.nextFloat() * (float) j);
             double d4 = ((double) rand.nextFloat() - 0.5D) * 0.125D;
             double d5 = (double) (rand.nextFloat() * (float) k);
-            worldIn.spawnParticle(EnumParticleTypes.SPELL, d0, d1, d2, d3, d4, d5, new int[0]);
+            worldIn.spawnParticle(EnumParticleTypes.SPELL, d0, d1, d2, d3, d4, d5);
         }
     }
 
 
     @Override
-    public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+    public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
         if (!world.isRemote && player != null && !(player instanceof FakePlayer)) {
-
             world.setBlockToAir(pos);
             drops(world, pos, player);
         }
-        return true;
-
-        //super.onBlockDestroyedByPlayer(worldIn, pos, state);
+        return false;
     }
 
     private void drops(World worldIn, BlockPos pos, EntityPlayer player) {
 
         Enchantment[] e = new Enchantment[5];
-        e[0] = Enchantment.flame;
-        e[1] = Enchantment.knockback;
-        e[2] = Enchantment.power;
-        e[3] = Enchantment.thorns;
-        e[4] = Enchantment.looting;
+        e[0] = Enchantment.getEnchantmentByID(50);
+        e[1] = Enchantment.getEnchantmentByID(19);
+        e[2] = Enchantment.getEnchantmentByID(48);
+        e[3] = Enchantment.getEnchantmentByID(7);
+        e[4] = Enchantment.getEnchantmentByID(21);
 
 
         Random rand = new Random();
@@ -93,7 +94,7 @@ public class AphmauLuckyBlock extends Block {
         switch (rand.nextInt(51)) {
 
             default: {
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.diamond_sword), e, 5, worldIn, pos);
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.DIAMOND_SWORD), e, 5, worldIn, pos);
             }
             case 0: {
                 ExtraFunctions.slimeFort(worldIn, player);
@@ -208,7 +209,7 @@ public class AphmauLuckyBlock extends Block {
                 break;
             }
             case 28: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.golden_apple), 64, 0, 0);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.GOLDEN_APPLE), 64, 0, 0);
                 break;
             }
             case 29: {
@@ -236,31 +237,31 @@ public class AphmauLuckyBlock extends Block {
                 break;
             }
             case 35: {
-                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, ModItems.mic, "mic", Enchantment.fireAspect, 8);
+                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, ModItems.mic, "mic", Enchantment.getEnchantmentByID(20), 8);
                 break;
             }
             case 36: {
-                Enchantment[] ea = {Enchantment.fireAspect, Enchantment.aquaAffinity, Enchantment.fireProtection, Enchantment.protection, Enchantment.respiration, Enchantment.projectileProtection, Enchantment.blastProtection};
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.diamond_boots), ea, 8, worldIn, pos);
+                Enchantment[] ea = {Enchantment.getEnchantmentByID(20), Enchantment.getEnchantmentByID(6), Enchantment.getEnchantmentByID(1), Enchantment.getEnchantmentByID(0), Enchantment.getEnchantmentByID(5), Enchantment.getEnchantmentByID(4), Enchantment.getEnchantmentByID(3)};
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.DIAMOND_BOOTS), ea, 8, worldIn, pos);
                 break;
             }
             case 37: {
-                Enchantment[] ea = {Enchantment.fireAspect, Enchantment.aquaAffinity, Enchantment.fireProtection, Enchantment.protection, Enchantment.respiration, Enchantment.projectileProtection, Enchantment.blastProtection};
+                Enchantment[] ea = {Enchantment.getEnchantmentByID(20), Enchantment.getEnchantmentByID(6), Enchantment.getEnchantmentByID(1), Enchantment.getEnchantmentByID(0), Enchantment.getEnchantmentByID(5), Enchantment.getEnchantmentByID(4), Enchantment.getEnchantmentByID(3)};
 
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.diamond_leggings), ea, 5, worldIn, pos);
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.DIAMOND_LEGGINGS), ea, 5, worldIn, pos);
 
                 break;
             }
             case 38: {
-                Enchantment[] ea = {Enchantment.fireAspect, Enchantment.aquaAffinity, Enchantment.fireProtection, Enchantment.protection, Enchantment.respiration, Enchantment.projectileProtection, Enchantment.blastProtection};
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.diamond_chestplate), ea, 4, worldIn, pos);
+                Enchantment[] ea = {Enchantment.getEnchantmentByID(20), Enchantment.getEnchantmentByID(6), Enchantment.getEnchantmentByID(1), Enchantment.getEnchantmentByID(0), Enchantment.getEnchantmentByID(5), Enchantment.getEnchantmentByID(4), Enchantment.getEnchantmentByID(3)};
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.DIAMOND_CHESTPLATE), ea, 4, worldIn, pos);
 
                 break;
             }
             case 39: {
-                Enchantment[] ea = {Enchantment.fireAspect, Enchantment.aquaAffinity, Enchantment.fireProtection, Enchantment.protection, Enchantment.respiration, Enchantment.projectileProtection, Enchantment.blastProtection};
+                Enchantment[] ea = {Enchantment.getEnchantmentByID(20), Enchantment.getEnchantmentByID(6), Enchantment.getEnchantmentByID(1), Enchantment.getEnchantmentByID(0), Enchantment.getEnchantmentByID(5), Enchantment.getEnchantmentByID(4), Enchantment.getEnchantmentByID(3)};
 
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.diamond_helmet), ea, 6, worldIn, pos);
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.DIAMOND_HELMET), ea, 6, worldIn, pos);
                 break;
             }
             case 40: {

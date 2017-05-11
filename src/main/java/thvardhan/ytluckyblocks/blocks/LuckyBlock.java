@@ -11,9 +11,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.relauncher.Side;
@@ -35,11 +34,11 @@ public class LuckyBlock extends Block {
         this.setCreativeTab(CommonProxy.tabYTStuffMod);
         this.setHardness(hardness);
         this.setResistance(resistance);
-        this.setBlockBounds(0, 0, 0, 1, 0.9F, 1);
+
     }
 
     public LuckyBlock(String unlocalizedName, float hardness, float resistance) {
-        this(unlocalizedName, Material.rock, 0, 18000000);
+        this(unlocalizedName, Material.ROCK, 0, 18000000);
     }
 
     public LuckyBlock(String unlocalizedName) {
@@ -47,26 +46,26 @@ public class LuckyBlock extends Block {
     }
 
     @Override
-    public int getRenderType() {
-        return 3;
+    public boolean isOpaqueCube(IBlockState state) {
+        return false;
     }
 
     @Override
-    public boolean isOpaqueCube() {
+    public boolean isVisuallyOpaque() {
         return false;
     }
 
 
     @Override
-    public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
-
+    public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
         if (!world.isRemote && player != null && !(player instanceof FakePlayer)) {
 
             world.setBlockToAir(pos);
             drops(world, pos, player);
         }
 
-        return true;
+        return false;
+
     }
 
 
@@ -85,15 +84,15 @@ public class LuckyBlock extends Block {
                 break;
             }
             case 1: {
-                ExtraFunctions.summonBlockWithLoop(worldIn, pos, Blocks.diamond_block, 10, 0, 0);
+                ExtraFunctions.summonBlockWithLoop(worldIn, pos, Blocks.DIAMOND_BLOCK, 10, 0, 0);
                 break;
             }
             case 2: {
-                ExtraFunctions.summonBlockWithLoop(worldIn, pos, Blocks.gold_block, 64, 1, 0);
+                ExtraFunctions.summonBlockWithLoop(worldIn, pos, Blocks.GOLD_BLOCK, 64, 1, 0);
                 break;
             }
             case 3: {
-                ExtraFunctions.summonBlockWithLoop(worldIn, pos, Blocks.cobblestone, 128, 1, 2);
+                ExtraFunctions.summonBlockWithLoop(worldIn, pos, Blocks.COBBLESTONE, 128, 1, 2);
                 break;
             }
             case 4: {
@@ -101,7 +100,7 @@ public class LuckyBlock extends Block {
                 break;
             }
             case 5: {
-                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.apple, "Super Apple", Enchantment.sharpness, 10);
+                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.APPLE, "Super Apple", Enchantment.getEnchantmentByID(16), 10);
                 break;
             }
             case 6: {
@@ -109,7 +108,7 @@ public class LuckyBlock extends Block {
                 break;
             }
             case 7: {
-                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.melon_seeds, "Seeds?", Enchantment.fireAspect, 20);
+                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.MELON_SEEDS, "Seeds?", Enchantment.getEnchantmentByID(20), 20);
                 break;
             }
             case 8: {
@@ -125,11 +124,11 @@ public class LuckyBlock extends Block {
                 break;
             }
             case 11: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.flowing_lava);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.FLOWING_LAVA);
                 break;
             }
             case 12: {
-                ExtraFunctions.summonItemWithLoop(worldIn, pos, Items.bed, 64, 0, 0);
+                ExtraFunctions.summonItemWithLoop(worldIn, pos, Items.BED, 64, 0, 0);
                 break;
             }
             case 13: {
@@ -145,11 +144,11 @@ public class LuckyBlock extends Block {
                 break;
             }
             case 16: {
-                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.dragon_egg);
+                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.DRAGON_EGG);
                 break;
             }
             case 17: {
-                ExtraFunctions.summonBlockWithLoop(worldIn, pos, Blocks.cake, 20, 0, 0);
+                ExtraFunctions.summonBlockWithLoop(worldIn, pos, Blocks.CAKE, 20, 0, 0);
                 break;
             }
             case 18: {
@@ -169,27 +168,27 @@ public class LuckyBlock extends Block {
                 break;
             }
             case 22: {
-                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.diamond_boots, EnumChatFormatting.BLUE + "Log.zip Not So Lucky Boots", Enchantment.featherFalling, 30);
+                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.DIAMOND_BOOTS, ChatFormatting.BLUE + "Log.zip Not So Lucky Boots", Enchantment.getEnchantmentByID(2), 30);
                 break;
             }
             case 23: {
-                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.diamond_chestplate, EnumChatFormatting.BLUE + "Log.zip Not So Lucky Chestplate", Enchantment.thorns, 10);
+                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.DIAMOND_CHESTPLATE, ChatFormatting.BLUE + "Log.zip Not So Lucky Chestplate", Enchantment.getEnchantmentByID(7), 10);
                 break;
             }
             case 24: {
-                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.diamond_leggings, EnumChatFormatting.BLUE + "Log.zip Not So Lucky Leggings", Enchantment.blastProtection, 6);
+                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.DIAMOND_LEGGINGS, ChatFormatting.BLUE + "Log.zip Not So Lucky Leggings", Enchantment.getEnchantmentByID(3), 6);
             }
             case 25: {
-                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.diamond_helmet, EnumChatFormatting.BLUE + "Log.zip Not So Lucky Helmet", Enchantment.projectileProtection, 15);
+                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.DIAMOND_HELMET, ChatFormatting.BLUE + "Log.zip Not So Lucky Helmet", Enchantment.getEnchantmentByID(4), 15);
                 break;
             }
             case 26: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.beacon));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.BEACON));
                 break;
             }
             case 27: {
-                ExtraFunctions.summonItemWithLoop(worldIn, pos, Items.bucket, 64, 0, 0);
-                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.bucket, "You Found Me~!" + ChatFormatting.AQUA, Enchantment.fireAspect, 10);
+                ExtraFunctions.summonItemWithLoop(worldIn, pos, Items.BUCKET, 64, 0, 0);
+                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.BUCKET, "You Found Me~!" + ChatFormatting.AQUA, Enchantment.getEnchantmentByID(20), 10);
                 break;
             }
             case 28: {
@@ -238,7 +237,7 @@ public class LuckyBlock extends Block {
                 break;
             }
             case 39: {
-                ExtraFunctions.summonBlockWithLoop(worldIn, pos, Blocks.enchanting_table, 4, 0, 0);
+                ExtraFunctions.summonBlockWithLoop(worldIn, pos, Blocks.ENCHANTING_TABLE, 4, 0, 0);
                 break;
             }
             case 40: {
@@ -254,11 +253,11 @@ public class LuckyBlock extends Block {
                 break;
             }
             case 43: {
-                ItemStack[] stack = {new ItemStack(Items.diamond_sword), new ItemStack(Items.diamond_axe)
-                        , new ItemStack(Items.wooden_sword), new ItemStack(Items.bone), new ItemStack(Items.golden_boots),
-                        new ItemStack(Items.diamond_pickaxe)};
-                Enchantment[] ench = {Enchantment.fortune, Enchantment.fireAspect, Enchantment.punch, Enchantment.efficiency, Enchantment.flame
-                        , Enchantment.unbreaking, Enchantment.infinity, Enchantment.looting};
+                ItemStack[] stack = {new ItemStack(Items.DIAMOND_SWORD), new ItemStack(Items.DIAMOND_AXE)
+                        , new ItemStack(Items.WOODEN_SWORD), new ItemStack(Items.BONE), new ItemStack(Items.GOLDEN_BOOTS),
+                        new ItemStack(Items.DIAMOND_PICKAXE)};
+                Enchantment[] ench = {Enchantment.getEnchantmentByID(35), Enchantment.getEnchantmentByID(20), Enchantment.getEnchantmentByID(49), Enchantment.getEnchantmentByID(32), Enchantment.getEnchantmentByID(50)
+                        , Enchantment.getEnchantmentByID(34), Enchantment.getEnchantmentByID(51), Enchantment.getEnchantmentByID(21)};
 
 
                 ExtraFunctions.addRandomEnchtToRandomItems(worldIn, stack, ench, 8, pos, rand);
@@ -274,11 +273,11 @@ public class LuckyBlock extends Block {
                 break;
             }
             case 45: {
-                ItemStack[] s = {new ItemStack(Items.stone_axe), new ItemStack(Items.stone_hoe)
-                        , new ItemStack(Items.stone_pickaxe), new ItemStack(Items.stone_sword), new ItemStack(Items.diamond_chestplate),
-                        new ItemStack(Items.acacia_door)};
-                Enchantment[] ench = {Enchantment.fortune, Enchantment.fireAspect, Enchantment.punch, Enchantment.efficiency, Enchantment.flame
-                        , Enchantment.unbreaking, Enchantment.infinity, Enchantment.looting};
+                ItemStack[] s = {new ItemStack(Items.STONE_AXE), new ItemStack(Items.STONE_HOE)
+                        , new ItemStack(Items.STONE_PICKAXE), new ItemStack(Items.STONE_SWORD), new ItemStack(Items.DIAMOND_CHESTPLATE),
+                        new ItemStack(Items.ACACIA_DOOR)};
+                Enchantment[] ench = {Enchantment.getEnchantmentByID(35), Enchantment.getEnchantmentByID(20), Enchantment.getEnchantmentByID(49), Enchantment.getEnchantmentByID(32), Enchantment.getEnchantmentByID(50)
+                        , Enchantment.getEnchantmentByID(34), Enchantment.getEnchantmentByID(51), Enchantment.getEnchantmentByID(21)};
 
 
                 ExtraFunctions.addRandomEnchtToRandomItems(worldIn, s, ench, 8, pos, rand);
@@ -342,7 +341,7 @@ public class LuckyBlock extends Block {
             double d3 = (double) (rand.nextFloat() * (float) j);
             double d4 = ((double) rand.nextFloat() - 0.5D) * 0.125D;
             double d5 = (double) (rand.nextFloat() * (float) k);
-            worldIn.spawnParticle(EnumParticleTypes.PORTAL, d0, d1, d2, d3, d4, d5, new int[0]);
+            worldIn.spawnParticle(EnumParticleTypes.PORTAL, d0, d1, d2, d3, d4, d5);
         }
     }
 

@@ -1,5 +1,6 @@
 package thvardhan.ytluckyblocks.blocks;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -12,9 +13,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.relauncher.Side;
@@ -34,11 +34,11 @@ public class DanTDMLuckyBlock extends Block {
         this.setCreativeTab(CommonProxy.tabYTStuffMod);
         this.setHardness(hardness);
         this.setResistance(resistance);
-        this.setBlockBounds(0, 0, 0, 1, 0.9F, 1);
+
     }
 
     public DanTDMLuckyBlock(String unlocalizedName, float hardness, float resistance) {
-        this(unlocalizedName, Material.rock, 0, 10000);
+        this(unlocalizedName, Material.ROCK, 0, 10000);
     }
 
     public DanTDMLuckyBlock(String unlocalizedName) {
@@ -46,10 +46,13 @@ public class DanTDMLuckyBlock extends Block {
     }
 
     @Override
-    public boolean isOpaqueCube() {
+    public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
-
+    @Override
+    public boolean isVisuallyOpaque() {
+        return false;
+    }
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
         for (int i = 0; i < 3; ++i) {
@@ -61,19 +64,19 @@ public class DanTDMLuckyBlock extends Block {
             double d3 = (double) (rand.nextFloat() * (float) j);
             double d4 = ((double) rand.nextFloat() - 0.5D) * 0.125D;
             double d5 = (double) (rand.nextFloat() * (float) k);
-            worldIn.spawnParticle(EnumParticleTypes.PORTAL, d0, d1, d2, d3, d4, d5, new int[0]);
+            worldIn.spawnParticle(EnumParticleTypes.PORTAL, d0, d1, d2, d3, d4, d5);
         }
     }
 
 
     @Override
-    public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+    public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
         if (!world.isRemote && player != null && !(player instanceof FakePlayer)) {
             world.setBlockToAir(pos);
             drops(world, pos, player);
         }
 
-        return true;
+        return false;
     }
 
 
@@ -100,7 +103,7 @@ public class DanTDMLuckyBlock extends Block {
                 break;
             }
             case 3: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.diamond_block);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.DIAMOND_BLOCK);
                 break;
             }
             case 4: {
@@ -112,13 +115,13 @@ public class DanTDMLuckyBlock extends Block {
                 break;
             }
             case 6: {
-                Enchantment[] e = {Enchantment.aquaAffinity, Enchantment.baneOfArthropods, Enchantment.blastProtection, Enchantment.power, Enchantment.looting, Enchantment.fireAspect, Enchantment.sharpness};
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.diamond_axe), e, 6, worldIn, pos);
+                Enchantment[] e = {Enchantment.getEnchantmentByID(6), Enchantment.getEnchantmentByID(18), Enchantment.getEnchantmentByID(3), Enchantment.getEnchantmentByID(48), Enchantment.getEnchantmentByID(21), Enchantment.getEnchantmentByID(20), Enchantment.getEnchantmentByID(16)};
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.DIAMOND_AXE), e, 6, worldIn, pos);
                 break;
             }
             case 7: {
-                Enchantment[] e = {Enchantment.aquaAffinity, Enchantment.baneOfArthropods, Enchantment.blastProtection, Enchantment.power, Enchantment.looting, Enchantment.fireAspect, Enchantment.sharpness, Enchantment.efficiency, Enchantment.featherFalling};
-                ItemStack[] stack = {new ItemStack(Items.diamond_axe), new ItemStack(Items.diamond_hoe), new ItemStack(Items.diamond_sword), new ItemStack(Items.diamond_shovel)};
+                Enchantment[] e = {Enchantment.getEnchantmentByID(6), Enchantment.getEnchantmentByID(18), Enchantment.getEnchantmentByID(3), Enchantment.getEnchantmentByID(48), Enchantment.getEnchantmentByID(21), Enchantment.getEnchantmentByID(20), Enchantment.getEnchantmentByID(16), Enchantment.getEnchantmentByID(32), Enchantment.getEnchantmentByID(2)};
+                ItemStack[] stack = {new ItemStack(Items.DIAMOND_AXE), new ItemStack(Items.DIAMOND_HOE), new ItemStack(Items.DIAMOND_SWORD), new ItemStack(Items.DIAMOND_SHOVEL)};
                 ExtraFunctions.addRandomEnchtToRandomItems(worldIn, stack, e, 10, pos, rand);
                 break;
             }
@@ -135,7 +138,7 @@ public class DanTDMLuckyBlock extends Block {
                 break;
             }
             case 11: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.bedrock);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.BEDROCK);
                 break;
             }
             case 12: {
@@ -144,7 +147,7 @@ public class DanTDMLuckyBlock extends Block {
             }
             case 13: {
                 ExtraFunctions.summonMobsOnBreakBlock(new EntityWither(worldIn), 10, worldIn, pos);
-                ExtraFunctions.chat(EnumChatFormatting.RED + "You Are Done.. Worst Drop Of This Mod", player);
+                ExtraFunctions.chat(ChatFormatting.RED + "You Are Done.. Worst Drop Of This Mod", player);
                 break;
             }
             case 14: {
@@ -186,11 +189,11 @@ public class DanTDMLuckyBlock extends Block {
                 break;
             }
             case 23: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.diamond_block), 64, 1, 3);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.DIAMOND_BLOCK), 64, 1, 3);
                 break;
             }
             case 24: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.emerald_block), 64, 0, 0);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.EMERALD_BLOCK), 64, 0, 0);
                 break;
             }
             case 25: {
@@ -198,13 +201,13 @@ public class DanTDMLuckyBlock extends Block {
                 break;
             }
             case 26: {
-                Enchantment[] e = {Enchantment.sharpness, Enchantment.fireAspect};
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.golden_apple), e, 50, worldIn, pos);
-                ExtraFunctions.chat(EnumChatFormatting.DARK_AQUA + "Up To You.. Use Or Throw", player);
+                Enchantment[] e = {Enchantment.getEnchantmentByID(16), Enchantment.getEnchantmentByID(20)};
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.GOLDEN_APPLE), e, 50, worldIn, pos);
+                ExtraFunctions.chat(ChatFormatting.DARK_AQUA + "Up To You.. Use Or Throw", player);
                 break;
             }
             case 27: {
-                ExtraFunctions.chat(EnumChatFormatting.AQUA + "Hello" + EnumChatFormatting.BLACK + " Just" + EnumChatFormatting.BLUE + " For" + EnumChatFormatting.BOLD + " Your" + EnumChatFormatting.DARK_AQUA + " Info " + EnumChatFormatting.DARK_BLUE + "This" + EnumChatFormatting.DARK_GRAY + " Is" + EnumChatFormatting.DARK_GREEN + " Made" + EnumChatFormatting.DARK_PURPLE + " By" + EnumChatFormatting.DARK_RED + " thvardhan", player);
+                ExtraFunctions.chat(ChatFormatting.AQUA + "Hello" + ChatFormatting.BLACK + " Just" + ChatFormatting.BLUE + " For" + ChatFormatting.BOLD + " Your" + ChatFormatting.DARK_AQUA + " Info " + ChatFormatting.DARK_BLUE + "This" + ChatFormatting.DARK_GRAY + " Is" + ChatFormatting.DARK_GREEN + " Made" + ChatFormatting.DARK_PURPLE + " By" + ChatFormatting.DARK_RED + " thvardhan", player);
                 break;
             }
             case 28: {
@@ -246,7 +249,7 @@ public class DanTDMLuckyBlock extends Block {
                 break;
             }
             case 37: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.end_portal);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.END_PORTAL);
                 break;
             }
             case 38: {
@@ -254,8 +257,8 @@ public class DanTDMLuckyBlock extends Block {
                 break;
             }
             case 39: {
-                Enchantment[] e = {Enchantment.sharpness, Enchantment.knockback, Enchantment.fireAspect};
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.wooden_hoe), e, 60, worldIn, pos);
+                Enchantment[] e = {Enchantment.getEnchantmentByID(16), Enchantment.getEnchantmentByID(19), Enchantment.getEnchantmentByID(20)};
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.WOODEN_HOE), e, 60, worldIn, pos);
                 ExtraFunctions.chat("Someone Just Got A God Hoe", player);
                 break;
             }
@@ -268,7 +271,7 @@ public class DanTDMLuckyBlock extends Block {
                 break;
             }
             case 42: {
-                ExtraFunctions.summonBlockWithLoop(worldIn, pos, Blocks.cake, 10, 0, 0);
+                ExtraFunctions.summonBlockWithLoop(worldIn, pos, Blocks.CAKE, 10, 0, 0);
                 break;
             }
             case 43: {

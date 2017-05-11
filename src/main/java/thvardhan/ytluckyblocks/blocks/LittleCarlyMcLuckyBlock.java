@@ -1,5 +1,6 @@
 package thvardhan.ytluckyblocks.blocks;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -7,12 +8,11 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.monster.EntityBlaze;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
+import net.minecraft.init.PotionTypes;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.relauncher.Side;
@@ -37,7 +37,7 @@ public class LittleCarlyMcLuckyBlock extends Block {
     }
 
     public LittleCarlyMcLuckyBlock(String unlocalizedName, float hardness, float resistance) {
-        this(unlocalizedName, Material.rock, 0, 10000);
+        this(unlocalizedName, Material.ROCK, 0, 10000);
     }
 
     public LittleCarlyMcLuckyBlock(String unlocalizedName) {
@@ -45,10 +45,13 @@ public class LittleCarlyMcLuckyBlock extends Block {
     }
 
     @Override
-    public boolean isOpaqueCube() {
+    public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
-
+    @Override
+    public boolean isVisuallyOpaque() {
+        return false;
+    }
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
         for (int i = 0; i < 3; ++i) {
@@ -60,31 +63,28 @@ public class LittleCarlyMcLuckyBlock extends Block {
             double d3 = (double) (rand.nextFloat() * (float) j);
             double d4 = ((double) rand.nextFloat() - 0.5D) * 0.125D;
             double d5 = (double) (rand.nextFloat() * (float) k);
-            worldIn.spawnParticle(EnumParticleTypes.CRIT_MAGIC, d0, d1, d2, d3, d4, d5, new int[0]);
+            worldIn.spawnParticle(EnumParticleTypes.CRIT_MAGIC, d0, d1, d2, d3, d4, d5);
         }
     }
 
 
     @Override
-    public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+    public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
         if (!world.isRemote && player != null && !(player instanceof FakePlayer)) {
-
             world.setBlockToAir(pos);
             drops(world, pos, player);
         }
-        return true;
-
-        //super.onBlockDestroyedByPlayer(worldIn, pos, state);
+        return false;
     }
 
     private void drops(World worldIn, BlockPos pos, EntityPlayer player) {
 
         Enchantment[] e = new Enchantment[5];
-        e[0] = Enchantment.flame;
-        e[1] = Enchantment.knockback;
-        e[2] = Enchantment.power;
-        e[3] = Enchantment.thorns;
-        e[4] = Enchantment.looting;
+        e[0] = Enchantment.getEnchantmentByID(50);
+        e[1] = Enchantment.getEnchantmentByID(19);
+        e[2] = Enchantment.getEnchantmentByID(48);
+        e[3] = Enchantment.getEnchantmentByID(7);
+        e[4] = Enchantment.getEnchantmentByID(21);
 
 
         Random rand = new Random();
@@ -93,19 +93,19 @@ public class LittleCarlyMcLuckyBlock extends Block {
         switch (rand.nextInt(51)) {
 
             default: {
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.diamond_sword), e, 5, worldIn, pos);
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.DIAMOND_SWORD), e, 5, worldIn, pos);
             }
             case 0: {
                 ExtraFunctions.addEnchantsMany(new ItemStack(ModItems.ytBoots), e, 10, worldIn, pos);
-                ExtraFunctions.chat(EnumChatFormatting.AQUA + "What is this? Defence or offence?", player);
+                ExtraFunctions.chat(ChatFormatting.AQUA + "What is this? Defence or offence?", player);
                 break;
             }
             case 1: {
-                ExtraFunctions.effectPlayer(player, new PotionEffect(Potion.nightVision.getId(), 1200, 1, true, true));
+                ExtraFunctions.effectPlayer(player, new PotionEffect(PotionTypes.NIGHT_VISION.getEffects().get(0).getPotion(), 1200, 1, true, true));
                 break;
             }
             case 2: {
-                ExtraFunctions.effectPlayer(player, new PotionEffect(Potion.moveSpeed.getId(), 2000, 100, true, true));
+                ExtraFunctions.effectPlayer(player, new PotionEffect(PotionTypes.STRONG_POISON.getEffects().get(0).getPotion(), 2000, 100, true, true));
                 break;
             }
             case 3: {
@@ -137,7 +137,7 @@ public class LittleCarlyMcLuckyBlock extends Block {
                 break;
             }
             case 10: {
-                ExtraFunctions.effectPlayer(player, new PotionEffect(Potion.poison.id, 600, 5));
+                ExtraFunctions.effectPlayer(player, new PotionEffect(PotionTypes.POISON.getEffects().get(0).getPotion(), 600, 5));
                 break;
             }
             case 11: {
@@ -173,7 +173,7 @@ public class LittleCarlyMcLuckyBlock extends Block {
                 break;
             }
             case 19: {
-                ExtraFunctions.effectPlayer(player, new PotionEffect(Potion.hunger.id, 600, 30));
+                ExtraFunctions.effectPlayer(player, new PotionEffect(PotionTypes.FIRE_RESISTANCE.getEffects().get(0).getPotion(), 600, 30));
                 break;
             }
             case 20: {
@@ -241,7 +241,7 @@ public class LittleCarlyMcLuckyBlock extends Block {
                 break;
             }
             case 36: {
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.wooden_sword), e, 2, worldIn, pos);
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.WOODEN_SWORD), e, 2, worldIn, pos);
                 break;
             }
             case 37: {

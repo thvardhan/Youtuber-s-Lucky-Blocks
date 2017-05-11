@@ -1,5 +1,6 @@
 package thvardhan.ytluckyblocks.blocks;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -11,9 +12,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.relauncher.Side;
@@ -38,7 +38,7 @@ public class LittleAngelLuckyBlock extends Block {
     }
 
     public LittleAngelLuckyBlock(String unlocalizedName, float hardness, float resistance) {
-        this(unlocalizedName, Material.rock, 0, 10000);
+        this(unlocalizedName, Material.ROCK, 0, 10000);
     }
 
     public LittleAngelLuckyBlock(String unlocalizedName) {
@@ -46,10 +46,13 @@ public class LittleAngelLuckyBlock extends Block {
     }
 
     @Override
-    public boolean isOpaqueCube() {
+    public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
-
+    @Override
+    public boolean isVisuallyOpaque() {
+        return false;
+    }
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
         for (int i = 0; i < 3; ++i) {
@@ -61,30 +64,27 @@ public class LittleAngelLuckyBlock extends Block {
             double d3 = (double) (rand.nextFloat() * (float) j);
             double d4 = ((double) rand.nextFloat() - 0.5D) * 0.125D;
             double d5 = (double) (rand.nextFloat() * (float) k);
-            worldIn.spawnParticle(EnumParticleTypes.SPELL, d0, d1, d2, d3, d4, d5, new int[0]);
+            worldIn.spawnParticle(EnumParticleTypes.SPELL, d0, d1, d2, d3, d4, d5);
         }
     }
 
     @Override
-    public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+    public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
         if (!world.isRemote && player != null && !(player instanceof FakePlayer)) {
-
             world.setBlockToAir(pos);
             drops(world, pos, player);
         }
-        return true;
-
-        //super.onBlockDestroyedByPlayer(worldIn, pos, state);
+        return false;
     }
 
     private void drops(World worldIn, BlockPos pos, EntityPlayer player) {
 
         Enchantment[] e = new Enchantment[5];
-        e[0] = Enchantment.flame;
-        e[1] = Enchantment.knockback;
-        e[2] = Enchantment.power;
-        e[3] = Enchantment.thorns;
-        e[4] = Enchantment.looting;
+        e[0] = Enchantment.getEnchantmentByID(50);
+        e[1] = Enchantment.getEnchantmentByID(19);
+        e[2] = Enchantment.getEnchantmentByID(48);
+        e[3] = Enchantment.getEnchantmentByID(7);
+        e[4] = Enchantment.getEnchantmentByID(21);
 
 
         Random rand = new Random();
@@ -93,7 +93,7 @@ public class LittleAngelLuckyBlock extends Block {
         switch (rand.nextInt(51)) {
 
             default: {
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.diamond_sword), e, 5, worldIn, pos);
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.DIAMOND_SWORD), e, 5, worldIn, pos);
             }
             case 0: {
                 ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(ModItems.ytBoots));
@@ -132,7 +132,7 @@ public class LittleAngelLuckyBlock extends Block {
                 break;
             }
             case 9: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.glowstone);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.GLOWSTONE);
                 break;
             }
             case 10: {
@@ -144,7 +144,7 @@ public class LittleAngelLuckyBlock extends Block {
                 break;
             }
             case 12: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.flower_pot), 23, 1, 2);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.FLOWER_POT), 23, 1, 2);
                 break;
             }
             case 13: {
@@ -208,8 +208,8 @@ public class LittleAngelLuckyBlock extends Block {
                 break;
             }
             case 28: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.command_block);
-                ExtraFunctions.chat(EnumChatFormatting.GOLD + "I Wonder If You Can Do Anything With This Command Block..", player);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.COMMAND_BLOCK);
+                ExtraFunctions.chat(ChatFormatting.GOLD + "I Wonder If You Can Do Anything With This Command Block..", player);
                 break;
             }
             case 29: {
@@ -217,11 +217,11 @@ public class LittleAngelLuckyBlock extends Block {
                 break;
             }
             case 30: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.melon_block), 25, 0, 0);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.MELON_BLOCK), 25, 0, 0);
                 break;
             }
             case 31: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.pumpkin), 25, 0, 0);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.PUMPKIN), 25, 0, 0);
                 break;
             }
             case 32: {
@@ -233,19 +233,19 @@ public class LittleAngelLuckyBlock extends Block {
                 break;
             }
             case 34: {
-                ItemStack[] i = {new ItemStack(Items.apple), new ItemStack(Items.arrow), new ItemStack(Items.baked_potato)
-                        , new ItemStack(Items.blaze_powder), new ItemStack(Items.map), new ItemStack(Items.diamond_axe),
-                        new ItemStack(Items.diamond_horse_armor)};
+                ItemStack[] i = {new ItemStack(Items.APPLE), new ItemStack(Items.ARROW), new ItemStack(Items.BAKED_POTATO)
+                        , new ItemStack(Items.BLAZE_POWDER), new ItemStack(Items.MAP), new ItemStack(Items.DIAMOND_AXE),
+                        new ItemStack(Items.DIAMOND_HORSE_ARMOR)};
                 ExtraFunctions.addRandomEnchtToRandomItems(worldIn, i, e, 8, pos, rand);
                 break;
             }
             case 35: {
-                ExtraFunctions.summonItemWithLoop(worldIn, pos, Items.baked_potato, 50, 1, 10);
+                ExtraFunctions.summonItemWithLoop(worldIn, pos, Items.BAKED_POTATO, 50, 1, 10);
                 ExtraFunctions.chat("ItS PoTaT RaIn!", player);
                 break;
             }
             case 36: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.iron_axe), 5, 1, 50);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.IRON_AXE), 5, 1, 50);
                 break;
             }
             case 37: {
@@ -285,8 +285,8 @@ public class LittleAngelLuckyBlock extends Block {
                 break;
             }
             case 46: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.tnt);
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.flint_and_steel));
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.TNT);
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.FLINT_AND_STEEL));
                 break;
             }
             case 47: {

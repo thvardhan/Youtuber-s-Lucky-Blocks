@@ -1,5 +1,6 @@
 package thvardhan.ytluckyblocks.blocks;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -12,9 +13,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.relauncher.Side;
@@ -41,7 +41,7 @@ public class BabyLeahLuckyBlock extends Block {
     }
 
     public BabyLeahLuckyBlock(String unlocalizedName, float hardness, float resistance) {
-        this(unlocalizedName, Material.rock, 0, 10000);
+        this(unlocalizedName, Material.ROCK, 0, 10000);
     }
 
     public BabyLeahLuckyBlock(String unlocalizedName) {
@@ -49,7 +49,12 @@ public class BabyLeahLuckyBlock extends Block {
     }
 
     @Override
-    public boolean isOpaqueCube() {
+    public boolean isVisuallyOpaque() {
+        return false;
+    }
+
+    @Override
+    public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
 
@@ -64,31 +69,28 @@ public class BabyLeahLuckyBlock extends Block {
             double d3 = (double) (rand.nextFloat() * (float) j);
             double d4 = ((double) rand.nextFloat() - 0.5D) * 0.125D;
             double d5 = (double) (rand.nextFloat() * (float) k);
-            worldIn.spawnParticle(EnumParticleTypes.CRIT_MAGIC, d0, d1, d2, d3, d4, d5, new int[0]);
+            worldIn.spawnParticle(EnumParticleTypes.CRIT_MAGIC, d0, d1, d2, d3, d4, d5);
         }
     }
 
 
     @Override
-    public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+    public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
         if (!world.isRemote && player != null && !(player instanceof FakePlayer)) {
-
             world.setBlockToAir(pos);
             drops(world, pos, player);
         }
-        return true;
-
-        //super.onBlockDestroyedByPlayer(worldIn, pos, state);
+        return false;
     }
 
     private void drops(World worldIn, BlockPos pos, EntityPlayer player) {
 
         Enchantment[] e = new Enchantment[5];
-        e[0] = Enchantment.flame;
-        e[1] = Enchantment.knockback;
-        e[2] = Enchantment.power;
-        e[3] = Enchantment.thorns;
-        e[4] = Enchantment.looting;
+        e[0] = Enchantment.getEnchantmentByID(50);
+        e[1] = Enchantment.getEnchantmentByID(19);
+        e[2] = Enchantment.getEnchantmentByID(48);
+        e[3] = Enchantment.getEnchantmentByID(7);
+        e[4] = Enchantment.getEnchantmentByID(21);
 
 
         Random rand = new Random();
@@ -97,7 +99,7 @@ public class BabyLeahLuckyBlock extends Block {
         switch (rand.nextInt(51)) {
 
             default: {
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.diamond_sword), e, 5, worldIn, pos);
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.DIAMOND_SWORD), e, 5, worldIn, pos);
             }
             case 0: {
                 ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(ModItems.leahBoots));
@@ -203,7 +205,7 @@ public class BabyLeahLuckyBlock extends Block {
                 break;
             }
             case 25: {
-                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.wooden_sword, EnumChatFormatting.BLUE + "Mama", Enchantment.featherFalling, 100);
+                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.WOODEN_SWORD, ChatFormatting.BLUE + "Mama", Enchantment.getEnchantmentByID(2), 100);
                 break;
             }
             case 26: {
@@ -219,11 +221,11 @@ public class BabyLeahLuckyBlock extends Block {
                 break;
             }
             case 29: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.cake);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.CAKE);
                 break;
             }
             case 30: {
-                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.iron_block);
+                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.IRON_BLOCK);
                 break;
             }
             case 31: {
@@ -245,15 +247,15 @@ public class BabyLeahLuckyBlock extends Block {
                 break;
             }
             case 35: {
-                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.cake);
+                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.CAKE);
                 break;
             }
             case 36: {
-                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.dragon_egg);
+                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.DRAGON_EGG);
                 break;
             }
             case 37: {
-                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.bed);
+                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.BED);
                 break;
             }
             case 38: {
@@ -273,15 +275,15 @@ public class BabyLeahLuckyBlock extends Block {
                 break;
             }
             case 42: {
-                ExtraFunctions.summonItemWithLoop(worldIn, pos, Items.diamond, 64, 0, 0);
+                ExtraFunctions.summonItemWithLoop(worldIn, pos, Items.DIAMOND, 64, 0, 0);
                 break;
             }
             case 43: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.gold_block), 55, 1, 5);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.GOLD_BLOCK), 55, 1, 5);
                 break;
             }
             case 44: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.emerald), 54, 0, 0);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.EMERALD), 54, 0, 0);
                 break;
             }
             case 45: {

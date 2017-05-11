@@ -11,7 +11,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import thvardhan.ytluckyblocks.CommonProxy;
 import thvardhan.ytluckyblocks.functions.ExtraFunctions;
@@ -30,23 +32,31 @@ public class LuckyPressurePlate extends Block {
         this.setHardness(hardness);
         this.setResistance(resistance);
         this.setLightLevel(0F);
-        this.setBlockBounds(0.03f, 0, 0.03f, 0.93F, 0.2F, 0.93F);
+        //      this.setBlockBounds(0.03f, 0, 0.03f, 0.93F, 0.2F, 0.93F);
+    }
+
+    @Override
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+        return new AxisAlignedBB(0.03f, 0, 0.03f, 0.93F, 0.2F, 0.93F);
     }
 
 
     public LuckyPressurePlate(String unlocalizedName, float hardness, float resistance) {
-        this(unlocalizedName, Material.rock, 0, 10000);
+        this(unlocalizedName, Material.ROCK, 0, 10000);
     }
-
     public LuckyPressurePlate(String unlocalizedName) {
         this(unlocalizedName, 2.0f, 10.0f);
     }
 
     @Override
-    public boolean isOpaqueCube() {
+    public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
 
+    @Override
+    public boolean isVisuallyOpaque() {
+        return false;
+    }
 
     @Override
     public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
@@ -60,7 +70,7 @@ public class LuckyPressurePlate extends Block {
         if (!worldIn.isRemote && entityIn instanceof EntityPlayer) {
 
 
-            ExtraFunctions.setOneBlock(worldIn, pos, Blocks.air);
+            ExtraFunctions.setOneBlock(worldIn, pos, Blocks.AIR);
 
 
             //GOLDENAPPLE FAKE!
@@ -110,11 +120,11 @@ public class LuckyPressurePlate extends Block {
                     break;
                 }
                 case 9: {
-                    ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.diamond), 40, 1, 4);
+                    ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.DIAMOND), 40, 1, 4);
                     break;
                 }
                 case 10: {
-                    ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.emerald), 15, 1, 6);
+                    ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.EMERALD), 15, 1, 6);
                     break;
                 }
                 case 11: {
@@ -127,7 +137,7 @@ public class LuckyPressurePlate extends Block {
                     break;
                 }
                 case 13: {
-                    ExtraFunctions.setOneBlock(worldIn, new BlockPos(pos.getX(), pos.getY() + 2, pos.getZ()), Blocks.flowing_lava);
+                    ExtraFunctions.setOneBlock(worldIn, new BlockPos(pos.getX(), pos.getY() + 2, pos.getZ()), Blocks.FLOWING_LAVA);
                     break;
                 }
                 case 14: {
@@ -148,7 +158,7 @@ public class LuckyPressurePlate extends Block {
                     break;
                 }
                 case 18: {
-                    ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.flint_and_steel));
+                    ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.FLINT_AND_STEEL));
                     break;
                 }
                 case 19: {
@@ -169,7 +179,7 @@ public class LuckyPressurePlate extends Block {
                 }
                 case 23: {
                     ExtraFunctions.chat("DONT EAT ME! I BEG! :3", (EntityPlayer) entityIn);
-                    ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.golden_apple, "apule", Enchantment.fireAspect, 60);
+                    ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.GOLDEN_APPLE, "apule", Enchantment.getEnchantmentByID(20), 60);
                     break;
                 }
                 case 24: {
@@ -181,19 +191,19 @@ public class LuckyPressurePlate extends Block {
                     break;
                 }
                 case 26: {
-                    ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.diamond_axe));
+                    ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.DIAMOND_AXE));
                     break;
                 }
                 case 27: {
-                    ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.diamond_pickaxe));
+                    ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.DIAMOND_PICKAXE));
                     break;
                 }
                 case 28: {
-                    ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.diamond_sword));
+                    ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.DIAMOND_SWORD));
                     break;
                 }
                 case 29: {
-                    ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, ModItems.rainbowBlade, "Rainbow", Enchantment.sharpness, 10);
+                    ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, ModItems.rainbowBlade, "Rainbow", Enchantment.getEnchantmentByID(16), 10);
                     break;
                 }
                 case 30: {
@@ -245,19 +255,19 @@ public class LuckyPressurePlate extends Block {
                     break;
                 }
                 case 42: {
-                    ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.wheat));
+                    ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.WHEAT));
                     break;
                 }
                 case 43: {
-                    ExtraFunctions.setOneBlock(worldIn, pos, Blocks.lit_pumpkin);
+                    ExtraFunctions.setOneBlock(worldIn, pos, Blocks.LIT_PUMPKIN);
                     break;
                 }
                 case 44: {
-                    ExtraFunctions.setOneBlock(worldIn, pos, Blocks.end_portal);
+                    ExtraFunctions.setOneBlock(worldIn, pos, Blocks.END_PORTAL);
                     break;
                 }
                 case 45: {
-                    ExtraFunctions.setOneBlock(worldIn, pos, Blocks.ender_chest);
+                    ExtraFunctions.setOneBlock(worldIn, pos, Blocks.ENDER_CHEST);
                     break;
                 }
                 case 46: {

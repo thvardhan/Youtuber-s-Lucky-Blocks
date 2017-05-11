@@ -2,10 +2,9 @@ package thvardhan.ytluckyblocks;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.event.ClickEvent;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatStyle;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.event.ClickEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -20,37 +19,39 @@ public class YTEventHandler {
 
         if (event.player instanceof EntityPlayer && FMLCommonHandler.instance().getSide() == Side.CLIENT) {
 
-            ChatComponentText enter = new ChatComponentText(EnumChatFormatting.AQUA + "You Are Using " + ChatFormatting.GREEN + "Youtuber's Lucky block" + ChatFormatting.RED + " Mod V" + Main.VERSION + " By thvardhan / Serial Player and "+ChatFormatting.AQUA+"Spikespaz" + ChatFormatting.GREEN);
-            ChatComponentText enter2 = new ChatComponentText(ChatFormatting.AQUA + "Press Me To Visit To " + ChatFormatting.GREEN + "thvardhan's / SerialPlayer" + ChatFormatting.YELLOW + " Youtube Channel For More Cool Stuff" + ChatFormatting.GREEN);
+
+            TextComponentString enter = new TextComponentString(ChatFormatting.AQUA + "You Are Using " + ChatFormatting.GREEN + "Youtuber's Lucky block" + ChatFormatting.RED + " Mod V" + Main.VERSION + " By thvardhan / Serial Player");
+            TextComponentString enter2 = new TextComponentString(ChatFormatting.AQUA + "Press Me To Visit To " + ChatFormatting.GREEN + "thvardhan's / SerialPlayer" + ChatFormatting.YELLOW + " Youtube Channel For More Cool Stuff" + ChatFormatting.GREEN);
+
 
             ClickEvent site1 = new ClickEvent(ClickEvent.Action.OPEN_URL, "https://www.youtube.com/channel/UCLCDATvGikpHpoC1LsSRm8w");
 
 
-            ChatStyle s2 = new ChatStyle();
+            Style s2 = new Style();
             s2.setBold(true);
-            s2.setChatClickEvent(site1);
+            s2.setClickEvent(site1);
 
 
-            enter2.setChatStyle(s2);
+            enter2.setStyle(s2);
 
 
             event.player.addChatMessage(enter);
             event.player.addChatComponentMessage(enter2);
         } else {
 
-            ChatComponentText enter = new ChatComponentText("You Are Using YTStuff Mod V" + Main.VERSION + " By thvardhan / Serial Player");
-            ChatComponentText enter2 = new ChatComponentText("Press Me To Visit To thvardhan's / SerialPlayer Youtube Channel For More Cool Stuff");
+            TextComponentString enter = new TextComponentString("You Are Using YTStuff Mod V" + Main.VERSION + " By thvardhan / Serial Player");
+            TextComponentString enter2 = new TextComponentString("Press Me To Visit To thvardhan's / SerialPlayer Youtube Channel For More Cool Stuff");
 
             ClickEvent site1 = new ClickEvent(ClickEvent.Action.OPEN_URL, "https://www.youtube.com/channel/UCLCDATvGikpHpoC1LsSRm8w");
 
-            ChatStyle s1 = new ChatStyle();
+            Style s1 = new Style();
 
-            ChatStyle s2 = new ChatStyle();
+            Style s2 = new Style();
             s2.setBold(true);
-            s2.setChatClickEvent(site1);
+            s2.setClickEvent(site1);
 
 
-            enter2.setChatStyle(s2);
+            enter2.setStyle(s2);
 
 
             event.player.addChatMessage(enter);

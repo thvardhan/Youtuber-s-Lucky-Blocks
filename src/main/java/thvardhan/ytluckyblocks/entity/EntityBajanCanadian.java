@@ -10,7 +10,6 @@ import net.minecraft.entity.monster.EntityPigZombie;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.pathfinding.PathNavigateGround;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
@@ -24,8 +23,7 @@ public class EntityBajanCanadian extends EntityMob {
         super(worldIn);
         ((PathNavigateGround) this.getNavigator()).setBreakDoors(true);
         this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(2, new EntityAIAttackOnCollide(this, EntityPlayer.class, 1.0D, false));
-        this.tasks.addTask(5, new EntityAIMoveTowardsRestriction(this, 1.0D));
+          this.tasks.addTask(5, new EntityAIMoveTowardsRestriction(this, 1.0D));
         this.tasks.addTask(7, new EntityAIWander(this, 1.0D));
         this.tasks.addTask(8, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
         this.tasks.addTask(8, new EntityAILookIdle(this));
@@ -37,22 +35,22 @@ public class EntityBajanCanadian extends EntityMob {
     }
 
     protected void applyEntityAI() {
-        this.tasks.addTask(4, new EntityAIAttackOnCollide(this, EntityVillager.class, 1.0D, true));
-        this.tasks.addTask(4, new EntityAIAttackOnCollide(this, EntityIronGolem.class, 1.0D, true));
+        this.tasks.addTask(2, new EntityAIAttackMelee(this, 1.0D, false));
+
         this.tasks.addTask(6, new EntityAIMoveThroughVillage(this, 1.0D, false));
-        this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, true, new Class[]{EntityPigZombie.class}));
+        this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, true, EntityPigZombie.class));
         this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityPlayer.class, true));
-        this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityVillager.class, false));
-        this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityIronGolem.class, true));
+        this.targetTasks.addTask(3, new EntityAINearestAttackableTarget(this, EntityVillager.class, false));
+        this.targetTasks.addTask(3, new EntityAINearestAttackableTarget(this, EntityIronGolem.class, true));
     }
 
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
-        this.getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(10.0D);
-        this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.3D);
-        this.getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(15.0D);
-        this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(75D);
-        this.getEntityAttribute(SharedMonsterAttributes.knockbackResistance).setBaseValue(0.1D);
+        this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(10.0D);
+        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
+        this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(5.0D);
+        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(40D);
+        this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.1D);
     }
 
 
@@ -91,11 +89,6 @@ public class EntityBajanCanadian extends EntityMob {
         return super.attackEntityAsMob(entityIn);
     }
 
-
-    @Override
-    public float getBlockPathWeight(BlockPos pos) {
-        return super.getBlockPathWeight(pos);
-    }
 
 
     @Override

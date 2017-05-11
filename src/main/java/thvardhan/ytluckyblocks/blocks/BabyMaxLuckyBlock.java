@@ -13,8 +13,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.relauncher.Side;
@@ -40,7 +40,7 @@ public class BabyMaxLuckyBlock extends Block {
     }
 
     public BabyMaxLuckyBlock(String unlocalizedName, float hardness, float resistance) {
-        this(unlocalizedName, Material.rock, 0, 10000);
+        this(unlocalizedName, Material.ROCK, 0, 10000);
     }
 
     public BabyMaxLuckyBlock(String unlocalizedName) {
@@ -48,10 +48,14 @@ public class BabyMaxLuckyBlock extends Block {
     }
 
     @Override
-    public boolean isOpaqueCube() {
+    public boolean isVisuallyOpaque() {
         return false;
     }
 
+    @Override
+    public boolean isOpaqueCube(IBlockState state) {
+        return false;
+    }
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
         for (int i = 0; i < 3; ++i) {
@@ -63,32 +67,31 @@ public class BabyMaxLuckyBlock extends Block {
             double d3 = (double) (rand.nextFloat() * (float) j);
             double d4 = ((double) rand.nextFloat() - 0.5D) * 0.125D;
             double d5 = (double) (rand.nextFloat() * (float) k);
-            worldIn.spawnParticle(EnumParticleTypes.CRIT_MAGIC, d0, d1, d2, d3, d4, d5, new int[0]);
+            worldIn.spawnParticle(EnumParticleTypes.CRIT_MAGIC, d0, d1, d2, d3, d4, d5);
         }
     }
 
 
     @Override
-    public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+    public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
         if (!world.isRemote && player != null && !(player instanceof FakePlayer)) {
 
             world.setBlockToAir(pos);
 
             drops(world, pos, player);
         }
-        return true;
-
+        return false;
         //super.onBlockDestroyedByPlayer(worldIn, pos, state);
     }
 
     private void drops(World worldIn, BlockPos pos, EntityPlayer player) {
 
         Enchantment[] e = new Enchantment[5];
-        e[0] = Enchantment.flame;
-        e[1] = Enchantment.knockback;
-        e[2] = Enchantment.power;
-        e[3] = Enchantment.thorns;
-        e[4] = Enchantment.looting;
+        e[0] = Enchantment.getEnchantmentByID(50);
+        e[1] = Enchantment.getEnchantmentByID(19);
+        e[2] = Enchantment.getEnchantmentByID(48);
+        e[3] = Enchantment.getEnchantmentByID(7);
+        e[4] = Enchantment.getEnchantmentByID(21);
 
 
         Random rand = new Random();
@@ -97,7 +100,7 @@ public class BabyMaxLuckyBlock extends Block {
         switch (rand.nextInt(51)) {
 
             default: {
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.diamond_sword), e, 5, worldIn, pos);
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.DIAMOND_SWORD), e, 5, worldIn, pos);
             }
             case 0: {
                 ExtraFunctions.fireCamp(worldIn, player);
@@ -108,11 +111,11 @@ public class BabyMaxLuckyBlock extends Block {
                 break;
             }
             case 2: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.bedrock);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.BEDROCK);
                 break;
             }
             case 3: {
-                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.anvil);
+                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.ANVIL);
                 break;
             }
             case 4: {
@@ -228,7 +231,7 @@ public class BabyMaxLuckyBlock extends Block {
                 break;
             }
             case 32: {
-                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, ModItems.maxBoots, "AAAA!!", Enchantment.protection, 100);
+                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, ModItems.maxBoots, "AAAA!!", Enchantment.getEnchantmentByID(0), 100);
                 break;
             }
             case 33: {
@@ -274,7 +277,7 @@ public class BabyMaxLuckyBlock extends Block {
                 break;
             }
             case 43: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.potionitem));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.POTIONITEM));
                 break;
             }
             case 44: {
@@ -302,7 +305,7 @@ public class BabyMaxLuckyBlock extends Block {
                 break;
             }
             case 50: {
-                ExtraFunctions.summonItemWithLoop(worldIn, pos, Items.bone, 20, 1, 2);
+                ExtraFunctions.summonItemWithLoop(worldIn, pos, Items.BONE, 20, 1, 2);
                 break;
             }
 

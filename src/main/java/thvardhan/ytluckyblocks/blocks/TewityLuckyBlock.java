@@ -11,11 +11,11 @@ import net.minecraft.entity.passive.EntityRabbit;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.init.PotionTypes;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.relauncher.Side;
@@ -39,7 +39,7 @@ public class TewityLuckyBlock extends Block {
     }
 
     public TewityLuckyBlock(String unlocalizedName, float hardness, float resistance) {
-        this(unlocalizedName, Material.rock, 0, 10000);
+        this(unlocalizedName, Material.ROCK, 0, 10000);
     }
 
     public TewityLuckyBlock(String unlocalizedName) {
@@ -47,10 +47,13 @@ public class TewityLuckyBlock extends Block {
     }
 
     @Override
-    public boolean isOpaqueCube() {
+    public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
-
+    @Override
+    public boolean isVisuallyOpaque() {
+        return false;
+    }
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
         for (int i = 0; i < 3; ++i) {
@@ -62,30 +65,27 @@ public class TewityLuckyBlock extends Block {
             double d3 = (double) (rand.nextFloat() * (float) j);
             double d4 = ((double) rand.nextFloat() - 0.5D) * 0.125D;
             double d5 = (double) (rand.nextFloat() * (float) k);
-            worldIn.spawnParticle(EnumParticleTypes.ENCHANTMENT_TABLE, d0, d1, d2, d3, d4, d5, new int[0]);
+            worldIn.spawnParticle(EnumParticleTypes.ENCHANTMENT_TABLE, d0, d1, d2, d3, d4, d5);
         }
     }
 
     @Override
-    public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+    public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
         if (!world.isRemote && player != null && !(player instanceof FakePlayer)) {
-
             world.setBlockToAir(pos);
             drops(world, pos, player);
         }
-        return true;
-
-        //super.onBlockDestroyedByPlayer(worldIn, pos, state);
+        return false;
     }
 
     private void drops(World worldIn, BlockPos pos, EntityPlayer player) {
 
 
         Enchantment[] e = new Enchantment[4];
-        e[0] = Enchantment.flame;
-        e[2] = Enchantment.power;
-        e[3] = Enchantment.thorns;
-        e[1] = Enchantment.looting;
+        e[0] = Enchantment.getEnchantmentByID(50);
+        e[2] = Enchantment.getEnchantmentByID(48);
+        e[3] = Enchantment.getEnchantmentByID(7);
+        e[1] = Enchantment.getEnchantmentByID(21);
 
 
         Random rand = new Random();
@@ -94,7 +94,7 @@ public class TewityLuckyBlock extends Block {
         switch (rand.nextInt(101)) {
 
             default: {
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.diamond_sword), e, 5, worldIn, pos);
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.DIAMOND_SWORD), e, 5, worldIn, pos);
             }
             case 0: {
                 ExtraFunctions.slimeFort(worldIn, player);
@@ -241,7 +241,7 @@ public class TewityLuckyBlock extends Block {
                 break;
             }
             case 36: {
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.wooden_sword), e, 2, worldIn, pos);
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.WOODEN_SWORD), e, 2, worldIn, pos);
                 break;
             }
             case 37: {
@@ -261,19 +261,19 @@ public class TewityLuckyBlock extends Block {
                 break;
             }
             case 41: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.dragon_egg));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.DRAGON_EGG));
                 break;
             }
             case 42: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.cake));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.CAKE));
                 break;
             }
             case 43: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.command_block));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.COMMAND_BLOCK));
                 break;
             }
             case 44: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.arrow), 64, 0, 0);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.ARROW), 64, 0, 0);
                 break;
             }
             case 45: {
@@ -281,7 +281,7 @@ public class TewityLuckyBlock extends Block {
                 break;
             }
             case 46: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.diamond_horse_armor));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.DIAMOND_HORSE_ARMOR));
                 break;
             }
             case 47: {
@@ -289,23 +289,23 @@ public class TewityLuckyBlock extends Block {
                 break;
             }
             case 48: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.diamond_sword));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.DIAMOND_SWORD));
                 break;
             }
             case 49: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.enchanting_table);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.ENCHANTING_TABLE);
                 break;
             }
             case 50: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.bedrock);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.BEDROCK);
                 break;
             }
             case 51: {
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.iron_pickaxe), new Enchantment[]{Enchantment.efficiency, Enchantment.fortune}, 4, worldIn, pos);
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.IRON_PICKAXE), new Enchantment[]{Enchantment.getEnchantmentByID(32), Enchantment.getEnchantmentByID(35)}, 4, worldIn, pos);
                 break;
             }
             case 52: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.heavy_weighted_pressure_plate);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE);
                 break;
             }
             case 53: {
@@ -355,7 +355,7 @@ public class TewityLuckyBlock extends Block {
                 break;
             }
             case 64: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.skull);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.SKULL);
                 break;
             }
             case 65: {
@@ -371,23 +371,23 @@ public class TewityLuckyBlock extends Block {
                 break;
             }
             case 68: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.command_block_minecart));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.COMMAND_BLOCK_MINECART));
                 break;
             }
             case 69: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.flowing_lava);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.FLOWING_LAVA);
                 break;
             }
             case 70: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.golden_sword));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.GOLDEN_SWORD));
                 break;
             }
             case 71: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.stone_sword));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.STONE_SWORD));
                 break;
             }
             case 72: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.iron_sword));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.IRON_SWORD));
                 break;
             }
             case 73: {
@@ -395,11 +395,11 @@ public class TewityLuckyBlock extends Block {
                 break;
             }
             case 74: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.gold_ingot), 20, 1, 20);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.GOLD_INGOT), 20, 1, 20);
                 break;
             }
             case 75: {
-                ExtraFunctions.effectPlayer(player, new PotionEffect(Potion.blindness.getId(), 700, 20));
+                ExtraFunctions.effectPlayer(player, new PotionEffect(PotionTypes.LONG_SLOWNESS.getEffects().get(0).getPotion(), 700, 20));
                 break;
             }
             case 76: {
@@ -435,7 +435,7 @@ public class TewityLuckyBlock extends Block {
                 break;
             }
             case 84: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.shears));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.SHEARS));
                 break;
             }
             case 85: {
@@ -443,11 +443,11 @@ public class TewityLuckyBlock extends Block {
                 break;
             }
             case 86: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.emerald_block);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.EMERALD_BLOCK);
                 break;
             }
             case 87: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.brewing_stand);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.BREWING_STAND);
                 break;
             }
             case 88: {
@@ -491,7 +491,7 @@ public class TewityLuckyBlock extends Block {
                 break;
             }
             case 98: {
-                ExtraFunctions.summonItemWithLoop(worldIn, pos, Items.bread, 20, 0, 0);
+                ExtraFunctions.summonItemWithLoop(worldIn, pos, Items.BREAD, 20, 0, 0);
                 break;
             }
             case 99: {

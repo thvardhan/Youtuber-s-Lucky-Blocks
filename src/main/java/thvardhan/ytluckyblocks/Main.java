@@ -1,7 +1,7 @@
 package thvardhan.ytluckyblocks;
 
 import net.minecraft.entity.EnumCreatureType;
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -35,7 +35,18 @@ public class Main {
 
     @EventHandler
     public void init(FMLInitializationEvent e) {
-        EntityRegistry.addSpawn(EntityLuckyMob.class, 6, 15, 50, EnumCreatureType.MONSTER, BiomeGenBase.desert);
+        Biome[] spawnForLuckMob=new Biome[10];
+        spawnForLuckMob[0]=Biome.getBiome(1);
+        spawnForLuckMob[1]=Biome.getBiome(17);
+        spawnForLuckMob[2]=Biome.getBiome(2);
+        spawnForLuckMob[3]=Biome.getBiome(3);
+        spawnForLuckMob[4]=Biome.getBiome(4);
+        spawnForLuckMob[5]=Biome.getBiome(5);
+        spawnForLuckMob[6]=Biome.getBiome(11);
+        spawnForLuckMob[7]=Biome.getBiome(12);
+        spawnForLuckMob[8]=Biome.getBiome(13);
+        spawnForLuckMob[9]=Biome.getBiome(35);
+        EntityRegistry.addSpawn(EntityLuckyMob.class, 6, 15, 50, EnumCreatureType.MONSTER, spawnForLuckMob);
         proxy.init(e);
     }
 
