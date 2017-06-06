@@ -1,5 +1,6 @@
 package thvardhan.ytluckyblocks;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -8,16 +9,22 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import thvardhan.ytluckyblocks.blocks.ModBlocks;
 import thvardhan.ytluckyblocks.items.ModItems;
 
+import java.io.InputStream;
+import java.util.Enumeration;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+
 
 public class CommonProxy {
 
     public static CreativeTabs tabYTStuffMod = new TabYTStuffMod(CreativeTabs.getNextID(), "YTSuffMod");
     public static CreativeTabs tabYtStuffArmor = new TabYTStuffArmor(CreativeTabs.getNextID(), "YTStuffArmor");
+    public static boolean addonsFound=false;
 
     public void preInit(FMLPreInitializationEvent e) {
         ModItems.createTools();
         ModBlocks.createBlocks();
-
+        registerAddons(e);
     }
 
     public void init(FMLInitializationEvent e) {
@@ -64,5 +71,26 @@ public class CommonProxy {
 
     }
 
+
+    private static void registerAddons(FMLPreInitializationEvent e){
+        zipParser(e);
+
+    }
+
+    private static void zipParser(FMLPreInitializationEvent e){
+        try {
+            ZipFile zipFile = new ZipFile(e.getModConfigurationDirectory()+"/splash.ytlb");
+            Enumeration<? extends ZipEntry> entries = zipFile.entries();
+
+            while (entries.hasMoreElements()) {
+                ZipEntry entry = entries.nextElement();
+                InputStream stream = zipFile.getInputStream(entry);
+                System.out.println(entry.getName());
+            }
+        }catch (Exception E){
+            System.out.println("something went wrong while loading addons. If the issue persists please contact the creator of youtubers lucky block "+Main.VERSION+" "+ Minecraft.getMinecraft().getVersion());
+            E.printStackTrace(System.out);
+        }
+    }
 
 }

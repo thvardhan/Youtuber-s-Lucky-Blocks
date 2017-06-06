@@ -27,7 +27,6 @@ public class Main {
     @EventHandler
     public void preInit(FMLPreInitializationEvent e) {
 
-
         registerEntities();
         proxy.preInit(e);
     }
