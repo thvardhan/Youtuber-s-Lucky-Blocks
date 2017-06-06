@@ -1,15 +1,20 @@
 package thvardhan.ytluckyblocks;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import thvardhan.ytluckyblocks.blocks.ModBlocks;
 import thvardhan.ytluckyblocks.items.ModItems;
 
+import java.io.BufferedReader;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -17,6 +22,8 @@ import java.util.zip.ZipFile;
 
 public class CommonProxy {
 
+    private static ArrayList<Block> luckyBlockAddons=new ArrayList<Block>();
+    private static int counterAddon=0;
     public static CreativeTabs tabYTStuffMod = new TabYTStuffMod(CreativeTabs.getNextID(), "YTSuffMod");
     public static CreativeTabs tabYtStuffArmor = new TabYTStuffArmor(CreativeTabs.getNextID(), "YTStuffArmor");
     public static boolean addonsFound=false;
@@ -77,6 +84,60 @@ public class CommonProxy {
 
     }
 
+    private static void handleFile(ZipEntry en,ZipFile zipFile){
+        if(en.getName().equals("block.txt")){
+            try {
+                InputStream stream=zipFile.getInputStream(en);
+                BufferedReader r=new BufferedReader(new InputStreamReader(stream, "UTF-8"));
+                handleBlockText(r);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+
+    }
+
+    private static void handleBlockText(BufferedReader reader) throws Exception{
+        String line="";
+        boolean isDrop=false;
+        String name="",creativeTab="",particle="";
+        boolean defaults=false;
+        float hardness=0,resistance=0,lightlevel=0;
+        ArrayList<Command> commands=new ArrayList<Command>();
+        ArrayList<String> arrayList=new ArrayList<String>();
+        while((line= reader.readLine())!=null){
+            if(line.contains("drops")){
+                isDrop=true;
+            }
+            if(!isDrop&&!line.isEmpty()){
+                name=line.split("=")[1].replaceAll(" ","_");
+                defaults=reader.readLine().contains("true")?true:false;
+                creativeTab=reader.readLine().split("=")[1];
+                hardness=Float.parseFloat(reader.readLine().split("=")[1]);
+                resistance=Float.parseFloat(reader.readLine().split("=")[1]);
+                lightlevel=Float.parseFloat(reader.readLine().split("=")[1]);
+                particle=reader.readLine().split("=")[1];
+            }
+            if(isDrop){
+
+                if(!line.isEmpty()&&!line.startsWith("drops")){
+                    arrayList.add(line);
+                }
+                if((line.isEmpty())&&arrayList.size()>0){
+
+                    Command c=new Command();
+                    c.addCommand(arrayList);
+                    commands.add(c);
+                    arrayList.removeAll(arrayList);
+                }
+
+            }
+        }
+        registerLuckyBlockFromAddon(name,defaults,creativeTab,hardness,resistance,lightlevel,particle,commands);
+
+    }
+
     private static void zipParser(FMLPreInitializationEvent e){
         try {
             ZipFile zipFile = new ZipFile(e.getModConfigurationDirectory()+"/splash.ytlb");
@@ -84,13 +145,27 @@ public class CommonProxy {
 
             while (entries.hasMoreElements()) {
                 ZipEntry entry = entries.nextElement();
-                InputStream stream = zipFile.getInputStream(entry);
-                System.out.println(entry.getName());
+               // InputStream stream = zipFile.getInputStream(entry);
+               handleFile(entry,zipFile);
             }
         }catch (Exception E){
             System.out.println("something went wrong while loading addons. If the issue persists please contact the creator of youtubers lucky block "+Main.VERSION+" "+ Minecraft.getMinecraft().getVersion());
             E.printStackTrace(System.out);
         }
+    }
+
+
+    private static void registerLuckyBlockFromAddon(String unLocalizedName,boolean useDefaults,
+                                                    String creativeTab,float hardness,float resistance,float lightLevel,String particle, ArrayList<Command> commands){
+        Block b=null;
+        luckyBlockAddons.add(b=new AddonLuckyBlock(unLocalizedName,useDefaults,creativeTab,hardness,resistance,lightLevel,particle,commands));
+        GameRegistry.registerBlock(b,unLocalizedName);
+
+    }
+
+
+    public static ArrayList<Block> getBlocks(){
+        return luckyBlockAddons;
     }
 
 }
