@@ -15,6 +15,7 @@ public class YoutubeBlock extends Block {
     public YoutubeBlock(String unlocalizedName, Material material, float hardness, float resistance) {
         super(material);
         this.setUnlocalizedName(unlocalizedName);
+        this.setRegistryName(unlocalizedName);
         this.setCreativeTab(CommonProxy.tabYTStuffMod);
         this.setHardness(hardness);
         this.setResistance(resistance);

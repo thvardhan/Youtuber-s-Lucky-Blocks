@@ -8,6 +8,7 @@ public class DevilSword extends ItemSword {
     public DevilSword(String string, ToolMaterial devil) {
         super(devil);
         this.setUnlocalizedName(string);
+        this.setRegistryName(string);
         this.setCreativeTab(CommonProxy.tabYTStuffMod);
 
 

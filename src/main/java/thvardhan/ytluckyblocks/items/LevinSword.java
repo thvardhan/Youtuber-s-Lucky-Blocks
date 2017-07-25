@@ -12,6 +12,7 @@ public class LevinSword extends ItemSword {
     public LevinSword(String string, ToolMaterial material) {
         super(material);
         this.setUnlocalizedName(string);
+        this.setRegistryName(string);
         this.setCreativeTab(CommonProxy.tabYTStuffMod);
 
     }

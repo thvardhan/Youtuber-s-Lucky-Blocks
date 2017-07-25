@@ -15,6 +15,7 @@ public class MicBlock extends Block {
     public MicBlock(String unlocalizedName, Material material, float hardness, float resistance) {
         super(material);
         this.setUnlocalizedName(unlocalizedName);
+        this.setRegistryName(unlocalizedName);
         this.setCreativeTab(CommonProxy.tabYTStuffMod);
         this.setHardness(hardness);
         this.setResistance(resistance);
@@ -34,12 +35,6 @@ public class MicBlock extends Block {
     public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
-
-    @Override
-    public boolean isVisuallyOpaque() {
-        return false;
-    }
-
 
     @Override
     public boolean getTickRandomly() {

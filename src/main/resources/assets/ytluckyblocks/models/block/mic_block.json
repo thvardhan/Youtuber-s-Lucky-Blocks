@@ -1,13 +1,13 @@
 {
     "__comment": "Made With Hard Work",
     "textures": {
-        "0": "ytluckyblocks:blocks/MicSides",
-        "1": "ytluckyblocks:blocks/micLine",
-        "2": "ytluckyblocks:blocks/BaseLine",
-        "3": "ytluckyblocks:blocks/BaseLine2a",
-        "4": "ytluckyblocks:blocks/micHeadDown",
-        "5": "ytluckyblocks:blocks/micHeaddone",
-"particle": "ytluckyblocks:blocks/micHeadDown"
+        "0": "ytluckyblocks:blocks/mic_sides",
+        "1": "ytluckyblocks:blocks/mic_line",
+        "2": "ytluckyblocks:blocks/baseline",
+        "3": "ytluckyblocks:blocks/base_line_2a",
+        "4": "ytluckyblocks:blocks/mic_head_down",
+        "5": "ytluckyblocks:blocks/mic_headdone",
+"particle": "ytluckyblocks:blocks/mic_head_down"
     },
     "elements": [
         {

@@ -3,6 +3,8 @@ package thvardhan.ytluckyblocks.blocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -14,6 +16,7 @@ public class GoldButton extends Block {
     public GoldButton(String unlocalizedName, Material material, float hardness, float resistance) {
         super(material);
         this.setUnlocalizedName(unlocalizedName);
+        this.setRegistryName(unlocalizedName);
         this.setCreativeTab(CommonProxy.tabYTStuffMod);
         this.setHardness(hardness);
         this.setResistance(resistance);
@@ -38,9 +41,8 @@ public class GoldButton extends Block {
     public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
-    @Override
-    public boolean isVisuallyOpaque() {
-        return false;
-    }
 
+    public Item createItemBlock() {
+        return new ItemBlock(this).setRegistryName(getRegistryName());
+    }
 }

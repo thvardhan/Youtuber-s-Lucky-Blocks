@@ -1,8 +1,8 @@
 {
     "__comment": "work..",
     "textures": {
-        "0": "ytluckyblocks:blocks/ironButton",
-	"particle": "ytluckyblocks:blocks/ironButton"
+        "0": "ytluckyblocks:blocks/iron_button",
+	"particle": "ytluckyblocks:blocks/iron_button"
     },
     "elements": [
         {

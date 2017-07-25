@@ -15,14 +15,14 @@ public class CommonProxy {
     public static CreativeTabs tabYtStuffArmor = new TabYTStuffArmor(CreativeTabs.getNextID(), "YTStuffArmor");
 
     public void preInit(FMLPreInitializationEvent e) {
-        ModItems.createTools();
         ModBlocks.createBlocks();
+        ModItems.createTools();
 
     }
 
     public void init(FMLInitializationEvent e) {
         //		registerRecipes();
-        FMLCommonHandler.instance().bus().register(new YTEventHandler());
+        //FMLCommonHandler.instance().bus().register(new YTEventHandler());
 
     }
 
