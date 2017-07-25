@@ -1,7 +1,6 @@
 package thvardhan.ytluckyblocks;
 
 import net.minecraft.entity.EnumCreatureType;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -11,14 +10,13 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
-import thvardhan.ytluckyblocks.blocks.ModBlocks;
 import thvardhan.ytluckyblocks.entity.*;
 
 
 @Mod(modid = Main.MODID, version = Main.VERSION, name = Main.NAME)
 public class Main {
     public static final String MODID = "ytluckyblocks";
-    public static final String VERSION = "6.1.2";
+    public static final String VERSION = "6.1.1";
     public static final String NAME = "YouTuber's Lucky Blocks Mod";
     @SidedProxy(clientSide = "thvardhan.ytluckyblocks.ClientProxy", serverSide = "thvardhan.ytluckyblocks.ServerProxy")
     public static CommonProxy proxy;
@@ -28,6 +26,7 @@ public class Main {
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent e) {
+
 
         registerEntities();
         proxy.preInit(e);
@@ -50,6 +49,7 @@ public class Main {
         EntityRegistry.addSpawn(EntityLuckyMob.class, 6, 15, 50, EnumCreatureType.MONSTER, spawnForLuckMob);
         proxy.init(e);
     }
+
 
     @EventHandler
     public void postInit(FMLPostInitializationEvent e) {
@@ -120,14 +120,16 @@ public class Main {
     }
 
 
-    public void registerModEntityWithEgg(Class parEntityClass, String parEntityName, int parEggColor, int parEggSpotsColor) {
-        EntityRegistry.registerModEntity(new ResourceLocation(MODID, parEntityName), parEntityClass, parEntityName, ++modEntitys, Main.instance, 80, 3, false);
+    public void registerModEntityWithEgg(Class parEntityClass, String parEntityName,
+                                         int parEggColor, int parEggSpotsColor) {
+        EntityRegistry.registerModEntity(parEntityClass, parEntityName, ++modEntitys,
+                Main.instance, 80, 3, false);
         registerSpawnEgg(parEntityName, parEntityClass, parEggColor, parEggSpotsColor);
     }
 
     private void registerSpawnEgg(String parEntityName, Class parEntityClass, int parEggColor,
                                   int parEggSpotsColor) {
-        EntityRegistry.registerEgg(new ResourceLocation(MODID, parEntityName), parEggColor, parEggSpotsColor);
+        EntityRegistry.registerEgg(parEntityClass, parEggColor, parEggSpotsColor);
 
     }
 

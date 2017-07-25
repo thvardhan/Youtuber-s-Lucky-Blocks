@@ -3,7 +3,6 @@ package thvardhan.ytluckyblocks.items.render;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
-import net.minecraftforge.client.model.ModelLoader;
 import thvardhan.ytluckyblocks.Main;
 import thvardhan.ytluckyblocks.items.ModItems;
 

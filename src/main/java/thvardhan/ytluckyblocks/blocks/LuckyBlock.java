@@ -31,7 +31,6 @@ public class LuckyBlock extends Block {
     public LuckyBlock(String unlocalizedName, Material material, float hardness, float resistance) {
         super(material);
         this.setUnlocalizedName(unlocalizedName);
-        this.setRegistryName(unlocalizedName);
         this.setCreativeTab(CommonProxy.tabYTStuffMod);
         this.setHardness(hardness);
         this.setResistance(resistance);
@@ -48,6 +47,11 @@ public class LuckyBlock extends Block {
 
     @Override
     public boolean isOpaqueCube(IBlockState state) {
+        return false;
+    }
+
+    @Override
+    public boolean isVisuallyOpaque() {
         return false;
     }
 

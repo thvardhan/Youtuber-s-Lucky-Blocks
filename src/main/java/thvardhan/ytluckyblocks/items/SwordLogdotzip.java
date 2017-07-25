@@ -13,7 +13,6 @@ public class SwordLogdotzip extends ItemSword {
     public SwordLogdotzip(String u, ToolMaterial material) {
         super(material);
         this.setUnlocalizedName(u);
-        this.setRegistryName(u);
         this.setCreativeTab(CommonProxy.tabYTStuffMod);
 
     }

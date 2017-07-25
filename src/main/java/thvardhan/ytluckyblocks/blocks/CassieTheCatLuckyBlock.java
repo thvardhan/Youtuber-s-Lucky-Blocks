@@ -5,7 +5,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.boss.EntityWither;
-import net.minecraft.entity.monster.EntityElderGuardian;
 import net.minecraft.entity.monster.EntityGhast;
 import net.minecraft.entity.monster.EntityGuardian;
 import net.minecraft.entity.monster.EntityIronGolem;
@@ -35,7 +34,6 @@ public class CassieTheCatLuckyBlock extends Block {
     public CassieTheCatLuckyBlock(String unlocalizedName, Material material, float hardness, float resistance) {
         super(material);
         this.setUnlocalizedName(unlocalizedName);
-        this.setRegistryName(unlocalizedName);
         this.setCreativeTab(CommonProxy.tabYTStuffMod);
         this.setHardness(hardness);
         this.setResistance(resistance);
@@ -54,7 +52,10 @@ public class CassieTheCatLuckyBlock extends Block {
     public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
-
+    @Override
+    public boolean isVisuallyOpaque() {
+        return false;
+    }
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
         for (int i = 0; i < 3; ++i) {
@@ -235,7 +236,9 @@ public class CassieTheCatLuckyBlock extends Block {
                 break;
             }
             case 34: {
-                ExtraFunctions.summonMobsNearby(new EntityElderGuardian(worldIn), 15, worldIn, pos, rand);
+                EntityGuardian t = new EntityGuardian(worldIn);
+                t.setElder();
+                ExtraFunctions.summonMobsNearby(t, 15, worldIn, pos, rand);
                 break;
             }
             case 35: {

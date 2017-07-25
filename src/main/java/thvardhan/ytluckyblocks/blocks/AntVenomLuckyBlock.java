@@ -37,7 +37,6 @@ public class AntVenomLuckyBlock extends Block {
     public AntVenomLuckyBlock(String unlocalizedName, Material material, float hardness, float resistance) {
         super(material);
         this.setUnlocalizedName(unlocalizedName);
-        this.setRegistryName(unlocalizedName);
         this.setCreativeTab(CommonProxy.tabYTStuffMod);
         this.setHardness(hardness);
         this.setResistance(resistance);
@@ -294,6 +293,11 @@ public class AntVenomLuckyBlock extends Block {
 
     @Override
     public boolean isOpaqueCube(IBlockState state) {
+        return false;
+    }
+
+    @Override
+    public boolean isVisuallyOpaque() {
         return false;
     }
 

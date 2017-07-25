@@ -7,7 +7,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.entity.monster.EntityCreeper;
-import net.minecraft.entity.monster.EntityElderGuardian;
 import net.minecraft.entity.monster.EntityGuardian;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.passive.EntityRabbit;
@@ -34,7 +33,6 @@ public class ExploadingTNTLuckyBlock extends Block {
     public ExploadingTNTLuckyBlock(String unlocalizedName, Material material, float hardness, float resistance) {
         super(material);
         this.setUnlocalizedName(unlocalizedName);
-        this.setRegistryName(unlocalizedName);
         this.setCreativeTab(CommonProxy.tabYTStuffMod);
         this.setHardness(hardness);
         this.setResistance(resistance);
@@ -53,7 +51,10 @@ public class ExploadingTNTLuckyBlock extends Block {
     public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
-
+    @Override
+    public boolean isVisuallyOpaque() {
+        return false;
+    }
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
         for (int i = 0; i < 3; ++i) {
@@ -153,7 +154,10 @@ public class ExploadingTNTLuckyBlock extends Block {
                 break;
             }
             case 12: {
-                ExtraFunctions.summonMobsNearby(new EntityElderGuardian(worldIn), 5, worldIn, pos, rand);
+                EntityGuardian g = new EntityGuardian(worldIn);
+                ExtraFunctions.summonMobsNearby(g, 15, worldIn, pos, rand);
+                g.setElder();
+                ExtraFunctions.summonMobsNearby(g, 5, worldIn, pos, rand);
                 break;
             }
             case 13: {

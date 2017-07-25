@@ -14,7 +14,6 @@ public class DiamondButton extends Block {
     public DiamondButton(String unlocalizedName, Material material, float hardness, float resistance) {
         super(material);
         this.setUnlocalizedName(unlocalizedName);
-        this.setRegistryName(unlocalizedName);
         this.setCreativeTab(CommonProxy.tabYTStuffMod);
         this.setHardness(hardness);
         this.setResistance(resistance);
@@ -32,6 +31,11 @@ public class DiamondButton extends Block {
 
     public DiamondButton(String unlocalizedName) {
         this(unlocalizedName, 2.0f, 10.0f);
+    }
+
+    @Override
+    public boolean isVisuallyOpaque() {
+        return false;
     }
 
     @Override

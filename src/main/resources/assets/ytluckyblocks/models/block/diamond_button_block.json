@@ -1,8 +1,8 @@
 {
     "__comment": "work..",
     "textures": {
-        "0": "ytluckyblocks:blocks/diamond_button",
-	"particle": "ytluckyblocks:blocks/diamond_button"
+        "0": "ytluckyblocks:blocks/diamondButton",
+	"particle": "ytluckyblocks:blocks/diamondButton"
     },
     "elements": [
         {
