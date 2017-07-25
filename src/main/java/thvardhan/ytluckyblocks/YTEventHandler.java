@@ -1,20 +1,24 @@
 package thvardhan.ytluckyblocks;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.event.ClickEvent;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.relauncher.Side;
-
+import thvardhan.ytluckyblocks.blocks.ModBlocks;
 public class YTEventHandler {
 
 
-    @SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
+    /*@SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
     public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
 
         if (event.player instanceof EntityPlayer && FMLCommonHandler.instance().getSide() == Side.CLIENT) {
@@ -59,7 +63,6 @@ public class YTEventHandler {
         }
 
 
-    }
-
+    }*/
 
 }

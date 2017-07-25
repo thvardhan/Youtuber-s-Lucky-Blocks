@@ -6,11 +6,11 @@
         "6": "ytluckyblocks:blocks/face_front",
         "7": "ytluckyblocks:blocks/left-Side",
         "8": "ytluckyblocks:blocks/right_side",
-        "9": "ytluckyblocks:blocks/side_TOP",
+        "9": "ytluckyblocks:blocks/side_top",
         "10": "ytluckyblocks:blocks/side_neck",
         "11": "ytluckyblocks:blocks/chk_jschl",
-        "12": "ytluckyblocks:blocks/logoa_A",
-"particle": "ytluckyblocks:blocks/logoa_A"
+        "12": "ytluckyblocks:blocks/logoa_a",
+"particle": "ytluckyblocks:blocks/logoa_a"
     },
     "elements": [
         {

@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.entity.monster.EntityElderGuardian;
 import net.minecraft.entity.monster.EntityGhast;
 import net.minecraft.entity.monster.EntityGuardian;
 import net.minecraft.entity.monster.EntityIronGolem;
@@ -33,6 +34,7 @@ public class BabyMaxLuckyBlock extends Block {
     public BabyMaxLuckyBlock(String unlocalizedName, Material material, float hardness, float resistance) {
         super(material);
         this.setUnlocalizedName(unlocalizedName);
+        this.setRegistryName(unlocalizedName);
         this.setCreativeTab(CommonProxy.tabYTStuffMod);
         this.setHardness(hardness);
         this.setResistance(resistance);
@@ -47,10 +49,6 @@ public class BabyMaxLuckyBlock extends Block {
         this(unlocalizedName, 2.0f, 10.0f);
     }
 
-    @Override
-    public boolean isVisuallyOpaque() {
-        return false;
-    }
 
     @Override
     public boolean isOpaqueCube(IBlockState state) {
@@ -239,9 +237,8 @@ public class BabyMaxLuckyBlock extends Block {
                 break;
             }
             case 34: {
-                EntityGuardian a = new EntityGuardian(worldIn);
-                a.setElder();
-                ExtraFunctions.summonMobsOnBreakBlock(a, 30, worldIn, pos);
+
+                ExtraFunctions.summonMobsOnBreakBlock(new EntityElderGuardian(worldIn), 30, worldIn, pos);
                 break;
             }
             case 35: {

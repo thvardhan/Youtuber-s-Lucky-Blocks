@@ -30,6 +30,7 @@ public class BabyDuckLuckyBlock extends Block {
     public BabyDuckLuckyBlock(String unlocalizedName, Material material, float hardness, float resistance) {
         super(material);
         this.setUnlocalizedName(unlocalizedName);
+        this.setRegistryName(unlocalizedName);
         this.setCreativeTab(CommonProxy.tabYTStuffMod);
         this.setHardness(hardness);
         this.setResistance(resistance);
@@ -44,10 +45,6 @@ public class BabyDuckLuckyBlock extends Block {
         this(unlocalizedName, 2.0f, 10.0f);
     }
 
-    @Override
-    public boolean isVisuallyOpaque() {
-        return false;
-    }
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
         for (int i = 0; i < 3; ++i) {

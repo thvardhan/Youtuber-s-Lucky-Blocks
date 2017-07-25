@@ -10,6 +10,7 @@ public class ItemModArmor extends ItemArmor {
         super(material, renderIndex, armorType);
         this.setCreativeTab(CommonProxy.tabYtStuffArmor);
         this.setUnlocalizedName(unlocalizedName);
+        this.setRegistryName(unlocalizedName);
     }
 
 

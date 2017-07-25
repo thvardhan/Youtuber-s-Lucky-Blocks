@@ -38,6 +38,7 @@ public class AlexircraftLuckyBlock extends Block {
     public AlexircraftLuckyBlock(String unlocalizedName, Material material, float hardness, float resistance) {
         super(material);
         this.setUnlocalizedName(unlocalizedName);
+        this.setRegistryName(unlocalizedName);
         this.setCreativeTab(CommonProxy.tabYTStuffMod);
         this.setHardness(hardness);
         this.setResistance(resistance);
@@ -57,10 +58,6 @@ public class AlexircraftLuckyBlock extends Block {
         return false;
     }
 
-    @Override
-    public boolean isVisuallyOpaque() {
-        return false;
-    }
 
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {

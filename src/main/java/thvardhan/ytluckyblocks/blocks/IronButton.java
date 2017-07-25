@@ -14,6 +14,7 @@ public class IronButton extends Block {
     public IronButton(String unlocalizedName, Material material, float hardness, float resistance) {
         super(material);
         this.setUnlocalizedName(unlocalizedName);
+        this.setRegistryName(unlocalizedName);
         this.setCreativeTab(CommonProxy.tabYTStuffMod);
         this.setHardness(hardness);
         this.setResistance(resistance);
@@ -34,10 +35,6 @@ public class IronButton extends Block {
         this(unlocalizedName, 2.0f, 10.0f);
     }
 
-    @Override
-    public boolean isVisuallyOpaque() {
-        return false;
-    }
 
     @Override
     public boolean isOpaqueCube(IBlockState state) {

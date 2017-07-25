@@ -8,6 +8,7 @@ public class YT_Sword extends ItemSword {
     public YT_Sword(String u, ToolMaterial material) {
         super(material);
         this.setUnlocalizedName(u);
+        this.setRegistryName(u);
         this.setCreativeTab(CommonProxy.tabYTStuffMod);
 
 
