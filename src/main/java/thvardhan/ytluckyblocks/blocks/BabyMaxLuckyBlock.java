@@ -13,6 +13,8 @@ import net.minecraft.entity.passive.EntitySquid;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
@@ -20,12 +22,12 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thvardhan.ytluckyblocks.CommonProxy;
 import thvardhan.ytluckyblocks.entity.EntityBabyMax;
 import thvardhan.ytluckyblocks.entity.EntityIhasCupquake;
 import thvardhan.ytluckyblocks.entity.EntityJeromeASF;
 import thvardhan.ytluckyblocks.functions.ExtraFunctions;
-import thvardhan.ytluckyblocks.items.ModItems;
+import thvardhan.ytluckyblocks.init.ModTabs;
+import thvardhan.ytluckyblocks.init.*;
 
 import java.util.Random;
 
@@ -35,7 +37,7 @@ public class BabyMaxLuckyBlock extends Block {
         super(material);
         this.setUnlocalizedName(unlocalizedName);
         this.setRegistryName(unlocalizedName);
-        this.setCreativeTab(CommonProxy.tabYTStuffMod);
+        this.setCreativeTab(ModTabs.tabYTStuffMod);
         this.setHardness(hardness);
         this.setResistance(resistance);
         this.setLightLevel(0F);
@@ -44,6 +46,11 @@ public class BabyMaxLuckyBlock extends Block {
     public BabyMaxLuckyBlock(String unlocalizedName, float hardness, float resistance) {
         this(unlocalizedName, Material.ROCK, 0, 10000);
     }
+
+    public Item createItemBlock() {
+        return new ItemBlock(this).setRegistryName(getRegistryName());
+    }
+
 
     public BabyMaxLuckyBlock(String unlocalizedName) {
         this(unlocalizedName, 2.0f, 10.0f);

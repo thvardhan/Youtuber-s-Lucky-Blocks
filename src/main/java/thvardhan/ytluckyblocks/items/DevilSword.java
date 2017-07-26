@@ -1,7 +1,8 @@
 package thvardhan.ytluckyblocks.items;
 
 import net.minecraft.item.ItemSword;
-import thvardhan.ytluckyblocks.CommonProxy;
+import thvardhan.ytluckyblocks.init.ModTabs;
+import thvardhan.ytluckyblocks.proxy.CommonProxy;
 
 public class DevilSword extends ItemSword {
 
@@ -9,7 +10,7 @@ public class DevilSword extends ItemSword {
         super(devil);
         this.setUnlocalizedName(string);
         this.setRegistryName(string);
-        this.setCreativeTab(CommonProxy.tabYTStuffMod);
+        this.setCreativeTab(ModTabs.tabYTStuffMod);
 
 
     }

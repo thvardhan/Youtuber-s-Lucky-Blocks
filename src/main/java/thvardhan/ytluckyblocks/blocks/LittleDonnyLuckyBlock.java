@@ -8,6 +8,8 @@ import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
@@ -15,11 +17,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thvardhan.ytluckyblocks.CommonProxy;
 import thvardhan.ytluckyblocks.entity.EntityDanTDM;
 import thvardhan.ytluckyblocks.entity.EntityLittleDonny;
 import thvardhan.ytluckyblocks.functions.ExtraFunctions;
-import thvardhan.ytluckyblocks.items.ModItems;
+import thvardhan.ytluckyblocks.init.ModTabs;
+import thvardhan.ytluckyblocks.init.*;
 
 import java.util.Random;
 
@@ -29,7 +31,7 @@ public class LittleDonnyLuckyBlock extends Block {
         super(material);
         this.setUnlocalizedName(unlocalizedName);
         this.setRegistryName(unlocalizedName);
-        this.setCreativeTab(CommonProxy.tabYTStuffMod);
+        this.setCreativeTab(ModTabs.tabYTStuffMod);
         this.setHardness(hardness);
         this.setResistance(resistance);
         this.setLightLevel(0F);
@@ -41,6 +43,10 @@ public class LittleDonnyLuckyBlock extends Block {
 
     public LittleDonnyLuckyBlock(String unlocalizedName) {
         this(unlocalizedName, 2.0f, 10.0f);
+    }
+
+    public Item createItemBlock() {
+        return new ItemBlock(this).setRegistryName(getRegistryName());
     }
 
     @Override

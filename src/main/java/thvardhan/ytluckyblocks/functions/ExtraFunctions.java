@@ -21,9 +21,9 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
-import thvardhan.ytluckyblocks.blocks.ModBlocks;
 import thvardhan.ytluckyblocks.entity.EntityLuckyMob;
-import thvardhan.ytluckyblocks.items.ModItems;
+import thvardhan.ytluckyblocks.init.ModBlocks;
+import thvardhan.ytluckyblocks.init.ModItems;
 
 import java.util.Random;
 import java.util.UUID;
@@ -31,12 +31,7 @@ import java.util.UUID;
 public class ExtraFunctions {
 
 
-    private static Block[] b = {ModBlocks.alexircraftLuckyBlock, ModBlocks.antVenomLuckyBlock, ModBlocks.bajanCanadianLuckyBlock, ModBlocks.captainSparkelzLuckyBlock, ModBlocks.danTDMLuckyBlock, ModBlocks.exploadingTNTLuckyBlock, ModBlocks.frizzleandpopLuckyBlock, ModBlocks.gamingWithJenLuckyBlock,
-            ModBlocks.iBallisticSquidLuckyBlock, ModBlocks.iHasCupcakeLuckyBlock, ModBlocks.jeromeASFLuckyBlock, ModBlocks.lachlanLuckyBlock, ModBlocks.lDShadowLadyLuckyBlock, ModBlocks.youtubeLuckyBlock, ModBlocks.vikkstar123LuckyBlock, ModBlocks.trueMuLuckyBlock, ModBlocks.thnxCyaLuckyBlock,
-            ModBlocks.tewityLuckyBlock, ModBlocks.stampylongheadLuckyBlock, ModBlocks.sSundeeLuckyBlock, ModBlocks.skyDoesMinecraftLuckyBlock, ModBlocks.serialPlayerLuckyBlock, ModBlocks.prestonPlayzLuckyBlock, ModBlocks.mrwooflessLuckyBlock, ModBlocks.petaZahHuttLuckyBlock,
-            ModBlocks.pinkSheepYTLuckyBlock, ModBlocks.popularMMOLuckyBlock, ModBlocks.babyDuckLuckyBlock, ModBlocks.babyLeahLuckyBlock, ModBlocks.babyMaxLuckyBlock, ModBlocks.donutTheDogLuckyBlock, ModBlocks.evilLittleKellyLuckyBlock, ModBlocks.littleAllyLuckyBlock, ModBlocks.littleCarlyMcLuckyBlock
-            , ModBlocks.littleDonnyLuckyBlock, ModBlocks.littleKellyMcLuckyBlock, ModBlocks.littleLizardGamingLuckyBlock, ModBlocks.maxTheMonkeyLuckyBlock, ModBlocks.sharkyLuckyBlock, ModBlocks.tinyTurtleLuckyBlock, ModBlocks.aphmauLuckyBlock, ModBlocks.scubaSteveLuckyBlock, ModBlocks.littleRopoLuckyBlock,
-            ModBlocks.mrCrainerLuckyBlock, ModBlocks.littleAngelLuckyBlock};
+    private static Block[] b = {Blocks.DIRT};
 
 
     /**
@@ -55,10 +50,10 @@ public class ExtraFunctions {
 
             if (style == 1) {
                 EntityItem entityitem1 = new EntityItem(worldIn, (double) pos.getX(), (double) pos.getY() + i + skip, (double) pos.getZ(), new ItemStack(block));
-                worldIn.spawnEntityInWorld(entityitem1);
+                worldIn.spawnEntity(entityitem1);
             } else {
                 EntityItem entityitem1 = new EntityItem(worldIn, (double) pos.getX() + d0, (double) pos.getY() + d1, (double) pos.getZ() + d2, new ItemStack(block));
-                worldIn.spawnEntityInWorld(entityitem1);
+                worldIn.spawnEntity(entityitem1);
             }
         }
 
@@ -76,7 +71,7 @@ public class ExtraFunctions {
         double d2 = (double) (worldIn.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
         EntityItem entityitem = new EntityItem(worldIn, (double) pos.getX() + d0, (double) pos.getY() + d1, (double) pos.getZ() + d2, new ItemStack(block));
         entityitem.setDefaultPickupDelay();
-        worldIn.spawnEntityInWorld(entityitem);
+        worldIn.spawnEntity(entityitem);
 
     }
 
@@ -93,7 +88,7 @@ public class ExtraFunctions {
         double d2 = (double) (worldIn.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
         EntityItem entityitem = new EntityItem(worldIn, (double) pos.getX() + d0, (double) pos.getY() + d1, (double) pos.getZ() + d2, stack);
         entityitem.setDefaultPickupDelay();
-        worldIn.spawnEntityInWorld(entityitem);
+        worldIn.spawnEntity(entityitem);
 
     }
 
@@ -217,11 +212,11 @@ public class ExtraFunctions {
             if (style == 1) {
                 EntityItem entityitem1 = new EntityItem(worldIn, (double) pos.getX(), (double) pos.getY() + i + skip, (double) pos.getZ(), new ItemStack(item));
                 entityitem1.setDefaultPickupDelay();
-                worldIn.spawnEntityInWorld(entityitem1);
+                worldIn.spawnEntity(entityitem1);
             } else {
                 EntityItem entityitem1 = new EntityItem(worldIn, (double) pos.getX() + d0, (double) pos.getY() + d1, (double) pos.getZ() + d2, new ItemStack(item));
                 entityitem1.setDefaultPickupDelay();
-                worldIn.spawnEntityInWorld(entityitem1);
+                worldIn.spawnEntity(entityitem1);
             }
         }
 
@@ -245,10 +240,10 @@ public class ExtraFunctions {
 
             if (style == 1) {
                 EntityItem entityitem1 = new EntityItem(worldIn, (double) pos.getX(), (double) pos.getY() + i + skip, (double) pos.getZ(), item);
-                worldIn.spawnEntityInWorld(entityitem1);
+                worldIn.spawnEntity(entityitem1);
             } else {
                 EntityItem entityitem1 = new EntityItem(worldIn, (double) pos.getX() + d0, (double) pos.getY() + d1, (double) pos.getZ() + d2, item);
-                worldIn.spawnEntityInWorld(entityitem1);
+                worldIn.spawnEntity(entityitem1);
             }
         }
 
@@ -261,7 +256,7 @@ public class ExtraFunctions {
     public static void trollChat(EntityPlayer player) {
 
 
-        player.addChatMessage(new TextComponentString(ChatFormatting.BLUE + "It Was A Troll... Or Maybe...."));
+        player.sendMessage(new TextComponentString(ChatFormatting.BLUE + "It Was A Troll... Or Maybe...."));
 
 
     }
@@ -322,7 +317,6 @@ public class ExtraFunctions {
         worldIn.setBlockState(new BlockPos(pos.getX() - 1, pos.getY() + r + 1, pos.getZ() - 1), Blocks.NETHERRACK.getDefaultState(), 2);
         worldIn.setBlockState(new BlockPos(pos.getX() - 1, pos.getY() + r + 1, pos.getZ() + 1), Blocks.NETHERRACK.getDefaultState(), 2);
         worldIn.setBlockState(new BlockPos(pos.getX() + 1, pos.getY() + r + 1, pos.getZ() - 1), Blocks.NETHERRACK.getDefaultState(), 2);
-        worldIn.setBlockState(new BlockPos(pos.getX(), pos.getY() + r + 2, pos.getZ()), ModBlocks.luckyPressurePlate.getDefaultState(), 2);
         worldIn.setBlockState(new BlockPos(pos.getX() + 1, pos.getY() + r + 2, pos.getZ() + 1), Blocks.FIRE.getDefaultState(), 2);
         worldIn.setBlockState(new BlockPos(pos.getX() - 1, pos.getY() + r + 2, pos.getZ() - 1), Blocks.FIRE.getDefaultState(), 2);
         worldIn.setBlockState(new BlockPos(pos.getX() - 1, pos.getY() + r + 2, pos.getZ() + 1), Blocks.FIRE.getDefaultState(), 2);
@@ -366,7 +360,6 @@ public class ExtraFunctions {
         worldIn.setBlockState(new BlockPos(pos.getX() - 1, pos.getY() + r + 1, pos.getZ() + 1), Blocks.OBSIDIAN.getDefaultState(), 2);
         worldIn.setBlockState(new BlockPos(pos.getX() + 1, pos.getY() + r + 1, pos.getZ() - 1), Blocks.OBSIDIAN.getDefaultState(), 2);
         worldIn.setBlockState(new BlockPos(pos.getX() + 1, pos.getY() + r + 2, pos.getZ() + 1), Blocks.END_PORTAL_FRAME.getDefaultState(), 2);
-        worldIn.setBlockState(new BlockPos(pos.getX(), pos.getY() + r + 2, pos.getZ()), ModBlocks.luckyPressurePlate.getDefaultState(), 2);
         worldIn.setBlockState(new BlockPos(pos.getX() - 1, pos.getY() + r + 2, pos.getZ() - 1), Blocks.END_PORTAL_FRAME.getDefaultState(), 2);
         worldIn.setBlockState(new BlockPos(pos.getX() - 1, pos.getY() + r + 2, pos.getZ() + 1), Blocks.END_PORTAL_FRAME.getDefaultState(), 2);
         worldIn.setBlockState(new BlockPos(pos.getX() + 1, pos.getY() + r + 2, pos.getZ() - 1), Blocks.END_PORTAL_FRAME.getDefaultState(), 2);
@@ -476,7 +469,7 @@ public class ExtraFunctions {
     public static void chat(String chat, EntityPlayer player) {
 
 
-        player.addChatMessage(new TextComponentString(chat));
+        player.sendMessage(new TextComponentString(chat));
 
 
     }
@@ -583,7 +576,7 @@ public class ExtraFunctions {
             }
 
 
-            worldIn.spawnEntityInWorld(e);
+            worldIn.spawnEntity(e);
         }
 
 
@@ -609,7 +602,7 @@ public class ExtraFunctions {
         for (int i = 0; i < amOfTNT; i++) {
             EntityTNTPrimed entityTNTprimed = new EntityTNTPrimed(worldIn, (double) ((float) pos.getX() + 0.5F), (double) pos.getY(), (double) ((float) pos.getZ() + 0.5F), player);
             entityTNTprimed.setFuse(worldIn.rand.nextInt(entityTNTprimed.getFuse() / 4) + entityTNTprimed.getFuse() / 8);
-            worldIn.spawnEntityInWorld(entityTNTprimed);
+            worldIn.spawnEntity(entityTNTprimed);
 
         }
 
@@ -619,7 +612,7 @@ public class ExtraFunctions {
         for (int i = 0; i < amOfTNT; i++) {
             EntityTNTPrimed entityTNTprimed = new EntityTNTPrimed(worldIn, (double) ((float) pos.getX() + 0.5F) + rand.nextInt(20), (double) pos.getY() + rand.nextInt(20), (double) ((float) pos.getZ() + 0.5F) + rand.nextInt(20), player);
             entityTNTprimed.setFuse(worldIn.rand.nextInt(entityTNTprimed.getFuse() / 4) + entityTNTprimed.getFuse() / 8);
-            worldIn.spawnEntityInWorld(entityTNTprimed);
+            worldIn.spawnEntity(entityTNTprimed);
 
         }
 
@@ -630,7 +623,7 @@ public class ExtraFunctions {
         for (int i = 0; i < amOfTNT; i++) {
             EntityTNTPrimed entityTNTprimed = new EntityTNTPrimed(worldIn, (double) ((float) pos.getX() + 0.5F), (double) pos.getY() + (skip * i), (double) ((float) pos.getZ() + 0.5F), player);
             entityTNTprimed.setFuse(worldIn.rand.nextInt(entityTNTprimed.getFuse() / 4) + entityTNTprimed.getFuse() / 8);
-            worldIn.spawnEntityInWorld(entityTNTprimed);
+            worldIn.spawnEntity(entityTNTprimed);
 
         }
 
@@ -750,7 +743,7 @@ public class ExtraFunctions {
             e.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.GOLDEN_APPLE));
             e.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(Items.GOLD_INGOT));
             e.setCustomNameTag("I AM SPECIAL");
-            worldIn.spawnEntityInWorld(e);
+            worldIn.spawnEntity(e);
         }
 
 
@@ -976,7 +969,7 @@ public class ExtraFunctions {
             }
             mob.setPosition(pos.getX(), pos.getY(), pos.getZ());
             mob.setAlwaysRenderNameTag(true);
-            worldIn.spawnEntityInWorld(mob);
+            worldIn.spawnEntity(mob);
         }
 
     }
@@ -992,7 +985,7 @@ public class ExtraFunctions {
             }
             mob.setPosition(pos.getX(), pos.getY(), pos.getZ());
             mob.setAlwaysRenderNameTag(true);
-            worldIn.spawnEntityInWorld(mob);
+            worldIn.spawnEntity(mob);
         }
 
     }
@@ -1007,7 +1000,7 @@ public class ExtraFunctions {
             }
             mob.setPosition(pos.getX(), pos.getY(), pos.getZ());
             mob.setAlwaysRenderNameTag(true);
-            worldIn.spawnEntityInWorld(mob);
+            worldIn.spawnEntity(mob);
         }
 
     }
@@ -1022,7 +1015,7 @@ public class ExtraFunctions {
             }
             mob.setPosition(pos.getX(), pos.getY(), pos.getZ());
             mob.setAlwaysRenderNameTag(true);
-            worldIn.spawnEntityInWorld(mob);
+            worldIn.spawnEntity(mob);
         }
 
     }
@@ -1038,7 +1031,7 @@ public class ExtraFunctions {
             }
             mob.setPosition(pos.getX() + rand.nextInt(30), pos.getY(), pos.getZ() + rand.nextInt(30));
             mob.setAlwaysRenderNameTag(true);
-            worldIn.spawnEntityInWorld(mob);
+            worldIn.spawnEntity(mob);
         }
 
 
@@ -1055,7 +1048,7 @@ public class ExtraFunctions {
             }
             mob.setPosition(pos.getX() + rand.nextInt(30), pos.getY(), pos.getZ() + rand.nextInt(30));
             mob.setAlwaysRenderNameTag(true);
-            worldIn.spawnEntityInWorld(mob);
+            worldIn.spawnEntity(mob);
         }
 
 
@@ -1073,7 +1066,7 @@ public class ExtraFunctions {
             }
             mob.setPosition(pos.getX() + rand.nextInt(30), pos.getY(), pos.getZ() + rand.nextInt(30));
             mob.setAlwaysRenderNameTag(true);
-            worldIn.spawnEntityInWorld(mob);
+            worldIn.spawnEntity(mob);
         }
 
 
@@ -1090,7 +1083,7 @@ public class ExtraFunctions {
             }
             mob.setPosition(pos.getX() + rand.nextInt(30), pos.getY(), pos.getZ() + rand.nextInt(30));
             mob.setAlwaysRenderNameTag(true);
-            worldIn.spawnEntityInWorld(mob);
+            worldIn.spawnEntity(mob);
         }
 
 
@@ -1107,7 +1100,7 @@ public class ExtraFunctions {
             }
             mob.setPosition(pos.getX() + rand.nextInt(30), pos.getY(), pos.getZ() + rand.nextInt(30));
             mob.setAlwaysRenderNameTag(true);
-            worldIn.spawnEntityInWorld(mob);
+            worldIn.spawnEntity(mob);
         }
 
 
@@ -1123,7 +1116,7 @@ public class ExtraFunctions {
             w.setTamed(true);
             w.setSitting(true);
             w.setOwnerId(UUID.fromString(player.getUniqueID().toString()));
-            worldIn.spawnEntityInWorld(w);
+            worldIn.spawnEntity(w);
         }
     }
 
@@ -1134,7 +1127,7 @@ public class ExtraFunctions {
 
             EntityLuckyMob w = new EntityLuckyMob(worldIn);
             w.setPosition(pos.getX(), pos.getY(), pos.getZ());
-            worldIn.spawnEntityInWorld(w);
+            worldIn.spawnEntity(w);
         }
     }
 

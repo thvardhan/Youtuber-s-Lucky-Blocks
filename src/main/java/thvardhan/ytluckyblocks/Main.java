@@ -1,41 +1,44 @@
 package thvardhan.ytluckyblocks;
 
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.item.ItemStack;
+import thvardhan.ytluckyblocks.entity.*;
+import thvardhan.ytluckyblocks.init.ModItems;
+import thvardhan.ytluckyblocks.proxy.CommonProxy;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
-import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
-import thvardhan.ytluckyblocks.blocks.ModBlocks;
 import thvardhan.ytluckyblocks.entity.*;
 
-
-@Mod(modid = Main.MODID, version = Main.VERSION, name = Main.NAME)
-public class Main {
+@Mod(modid = Main.MODID, version = Main.VERSION)
+public class Main
+{
     public static final String MODID = "ytluckyblocks";
     public static final String VERSION = "6.1.2";
     public static final String NAME = "YouTuber's Lucky Blocks Mod";
-    @SidedProxy(clientSide = "thvardhan.ytluckyblocks.ClientProxy", serverSide = "thvardhan.ytluckyblocks.ServerProxy")
+    @SidedProxy(clientSide = "thvardhan.ytluckyblocks.proxy.ClientProxy", serverSide = "thvardhan.ytluckyblocks.proxy.ServerProxy")
     public static CommonProxy proxy;
-    @Instance(MODID)
+    @Mod.Instance(MODID)
     public static Main instance;
     private static int modEntitys = 0;
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent e) {
 
+
         registerEntities();
         proxy.preInit(e);
     }
 
-
-    @EventHandler
-    public void init(FMLInitializationEvent e) {
+        @EventHandler
+        public void init(FMLInitializationEvent e) {
         Biome[] spawnForLuckMob=new Biome[10];
         spawnForLuckMob[0]=Biome.getBiome(1);
         spawnForLuckMob[1]=Biome.getBiome(17);
@@ -51,17 +54,17 @@ public class Main {
         proxy.init(e);
     }
 
-    @EventHandler
-    public void postInit(FMLPostInitializationEvent e) {
+        @EventHandler
+        public void postInit(FMLPostInitializationEvent e){
 
         proxy.postInit(e);
     }
 
 
-    //WHOLE FORGE INITS END HERE =================================================
+        //WHOLE FORGE INITS END HERE =================================================
 
 
-    private void registerEntities() {
+        private void registerEntities() {
 
 
         registerModEntityWithEgg(EntityScubaSteve.class, "scubasteve", 0xffcc00, 0xffff00);
@@ -120,13 +123,13 @@ public class Main {
     }
 
 
-    public void registerModEntityWithEgg(Class parEntityClass, String parEntityName, int parEggColor, int parEggSpotsColor) {
+        public void registerModEntityWithEgg(Class parEntityClass, String parEntityName, int parEggColor, int parEggSpotsColor) {
         EntityRegistry.registerModEntity(new ResourceLocation(MODID, parEntityName), parEntityClass, parEntityName, ++modEntitys, Main.instance, 80, 3, false);
         registerSpawnEgg(parEntityName, parEntityClass, parEggColor, parEggSpotsColor);
     }
 
-    private void registerSpawnEgg(String parEntityName, Class parEntityClass, int parEggColor,
-                                  int parEggSpotsColor) {
+        private void registerSpawnEgg(String parEntityName, Class parEntityClass, int parEggColor,
+        int parEggSpotsColor) {
         EntityRegistry.registerEgg(new ResourceLocation(MODID, parEntityName), parEggColor, parEggSpotsColor);
 
     }

@@ -5,7 +5,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import thvardhan.ytluckyblocks.Main;
-import thvardhan.ytluckyblocks.blocks.ModBlocks;
+import thvardhan.ytluckyblocks.init.ModBlocks;
 
 public class BlockRenderRegister {
 

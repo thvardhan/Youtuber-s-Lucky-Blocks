@@ -8,7 +8,7 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
-import thvardhan.ytluckyblocks.CommonProxy;
+import thvardhan.ytluckyblocks.init.ModTabs;
 
 public class GoldButton extends Block {
 
@@ -17,7 +17,7 @@ public class GoldButton extends Block {
         super(material);
         this.setUnlocalizedName(unlocalizedName);
         this.setRegistryName(unlocalizedName);
-        this.setCreativeTab(CommonProxy.tabYTStuffMod);
+        this.setCreativeTab(ModTabs.tabYTStuffMod);
         this.setHardness(hardness);
         this.setResistance(resistance);
         //   this.setBlockBounds(0, 0.1F, 0.5F, 1, 0.8F, 0.6F);
@@ -36,6 +36,7 @@ public class GoldButton extends Block {
     public GoldButton(String unlocalizedName) {
         this(unlocalizedName, 2.0f, 10.0f);
     }
+
 
     @Override
     public boolean isOpaqueCube(IBlockState state) {

@@ -1,4 +1,4 @@
-package thvardhan.ytluckyblocks;
+package thvardhan.ytluckyblocks.proxy;
 
 import net.minecraft.client.model.ModelBiped;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
@@ -11,9 +11,10 @@ import thvardhan.ytluckyblocks.entity.render.*;
 import thvardhan.ytluckyblocks.items.render.ItemRenderRegistry;
 import thvardhan.ytluckyblocks.render.blocks.BlockRenderRegister;
 
-
+/**
+ * Created by patrick on 25/07/2017.
+ */
 public class ClientProxy extends CommonProxy {
-
 
     @Override
     public void preInit(FMLPreInitializationEvent e) {
@@ -30,7 +31,6 @@ public class ClientProxy extends CommonProxy {
 
         BlockRenderRegister.registerBlockRenderer();
         ItemRenderRegistry.registerItemRender();
-
 
         RenderingRegistry.registerEntityRenderingHandler(EntityScubaSteve.class, new EntityScubaSteveRender(new ModelBiped(), 0.5F));
         RenderingRegistry.registerEntityRenderingHandler(EntityLittleRopo.class, new EntityLittleRopoRender(new ModelBiped(), 0.5F));
@@ -96,6 +96,4 @@ public class ClientProxy extends CommonProxy {
     public void postInit(FMLPostInitializationEvent e) {
         super.postInit(e);
     }
-
-
 }
