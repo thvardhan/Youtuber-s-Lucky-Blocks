@@ -3,10 +3,12 @@ package thvardhan.ytluckyblocks.blocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import thvardhan.ytluckyblocks.CommonProxy;
 import thvardhan.ytluckyblocks.functions.ExtraFunctions;
+import thvardhan.ytluckyblocks.init.*;
 
 import java.util.Random;
 
@@ -15,7 +17,8 @@ public class YoutubeBlock extends Block {
     public YoutubeBlock(String unlocalizedName, Material material, float hardness, float resistance) {
         super(material);
         this.setUnlocalizedName(unlocalizedName);
-        this.setCreativeTab(CommonProxy.tabYTStuffMod);
+        this.setRegistryName(unlocalizedName);
+        this.setCreativeTab(ModTabs.tabYTStuffMod);
         this.setHardness(hardness);
         this.setResistance(resistance);
         this.setLightLevel(0F);
@@ -27,6 +30,10 @@ public class YoutubeBlock extends Block {
 
     public YoutubeBlock(String unlocalizedName) {
         this(unlocalizedName, 2.0f, 10.0f);
+    }
+
+    public Item createItemBlock() {
+        return new ItemBlock(this).setRegistryName(getRegistryName());
     }
 
     @Override

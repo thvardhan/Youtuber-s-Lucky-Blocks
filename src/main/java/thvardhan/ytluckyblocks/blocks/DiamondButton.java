@@ -3,10 +3,12 @@ package thvardhan.ytluckyblocks.blocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
-import thvardhan.ytluckyblocks.CommonProxy;
+import thvardhan.ytluckyblocks.init.ModTabs;
 
 public class DiamondButton extends Block {
 
@@ -14,7 +16,8 @@ public class DiamondButton extends Block {
     public DiamondButton(String unlocalizedName, Material material, float hardness, float resistance) {
         super(material);
         this.setUnlocalizedName(unlocalizedName);
-        this.setCreativeTab(CommonProxy.tabYTStuffMod);
+        this.setRegistryName(unlocalizedName);
+        this.setCreativeTab(ModTabs.tabYTStuffMod);
         this.setHardness(hardness);
         this.setResistance(resistance);
         //  this.setBlockBounds(0, 0.1F, 0.5F, 1, 0.8F, 0.6F);
@@ -34,12 +37,12 @@ public class DiamondButton extends Block {
     }
 
     @Override
-    public boolean isVisuallyOpaque() {
-        return false;
-    }
-
-    @Override
     public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
+
+    public Item createItemBlock() {
+        return new ItemBlock(this).setRegistryName(getRegistryName());
+    }
+
 }

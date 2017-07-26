@@ -6,6 +6,7 @@ public class YtIcon extends Item {
 
     public YtIcon(String string) {
         this.setUnlocalizedName(string);
+        this.setRegistryName(string);
         //	this.setCreativeTab(CommonProxy.tabYTStuffMod);
     }
 

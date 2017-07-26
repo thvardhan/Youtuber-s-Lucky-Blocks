@@ -3,10 +3,12 @@ package thvardhan.ytluckyblocks.blocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import thvardhan.ytluckyblocks.CommonProxy;
+import thvardhan.ytluckyblocks.init.ModTabs;
 
 import java.util.Random;
 
@@ -15,7 +17,8 @@ public class MicBlock extends Block {
     public MicBlock(String unlocalizedName, Material material, float hardness, float resistance) {
         super(material);
         this.setUnlocalizedName(unlocalizedName);
-        this.setCreativeTab(CommonProxy.tabYTStuffMod);
+        this.setRegistryName(unlocalizedName);
+        this.setCreativeTab(ModTabs.tabYTStuffMod);
         this.setHardness(hardness);
         this.setResistance(resistance);
 
@@ -36,12 +39,6 @@ public class MicBlock extends Block {
     }
 
     @Override
-    public boolean isVisuallyOpaque() {
-        return false;
-    }
-
-
-    @Override
     public boolean getTickRandomly() {
         return true;
     }
@@ -53,6 +50,11 @@ public class MicBlock extends Block {
         worldIn.spawnParticle(EnumParticleTypes.ENCHANTMENT_TABLE, (double) pos.getX() + 0.5D, (double) pos.getY() + 2.0D, (double) pos.getZ() + 0.5D, (double) ((float) +rand.nextFloat()) - 0.5D, (double) (-rand.nextFloat() - 1.0F), (double) ((float) +rand.nextFloat()) - 0.5D);
 
     }
+
+    public Item createItemBlock() {
+        return new ItemBlock(this).setRegistryName(getRegistryName());
+    }
+
 
 
 }

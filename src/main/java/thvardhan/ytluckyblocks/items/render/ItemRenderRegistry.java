@@ -4,7 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import thvardhan.ytluckyblocks.Main;
-import thvardhan.ytluckyblocks.items.ModItems;
+import thvardhan.ytluckyblocks.init.ModItems;
 
 public class ItemRenderRegistry {
 
@@ -41,6 +41,10 @@ public class ItemRenderRegistry {
         reg(ModItems.levinSword);
         reg(ModItems.mic);
         reg(ModItems.ytIcon);
+        reg(ModItems.snowSword);
+        reg(ModItems.megaSword);
+        reg(ModItems.battleAxe);
+        reg(ModItems.rainbowBlade);
         reg(ModItems.ytBoots);
         reg(ModItems.ytChestplate);
         reg(ModItems.ytHelmet);
@@ -85,10 +89,6 @@ public class ItemRenderRegistry {
         reg(ModItems.trueChestplate);
         reg(ModItems.trueLeggings);
         reg(ModItems.trueBoots);
-        reg(ModItems.snowSword);
-        reg(ModItems.megaSword);
-        reg(ModItems.battleAxe);
-        reg(ModItems.rainbowBlade);
         reg(ModItems.alexHelmet);
         reg(ModItems.alexChestplate);
         reg(ModItems.alexLeggings);
@@ -217,9 +217,8 @@ public class ItemRenderRegistry {
         reg(ModItems.turtleLeggings);
     }
 
-    private static void reg(Item item) {
+    public static void reg(Item item) {
         Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, 0, new ModelResourceLocation(Main.MODID + ":" + item.getUnlocalizedName().substring(5), "inventory"));
-        //ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(Main.MODID+ ":" +item.getUnlocalizedName().substring(5)));
     }
 
 

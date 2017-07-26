@@ -5,14 +5,16 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
-import thvardhan.ytluckyblocks.CommonProxy;
+import thvardhan.ytluckyblocks.init.ModTabs;
+import thvardhan.ytluckyblocks.proxy.CommonProxy;
 
 public class LevinSword extends ItemSword {
 
     public LevinSword(String string, ToolMaterial material) {
         super(material);
         this.setUnlocalizedName(string);
-        this.setCreativeTab(CommonProxy.tabYTStuffMod);
+        this.setRegistryName(string);
+        this.setCreativeTab(ModTabs.tabYTStuffMod);
 
     }
 

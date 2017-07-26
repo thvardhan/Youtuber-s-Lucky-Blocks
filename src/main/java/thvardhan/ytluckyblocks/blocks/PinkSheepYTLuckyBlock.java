@@ -12,6 +12,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.PotionTypes;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumParticleTypes;
@@ -20,11 +22,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thvardhan.ytluckyblocks.CommonProxy;
 import thvardhan.ytluckyblocks.entity.EntityExplodingTNT;
 import thvardhan.ytluckyblocks.entity.EntityPinkSheep;
 import thvardhan.ytluckyblocks.functions.ExtraFunctions;
-import thvardhan.ytluckyblocks.items.ModItems;
+import thvardhan.ytluckyblocks.init.*;
 
 import java.util.Random;
 
@@ -32,7 +33,8 @@ public class PinkSheepYTLuckyBlock extends Block {
     public PinkSheepYTLuckyBlock(String unlocalizedName, Material material, float hardness, float resistance) {
         super(material);
         this.setUnlocalizedName(unlocalizedName);
-        this.setCreativeTab(CommonProxy.tabYTStuffMod);
+        this.setRegistryName(unlocalizedName);
+        this.setCreativeTab(ModTabs.tabYTStuffMod);
         this.setHardness(hardness);
         this.setResistance(resistance);
 
@@ -50,10 +52,7 @@ public class PinkSheepYTLuckyBlock extends Block {
     public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
-    @Override
-    public boolean isVisuallyOpaque() {
-        return false;
-    }
+
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
         for (int i = 0; i < 3; ++i) {
@@ -332,4 +331,9 @@ public class PinkSheepYTLuckyBlock extends Block {
 
         }//switch ends
     }//method end
+
+    public Item createItemBlock() {
+        return new ItemBlock(this).setRegistryName(getRegistryName());
+    }
+
 }

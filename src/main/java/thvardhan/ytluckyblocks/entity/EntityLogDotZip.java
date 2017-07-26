@@ -15,7 +15,7 @@ import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
-import thvardhan.ytluckyblocks.items.ModItems;
+import thvardhan.ytluckyblocks.init.ModItems;
 
 public class EntityLogDotZip extends EntityMob {
 

@@ -1,8 +1,8 @@
 {
     "__comment": "work..",
     "textures": {
-        "0": "ytluckyblocks:blocks/goldButton",
-	"particle": "ytluckyblocks:blocks/goldButton"
+        "0": "ytluckyblocks:blocks/gold_button",
+	"particle": "ytluckyblocks:blocks/gold_button"
     },
     "elements": [
         {
