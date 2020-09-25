@@ -3,17 +3,22 @@ package thvardhan.ytluckyblocks.entity.render;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBiped;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.RenderBiped;
+import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.client.registry.IRenderFactory;
 import thvardhan.ytluckyblocks.Main;
 import thvardhan.ytluckyblocks.entity.EntityScubaSteve;
 
-public class EntityScubaSteveRender extends RenderBiped {
+public class EntityScubaSteveRender extends RenderBiped implements IRenderFactory<T> {
     protected ResourceLocation alexircraft;
 
-    public EntityScubaSteveRender(ModelBiped par1ModelBase, float parShadowSize) {
+    public EntityScubaSteveRender(BipedModel<MobEntity> par1ModelBase, float parShadowSize) {
 
         super(Minecraft.getMinecraft().getRenderManager(), par1ModelBase, parShadowSize);
 
@@ -59,4 +64,8 @@ public class EntityScubaSteveRender extends RenderBiped {
     }
 
 
+    @Override
+    public EntityRenderer<? super T> createRenderFor(EntityRendererManager manager) {
+        return null;
+    }
 }

@@ -2,28 +2,24 @@ package thvardhan.ytluckyblocks.blocks;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.boss.EntityWither;
-import net.minecraft.entity.monster.EntityBlaze;
-import net.minecraft.entity.monster.EntityIronGolem;
-import net.minecraft.entity.monster.EntityZombie;
-import net.minecraft.entity.passive.EntityRabbit;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.init.PotionTypes;
+import net.minecraft.entity.monster.ZombieEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.IFluidState;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
+
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.item.Items;
+import net.minecraft.particles.ParticleTypes;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import thvardhan.ytluckyblocks.entity.EntityAlexirCraft;
 import thvardhan.ytluckyblocks.entity.EntityGhost;
 import thvardhan.ytluckyblocks.entity.EntitySerialPlayer;
@@ -38,14 +34,9 @@ public class AlexircraftLuckyBlock extends Block {
 
     private static Random rand = new Random();
 
+
     public AlexircraftLuckyBlock(String unlocalizedName, Material material, float hardness, float resistance) {
-        super(material);
-        this.setUnlocalizedName(unlocalizedName);
-        this.setRegistryName(unlocalizedName);
-        this.setCreativeTab(ModTabs.tabYTStuffMod);
-        this.setHardness(hardness);
-        this.setResistance(resistance);
-        this.setLightLevel(0F);
+        super(Block.Properties.create(material).hardnessAndResistance(hardness,resistance).lightValue(0));
     }
 
     public AlexircraftLuckyBlock(String unlocalizedName, float hardness, float resistance) {
@@ -57,13 +48,7 @@ public class AlexircraftLuckyBlock extends Block {
     }
 
     @Override
-    public boolean isOpaqueCube(IBlockState state) {
-        return false;
-    }
-
-
-    @SideOnly(Side.CLIENT)
-    public void randomDisplayTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+    public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
         for (int i = 0; i < 3; ++i) {
             int j = rand.nextInt(2) * 2 - 1;
             int k = rand.nextInt(2) * 2 - 1;
@@ -73,21 +58,21 @@ public class AlexircraftLuckyBlock extends Block {
             double d3 = (double) (rand.nextFloat() * (float) j);
             double d4 = ((double) rand.nextFloat() - 0.5D) * 0.125D;
             double d5 = (double) (rand.nextFloat() * (float) k);
-            worldIn.spawnParticle(EnumParticleTypes.ENCHANTMENT_TABLE, d0, d1, d2, d3, d4, d5);
+            worldIn.addParticle(ParticleTypes.ENCHANT,d0, d1, d2, d3, d4, d5);
         }
+        super.animateTick(stateIn, worldIn, pos, rand);
     }
 
-
     @Override
-    public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+    public boolean removedByPlayer(BlockState state, World world, BlockPos pos, PlayerEntity player, boolean willHarvest, IFluidState fluid) {
         if (!world.isRemote && player != null && !(player instanceof FakePlayer)) {
-            world.setBlockToAir(pos);
+            world.setBlockState(pos,Blocks.AIR.getDefaultState(),2);
             drops(world, pos, player);
         }
         return false;
     }
 
-    private void drops(World worldIn, BlockPos pos, EntityPlayer player) {
+    private void drops(World worldIn, BlockPos pos, PlayerEntity player) {
 
         Enchantment[] e = new Enchantment[4];
         e[0] = Enchantment.getEnchantmentByID(50);
@@ -96,19 +81,17 @@ public class AlexircraftLuckyBlock extends Block {
         e[1] = Enchantment.getEnchantmentByID(21);
 
 
-
-
         switch (rand.nextInt(101)) {
 
             default: {
                 ExtraFunctions.addEnchantsMany(new ItemStack(Items.DIAMOND_SWORD), e, 5, worldIn, pos);
             }
             case 0: {
-                ExtraFunctions.summonMobsOnBreakBlock(new EntityZombie(worldIn), rand.nextInt(50), worldIn, pos);
+                ExtraFunctions.summonMobsOnBreakBlock(new ZombieEntity(worldIn), rand.nextInt(50), worldIn, pos);
                 break;
             }
             case 1: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.FLOWING_LAVA);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.LAVA);
                 break;
             }
             case 2: {

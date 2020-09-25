@@ -1,25 +1,21 @@
 package thvardhan.ytluckyblocks.entity;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.IEntityLivingData;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.*;
-import net.minecraft.entity.monster.EntityIronGolem;
-import net.minecraft.entity.monster.EntityMob;
-import net.minecraft.entity.monster.EntityPigZombie;
-import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
-import net.minecraft.pathfinding.PathNavigateGround;
+
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import thvardhan.ytluckyblocks.functions.ExtraFunctions;
 
-public class EntityLuckyMob extends EntityMob {
+public class EntityLuckyMob extends MobEntity {
 
     boolean alwaysRenderNameTag = true;
     private String name = "Lucky Monster";
+
+
 
     public EntityLuckyMob(World worldIn) {
         super(worldIn);

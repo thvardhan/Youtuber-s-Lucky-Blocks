@@ -68,11 +68,6 @@ public class AntVenomLuckyBlock extends Block {
                 ExtraFunctions.lookUp(worldIn, player);
                 break;
             }
-            case 0: {
-
-                ExtraFunctions.lookUp(worldIn, player);
-                break;
-            }
             case 1: {
                 ExtraFunctions.foodKit(worldIn, pos);
                 break;
