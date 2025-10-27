@@ -1,62 +1,49 @@
 package thvardhan.ytluckyblocks.entity.render;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.ModelBiped;
-import net.minecraft.client.renderer.entity.RenderBiped;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.entity.BipedRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.util.ResourceLocation;
+
+import net.minecraft.util.text.ITextComponent;
+
 import thvardhan.ytluckyblocks.Main;
 import thvardhan.ytluckyblocks.entity.EntityGhost;
 
-public class EntityGhostRender extends RenderBiped {
+public class EntityGhostRender extends BipedRenderer<EntityGhost, BipedModel<EntityGhost>> {
+    protected ResourceLocation texture = new ResourceLocation(Main.MODID + ":textures/entity/ghost_skin.png");
 
-    protected ResourceLocation ghostRender;
-
-    public EntityGhostRender(ModelBiped par1ModelBase, float parShadowSize) {
-
-        super(Minecraft.getMinecraft().getRenderManager(), par1ModelBase, parShadowSize);
-
-        setEntityTexture();
+    public EntityGhostRender(EntityRendererManager renderManager) {
+        super(renderManager, new BipedModel<>(0.0F), 0.5F);
     }
 
-    protected void preRenderCallback(EntityLivingBase entity, float f) {
-        preRenderCallbackGhost((EntityGhost) entity, f);
+    @Override
+    protected void renderName(EntityGhost entity, ITextComponent displayNameIn, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
+        double yHeightCorrection = -0.1D;  // Adjust this value as needed to bring the nameplate down.
 
+        matrixStackIn.push();  // Push the current transformation to the stack
+        matrixStackIn.translate(0.0D, yHeightCorrection, 0.0D);  // Apply the translation
+
+        super.renderName(entity, displayNameIn, matrixStackIn, bufferIn, packedLightIn);
+
+        matrixStackIn.pop();  // Pop the last transformation off the stack to revert the change
     }
 
-    protected void preRenderCallbackGhost(EntityGhost entity, float f)
-
-    {
-
-        // some people do some G11 transformations or blends here, like you can do
-
-        // GL11.glScalef(1.5F, 1.5F, 1.5F);
-
-        // which is used for Slime entities.  I suggest having the entity cast to
-
-        // your custom type to make it easier to access fields from your 
-
-        // custom entity, eg. GL11.glScalef(entity.scaleFactor, entity.scaleFactor, 
-
-        // entity.scaleFactor); 
-
+    @Override
+    public void render(EntityGhost entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
+        matrixStackIn.push();
+        matrixStackIn.scale(1.5F, 1.0F, 1.5F);
+        super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
+        matrixStackIn.pop();
     }
-
-    protected void setEntityTexture() {
-        ghostRender = new ResourceLocation(Main.MODID + ":textures/entity/ghost_skin.png");
-
-    }
-
 
     /**
-     * Returns the location of an entity's texture. Doesn't seem to be called
-     * unless you call Render.bindEntityTexture.
+     * Returns the location of an entity's texture.
      */
-    protected ResourceLocation getEntityTexture(Entity par1Entity) {
-        return ghostRender;
-
+    @Override
+    public ResourceLocation getEntityTexture(EntityGhost entity) {
+        return texture;
     }
-
-
 }

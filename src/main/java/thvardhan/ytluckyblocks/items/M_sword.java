@@ -1,17 +1,9 @@
 package thvardhan.ytluckyblocks.items;
 
-import net.minecraft.item.ItemSword;
-import thvardhan.ytluckyblocks.CommonProxy;
+import net.minecraft.item.*;
 
-public class M_sword extends ItemSword {
-
-    public M_sword(String u, ToolMaterial material) {
-        super(material);
-        this.setUnlocalizedName(u);
-        this.setRegistryName(u);
-        this.setCreativeTab(CommonProxy.tabYTStuffMod);
-
-
+public class M_sword extends SwordItem {
+    public M_sword(IItemTier tier, int attackDamageIn, float attackSpeedIn, Properties builder) {
+        super(tier, attackDamageIn, attackSpeedIn, builder);
     }
-
 }

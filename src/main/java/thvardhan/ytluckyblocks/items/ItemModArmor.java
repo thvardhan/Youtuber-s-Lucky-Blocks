@@ -1,16 +1,17 @@
 package thvardhan.ytluckyblocks.items;
 
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.ItemArmor;
-import thvardhan.ytluckyblocks.CommonProxy;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ArmorItem;
+import net.minecraft.item.IArmorMaterial;
+import net.minecraft.item.ItemGroup;
+import thvardhan.ytluckyblocks.Main;
 
-public class ItemModArmor extends ItemArmor {
 
-    public ItemModArmor(String unlocalizedName, ArmorMaterial material, int renderIndex, EntityEquipmentSlot armorType) {
-        super(material, renderIndex, armorType);
-        this.setCreativeTab(CommonProxy.tabYtStuffArmor);
-        this.setUnlocalizedName(unlocalizedName);
-        this.setRegistryName(unlocalizedName);
+public class ItemModArmor extends ArmorItem {
+
+    public ItemModArmor(IArmorMaterial materialIn, EquipmentSlotType slot, Properties builder) {
+
+        super(materialIn, slot, new Properties().group(Main.ARMOR));
     }
 
 

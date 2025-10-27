@@ -1,18 +1,17 @@
 {
-    "parent": "builtin/generated",
-    "textures": {
-        "layer0": "ytluckyblocks:items/battle_axe"
-    },
-    "display": {
-        "thirdperson": {
-            "rotation": [ 0, 90, -35 ],
-            "translation": [ 0, 1.25, -3.5 ],
-            "scale": [ 1.85, 1.85, 1.85 ]
-        },
-        "firstperson": {
-            "rotation": [ 0, -135, 25 ],
-            "translation": [ 0, 4, 2 ],
-            "scale": [ 2.7, 2.7, 2.7 ]
-        }
-    }
+	"credit": "Made with Blockbench",
+	"parent": "builtin/generated",
+	"textures": {
+		"layer0": "ytluckyblocks:items/battle_axe"
+	},
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [32, 59, 0],
+			"translation": [2.75, 2.25, 1.75]
+		},
+		"firstperson_righthand": {
+			"rotation": [0, 88, 28],
+			"translation": [-0.5, 3.75, 1.25]
+		}
+	}
 }

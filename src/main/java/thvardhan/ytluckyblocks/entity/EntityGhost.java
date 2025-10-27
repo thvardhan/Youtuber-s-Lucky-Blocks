@@ -1,143 +1,106 @@
 package thvardhan.ytluckyblocks.entity;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.IEntityLivingData;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.*;
-import net.minecraft.entity.monster.EntityIronGolem;
-import net.minecraft.entity.monster.EntityMob;
-import net.minecraft.entity.monster.EntityPigZombie;
-import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.block.Blocks;
+import net.minecraft.entity.*;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.ai.goal.*;
+import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
+import net.minecraft.entity.merchant.villager.VillagerEntity;
+import net.minecraft.entity.monster.MonsterEntity;
+import net.minecraft.entity.monster.SlimeEntity;
+import net.minecraft.entity.monster.ZombifiedPiglinEntity;
+import net.minecraft.entity.passive.AnimalEntity;
+import net.minecraft.entity.passive.GolemEntity;
+import net.minecraft.entity.passive.IronGolemEntity;
+import net.minecraft.entity.passive.fish.AbstractGroupFishEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.pathfinding.PathNavigateGround;
+import net.minecraft.item.Items;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.particles.ParticleTypes;
+import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 
-public class EntityGhost extends EntityMob {
+public class EntityGhost extends CreatureEntity {
 
-    boolean alwaysRenderNameTag = true;
     private String name = "Ghost";
 
-    public EntityGhost(World worldIn) {
-        super(worldIn);
-        ((PathNavigateGround) this.getNavigator()).setBreakDoors(true);
-        this.tasks.addTask(0, new EntityAISwimming(this));
-         this.tasks.addTask(5, new EntityAIMoveTowardsRestriction(this, 1.0D));
-        this.tasks.addTask(7, new EntityAIWander(this, 1.0D));
-        this.tasks.addTask(8, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
-        this.tasks.addTask(8, new EntityAILookIdle(this));
-        this.applyEntityAI();
-        this.setSize(0.8F, 2.0F);
-        this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Blocks.PUMPKIN));
-
-        this.setAlwaysRenderNameTag(alwaysRenderNameTag);
-        this.setCustomNameTag(name);
-
-    }
-
-    protected void applyEntityAI() {
-        this.tasks.addTask(2, new EntityAIAttackMelee(this, 1.0D, false));
-
-
-        this.tasks.addTask(6, new EntityAIMoveThroughVillage(this, 1.0D, false));
-        this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, true, EntityPigZombie.class));
-        this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityPlayer.class, true));
-        this.targetTasks.addTask(3, new EntityAINearestAttackableTarget(this, EntityVillager.class, false));
-        this.targetTasks.addTask(3, new EntityAINearestAttackableTarget(this, EntityIronGolem.class, true));
-    }
-
-    protected void applyEntityAttributes() {
-        super.applyEntityAttributes();
-        this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(20.0D);
-        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.4D);
-        this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(10.0D);
-        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(10D);
-        this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(2D);
+    public EntityGhost(EntityType<? extends CreatureEntity> type, World worldIn) {
+        super(type, worldIn);
+        ((PathNavigator) this.getNavigator()).setCanSwim(true);
+        this.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(Blocks.CARVED_PUMPKIN));
+        this.setCustomName(new StringTextComponent(name));
     }
 
     @Override
-    public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty,
-                                            IEntityLivingData livingdata) {
+    protected void registerGoals() {
+        super.registerGoals();
 
+        // Movement / behavior goals
+        this.goalSelector.addGoal(0, new SwimGoal(this));
+        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.0D, false));
+        this.goalSelector.addGoal(5, new MoveTowardsRestrictionGoal(this, 1.0D));
+        this.goalSelector.addGoal(7, new RandomWalkingGoal(this, 1.0D));
+        this.goalSelector.addGoal(8, new LookAtGoal(this, PlayerEntity.class, 8.0F));
+        this.goalSelector.addGoal(9, new LookRandomlyGoal(this));
 
-        return livingdata;
+        // Target goals — these belong in targetSelector, not goalSelector
+        this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
+        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, VillagerEntity.class, false));
+        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, true));
     }
 
+    public static AttributeModifierMap.MutableAttribute getAttributes() {
+        return MobEntity.func_233666_p_()
+                .createMutableAttribute(Attributes.MAX_HEALTH, 10D)
+                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.4D)
+                .createMutableAttribute(Attributes.ATTACK_DAMAGE, 10.0D)
+                .createMutableAttribute(Attributes.KNOCKBACK_RESISTANCE, 2D)
+                .createMutableAttribute(Attributes.FOLLOW_RANGE, 20D);
 
-    public void onLivingUpdate() {
-        if (this.worldObj.isRemote) {
+    }
+    @Override
+    public ILivingEntityData onInitialSpawn(IServerWorld inWorld, DifficultyInstance difficulty, SpawnReason reason, ILivingEntityData livingdata, CompoundNBT dataTag) {
+        return super.onInitialSpawn(inWorld, difficulty, reason, livingdata, dataTag);
+    }
+
+    @Override
+    public void livingTick() {
+        super.livingTick();
+
+        if (this.world.isRemote) {
             if (rand.nextBoolean() && rand.nextBoolean()) {
                 for (int i = 0; i < 2; ++i) {
-                    this.worldObj.spawnParticle(EnumParticleTypes.DRIP_LAVA, this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.width, this.posY + this.rand.nextDouble() * (double) this.height - 0.25D, this.posZ + (this.rand.nextDouble() - 0.5D) * (double) this.width, (this.rand.nextDouble() - 0.5D) * 2.0D, -this.rand.nextDouble(), (this.rand.nextDouble() - 0.5D) * 2.0D);
+                    double d0 = this.getPosX() + (this.rand.nextDouble() - 0.5D) * (double) this.getWidth();
+                    double d1 = this.getPosY() + this.rand.nextDouble() * (double) this.getHeight() - 0.25D;
+                    double d2 = this.getPosZ() + (this.rand.nextDouble() - 0.5D) * (double) this.getWidth();
+                    double d3 = (this.rand.nextDouble() - 0.5D) * 2.0D;
+                    double d4 = -this.rand.nextDouble();
+                    double d5 = (this.rand.nextDouble() - 0.5D) * 2.0D;
+
+                    this.world.addParticle(ParticleTypes.DRIPPING_LAVA, d0, d1, d2, d3, d4, d5);
                 }
             }
         }
-
-
-        super.onLivingUpdate();
-    }
-
-
-    @Override
-    protected Item getDropItem() {
-
-        return Items.PUMPKIN_SEEDS;
-        //return super.getDropItem();
-    }
-
-
-    @Override
-    protected void setSize(float width, float height) {
-        super.setSize(width, height);
-    }
-
-
-    @Override
-    public void onUpdate() {
-        super.onUpdate();
-    }
-
-
-    @Override
-    public boolean attackEntityFrom(DamageSource source, float amount) {
-        return super.attackEntityFrom(source, amount);
-    }
-
-    @Override
-    public boolean attackEntityAsMob(Entity entityIn) {
-        return super.attackEntityAsMob(entityIn);
-    }
-
-
-
-    @Override
-    protected boolean isValidLightLevel() {
-        return super.isValidLightLevel();
-    }
-
-    @Override
-    public boolean getCanSpawnHere() {
-        return super.getCanSpawnHere();
     }
 
     @Override
     public void onDeath(DamageSource cause) {
-
-
         super.onDeath(cause);
+        if (!this.world.isRemote) { // Ensure this is on the server side
+            this.entityDropItem(Items.PUMPKIN_SEEDS);
+        }
     }
-
     @Override
-    public void setAlwaysRenderNameTag(boolean alwaysRenderNameTag) {
-        super.setAlwaysRenderNameTag(alwaysRenderNameTag);
+    public boolean getAlwaysRenderNameTagForRender() {
+        return true;
     }
-
-
 }

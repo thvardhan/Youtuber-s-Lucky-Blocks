@@ -1,6 +1,19 @@
 {
-    "parent": "item/handheld",
-    "textures": {
-        "layer0": "ytluckyblocks:items/levin_sword"
-    }
+	"credit": "Made with Blockbench",
+	"parent": "builtin/generated",
+	"textures": {
+		"layer0": "ytluckyblocks:items/levin_sword"
+	},
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [15, 90, 0],
+			"translation": [0.5, 25.5, -12.75],
+			"scale": [2.65, 3, 4]
+		},
+		"firstperson_righthand": {
+			"rotation": [0, -89, 30],
+			"translation": [0, 5, 1.75],
+			"scale": [2, 2, 1]
+		}
+	}
 }

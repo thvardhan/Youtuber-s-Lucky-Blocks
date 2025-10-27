@@ -1,33 +1,31 @@
 package thvardhan.ytluckyblocks.items;
 
-import com.mojang.realmsclient.gui.ChatFormatting;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.enchantment.Enchantments;
+import net.minecraft.item.IItemTier;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSword;
-import thvardhan.ytluckyblocks.CommonProxy;
+import net.minecraft.item.SwordItem;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.IBlockReader;
+import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
-public class SwordLogdotzip extends ItemSword {
-
-    public SwordLogdotzip(String u, ToolMaterial material) {
-        super(material);
-        this.setUnlocalizedName(u);
-        this.setRegistryName(u);
-        this.setCreativeTab(CommonProxy.tabYTStuffMod);
-
+public class SwordLogdotzip extends SwordItem {
+    public SwordLogdotzip(IItemTier tier, int attackDamageIn, float attackSpeedIn, Properties builder) {
+        super(tier, attackDamageIn, attackSpeedIn, builder);
     }
-
 
     @Override
-    public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        tooltip.add(new StringTextComponent(TextFormatting.RED + "I Have Power Of Logdotzip"));
+        tooltip.add(new StringTextComponent(TextFormatting.BLUE + "And I Seriously Don't Have Any Enchantments"));
 
-        tooltip.add(ChatFormatting.RED + "I Have Power Of Logdotzip");
-        tooltip.add(ChatFormatting.BLUE + "And I Seriously Dont Have Any Enchantments");
-
-
-        super.addInformation(stack, playerIn, tooltip, advanced);
+        super.addInformation(stack, worldIn, tooltip, flagIn);
     }
-
-
 }

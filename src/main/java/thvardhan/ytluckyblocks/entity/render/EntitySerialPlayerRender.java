@@ -1,63 +1,48 @@
 package thvardhan.ytluckyblocks.entity.render;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.ModelBiped;
-import net.minecraft.client.renderer.entity.RenderBiped;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import com.mojang.blaze3d.matrix.MatrixStack;
+
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.MobRenderer;
+import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.util.ResourceLocation;
-import org.lwjgl.opengl.GL11;
+import net.minecraft.util.text.ITextComponent;
+
 import thvardhan.ytluckyblocks.Main;
 import thvardhan.ytluckyblocks.entity.EntitySerialPlayer;
 
-public class EntitySerialPlayerRender extends RenderBiped {
+public class EntitySerialPlayerRender extends MobRenderer<EntitySerialPlayer, BipedModel<EntitySerialPlayer>> {
 
-    protected ResourceLocation serialPlayer;
+    protected ResourceLocation texture;
 
-    public EntitySerialPlayerRender(ModelBiped par1ModelBase, float parShadowSize) {
-
-        super(Minecraft.getMinecraft().getRenderManager(), par1ModelBase, parShadowSize);
-
-        setEntityTexture();
+    public EntitySerialPlayerRender(EntityRendererManager renderManagerIn) {
+        super(renderManagerIn, new BipedModel<>(0.0F), 0.5F);
+        this.texture = new ResourceLocation(Main.MODID, "textures/entity/serial_skin.png");
     }
 
-    protected void preRenderCallback(EntityLivingBase entity, float f) {
-        preRenderCallbackSP((EntitySerialPlayer) entity, f);
+    @Override
+    protected void renderName(EntitySerialPlayer entity, ITextComponent displayNameIn, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
+        double yHeightCorrection = 0.9D;  // Adjust this value as needed to bring the nameplate down/up.
 
+        matrixStackIn.push();  // Push the current transformation to the stack
+        matrixStackIn.translate(0.0D, yHeightCorrection, 0.0D);  // Apply the translation
+
+        super.renderName(entity, displayNameIn, matrixStackIn, bufferIn, packedLightIn);
+
+        matrixStackIn.pop();  // Pop the last transformation off the stack to revert the change
     }
 
-    protected void preRenderCallbackSP(EntitySerialPlayer entity, float f)
-
-    {
-
-        // some people do some G11 transformations or blends here, like you can do
-
-        GL11.glScalef(0.5F, 0.5F, 0.5F);
-
-        // which is used for Slime entities.  I suggest having the entity cast to
-
-        // your custom type to make it easier to access fields from your 
-
-        // custom entity, eg. GL11.glScalef(entity.scaleFactor, entity.scaleFactor, 
-
-        // entity.scaleFactor); 
-
+    @Override
+    public void render(EntitySerialPlayer entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
+        matrixStackIn.push();
+        matrixStackIn.scale(.5F, .5F, .5F);
+        super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
+        matrixStackIn.pop();
     }
 
-    protected void setEntityTexture() {
-        serialPlayer = new ResourceLocation(Main.MODID + ":textures/entity/serial_skin.png");
-
+    @Override
+    public ResourceLocation getEntityTexture(EntitySerialPlayer entity) {
+        return this.texture;
     }
-
-
-    /**
-     * Returns the location of an entity's texture. Doesn't seem to be called
-     * unless you call Render.bindEntityTexture.
-     */
-    protected ResourceLocation getEntityTexture(Entity par1Entity) {
-        return serialPlayer;
-
-    }
-
-
 }

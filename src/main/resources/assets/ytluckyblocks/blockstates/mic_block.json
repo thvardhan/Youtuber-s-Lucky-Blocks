@@ -1,5 +1,5 @@
 {
     "variants": {
-        "normal": { "model": "ytluckyblocks:mic_block" }
+        "": { "model": "ytluckyblocks:block/mic_block" }
     }
 }

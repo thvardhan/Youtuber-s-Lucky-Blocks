@@ -1,62 +1,24 @@
 package thvardhan.ytluckyblocks.entity.render;
 
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.ModelBiped;
-import net.minecraft.client.renderer.entity.RenderBiped;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.client.renderer.entity.BipedRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.util.ResourceLocation;
 import thvardhan.ytluckyblocks.Main;
 import thvardhan.ytluckyblocks.entity.EntityVikkstar123;
 
-public class EntityVikkstar123Render extends RenderBiped {
-    protected ResourceLocation loc;
+public class EntityVikkstar123Render extends BipedRenderer<EntityVikkstar123, BipedModel<EntityVikkstar123>> {
+    protected ResourceLocation texture = new ResourceLocation(Main.MODID + ":textures/entity/vik_skin.png");
 
-    public EntityVikkstar123Render(ModelBiped par1ModelBase, float parShadowSize) {
-
-        super(Minecraft.getMinecraft().getRenderManager(), par1ModelBase, parShadowSize);
-
-        setEntityTexture();
+    public EntityVikkstar123Render(EntityRendererManager renderManager) {
+        super(renderManager, new BipedModel<>(0.0F), 0.5F);
     }
-
-    protected void preRenderCallback(EntityLivingBase entity, float f) {
-        preRenderCallbackLogDotZip((EntityVikkstar123) entity, f);
-
-    }
-
-    protected void preRenderCallbackLogDotZip(EntityVikkstar123 entity, float f)
-
-    {
-
-        // some people do some G11 transformations or blends here, like you can do
-
-        //     GL11.glScalef(2F, 2F, 2F);
-
-        // which is used for Slime entities.  I suggest having the entity cast to
-
-        // your custom type to make it easier to access fields from your 
-
-        // custom entity, eg. GL11.glScalef(entity.scaleFactor, entity.scaleFactor, 
-
-        // entity.scaleFactor); 
-
-    }
-
-    protected void setEntityTexture() {
-        loc = new ResourceLocation(Main.MODID + ":textures/entity/vik_skin.png");
-
-    }
-
 
     /**
-     * Returns the location of an entity's texture. Doesn't seem to be called
-     * unless you call Render.bindEntityTexture.
+     * Returns the location of an entity's texture.
      */
-    protected ResourceLocation getEntityTexture(Entity par1Entity) {
-        return loc;
-
+    @Override
+    public ResourceLocation getEntityTexture(EntityVikkstar123 entity) {
+        return texture;
     }
-
-
 }

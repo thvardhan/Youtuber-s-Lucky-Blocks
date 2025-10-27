@@ -1,62 +1,25 @@
 package thvardhan.ytluckyblocks.entity.render;
 
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.ModelBiped;
-import net.minecraft.client.renderer.entity.RenderBiped;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.client.renderer.entity.BipedRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.util.ResourceLocation;
 import thvardhan.ytluckyblocks.Main;
+import thvardhan.ytluckyblocks.entity.EntityLittleCarlyMC;
 import thvardhan.ytluckyblocks.entity.EntityLittleDonny;
 
-public class EntityLittleDonnyRender extends RenderBiped {
-    protected ResourceLocation loc;
+public class EntityLittleDonnyRender extends BipedRenderer<EntityLittleDonny, BipedModel<EntityLittleDonny>> {
+    protected ResourceLocation texture = new ResourceLocation(Main.MODID + ":textures/entity/little_donny.png");
 
-    public EntityLittleDonnyRender(ModelBiped par1ModelBase, float parShadowSize) {
-
-        super(Minecraft.getMinecraft().getRenderManager(), par1ModelBase, parShadowSize);
-
-        setEntityTexture();
+    public EntityLittleDonnyRender(EntityRendererManager renderManager) {
+        super(renderManager, new BipedModel<>(0.0F), 0.5F);
     }
-
-    protected void preRenderCallback(EntityLivingBase entity, float f) {
-        preRenderCallbackLogDotZip((EntityLittleDonny) entity, f);
-
-    }
-
-    protected void preRenderCallbackLogDotZip(EntityLittleDonny entity, float f)
-
-    {
-
-        // some people do some G11 transformations or blends here, like you can do
-
-        //     GL11.glScalef(2F, 2F, 2F);
-
-        // which is used for Slime entities.  I suggest having the entity cast to
-
-        // your custom type to make it easier to access fields from your 
-
-        // custom entity, eg. GL11.glScalef(entity.scaleFactor, entity.scaleFactor, 
-
-        // entity.scaleFactor); 
-
-    }
-
-    protected void setEntityTexture() {
-        loc = new ResourceLocation(Main.MODID + ":textures/entity/little_donny.png");
-
-    }
-
 
     /**
-     * Returns the location of an entity's texture. Doesn't seem to be called
-     * unless you call Render.bindEntityTexture.
+     * Returns the location of an entity's texture.
      */
-    protected ResourceLocation getEntityTexture(Entity par1Entity) {
-        return loc;
-
+    @Override
+    public ResourceLocation getEntityTexture(EntityLittleDonny entity) {
+        return texture;
     }
-
-
 }

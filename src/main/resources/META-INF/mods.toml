@@ -1,0 +1,42 @@
+modLoader="javafml"
+
+loaderVersion="[36,)"
+
+license="GNU GENERAL PUBLIC LICENSE"
+
+issueTrackerURL="https://github.com/KingOfTheGamesYT/DangerZone/issues"
+
+[[mods]]
+
+modId="ytluckyblocks"
+
+version="6.1.4"
+
+displayName="YouTuber's Lucky Blocks Mod"
+
+displayURL="http://all-minecraft.weebly.com/youtuber-lucky-blocks.html"
+
+logoFile="ytlblocks.png"
+
+credits="The Forge Dev Team, and spikespaz."
+
+authors=["thvardhan (AKA Serial Player) for the versions below 1.11 and RedRoseWarrior1 aka DevMaster1015 for the versions 1.16.5 and above"]
+
+description='''
+YouTuber's Lucky Blocks Mod by @thvardhan. RNG blocks for every YouTuber!'''
+
+# Base Forge
+[[dependencies.ytluckyblocks]]
+    modId="forge"
+    mandatory=true
+    versionRange="[36,)"
+    ordering="NONE"
+    side="BOTH"
+
+# Base Minecraft
+[[dependencies.ytluckyblocks]]
+    modId="minecraft"
+    mandatory=true
+versionRange="[1.16.5,1.17]"
+    ordering="NONE"
+    side="BOTH"

@@ -1,33 +1,49 @@
 package thvardhan.ytluckyblocks.blocks;
 
-import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.boss.EntityWither;
-import net.minecraft.entity.monster.EntityBlaze;
-import net.minecraft.entity.monster.EntityIronGolem;
-import net.minecraft.entity.monster.EntityZombie;
-import net.minecraft.entity.passive.EntityRabbit;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.init.PotionTypes;
+import net.minecraft.enchantment.Enchantments;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.boss.WitherEntity;
+import net.minecraft.entity.monster.BlazeEntity;
+import net.minecraft.entity.monster.ZombieEntity;
+import net.minecraft.entity.passive.IronGolemEntity;
+import net.minecraft.entity.passive.RabbitEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.fluid.FluidState;
+import net.minecraft.fluid.Fluids;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.item.Items;
+import net.minecraft.particles.ParticleTypes;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.EffectType;
+import net.minecraft.potion.Effects;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.shapes.VoxelShapes;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.Explosion;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.ToolType;
+import net.minecraftforge.common.extensions.IForgeFluidState;
 import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import thvardhan.ytluckyblocks.CommonProxy;
+
+import thvardhan.ytluckyblocks.ExtraFunctions;
+import thvardhan.ytluckyblocks.RegistrationHandler;
 import thvardhan.ytluckyblocks.entity.EntityAlexirCraft;
 import thvardhan.ytluckyblocks.entity.EntityGhost;
 import thvardhan.ytluckyblocks.entity.EntitySerialPlayer;
-import thvardhan.ytluckyblocks.functions.ExtraFunctions;
-import thvardhan.ytluckyblocks.items.ModItems;
 
 import java.util.Random;
 
@@ -35,519 +51,487 @@ public class AlexircraftLuckyBlock extends Block {
 
     private static Random rand = new Random();
 
-    public AlexircraftLuckyBlock(String unlocalizedName, Material material, float hardness, float resistance) {
-        super(material);
-        this.setUnlocalizedName(unlocalizedName);
-        this.setRegistryName(unlocalizedName);
-        this.setCreativeTab(CommonProxy.tabYTStuffMod);
-        this.setHardness(hardness);
-        this.setResistance(resistance);
-        this.setLightLevel(0F);
+    public AlexircraftLuckyBlock() {
+        super(Properties.create(Material.ROCK)
+                .hardnessAndResistance(0, 10000)
+                .harvestLevel(0)
+                .harvestTool(ToolType.PICKAXE));
     }
 
-    public AlexircraftLuckyBlock(String unlocalizedName, float hardness, float resistance) {
-        this(unlocalizedName, Material.ROCK, 0, 10000);
-    }
-
-    public AlexircraftLuckyBlock(String unlocalizedName) {
-        this(unlocalizedName, 2.0f, 10.0f);
-    }
-
+    @OnlyIn(Dist.CLIENT)
     @Override
-    public boolean isOpaqueCube(IBlockState state) {
-        return false;
-    }
-
-
-    @SideOnly(Side.CLIENT)
-    public void randomDisplayTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+    public void animateTick(BlockState state, World worldIn, BlockPos pos, Random rand) {
         for (int i = 0; i < 3; ++i) {
             int j = rand.nextInt(2) * 2 - 1;
             int k = rand.nextInt(2) * 2 - 1;
+
             double d0 = (double) pos.getX() + 0.5D + 0.25D * (double) j;
-            double d1 = (double) ((float) pos.getY() + rand.nextFloat());
+            double d1 = (double) pos.getY() + rand.nextFloat();
             double d2 = (double) pos.getZ() + 0.5D + 0.25D * (double) k;
             double d3 = (double) (rand.nextFloat() * (float) j);
             double d4 = ((double) rand.nextFloat() - 0.5D) * 0.125D;
             double d5 = (double) (rand.nextFloat() * (float) k);
-            worldIn.spawnParticle(EnumParticleTypes.ENCHANTMENT_TABLE, d0, d1, d2, d3, d4, d5);
+
+            worldIn.addParticle(ParticleTypes.ENCHANT, d0, d1, d2, d3, d4, d5);
         }
     }
-
 
     @Override
-    public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
-        if (!world.isRemote && player != null && !(player instanceof FakePlayer)) {
-            world.setBlockToAir(pos);
-            drops(world, pos, player);
-        }
-        return false;
+    public void onBlockHarvested(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+        super.onBlockHarvested(world, pos, state, player);
+        drops(world, pos, player);
     }
 
-    private void drops(World worldIn, BlockPos pos, EntityPlayer player) {
+    @Override
+    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+        return VoxelShapes.create(0.1D, 0.0D, 0.0D, 0.9D, 1.0D, 1.0D);
+    }
+
+    private void drops(World worldIn, BlockPos pos, PlayerEntity player) {
 
         Enchantment[] e = new Enchantment[4];
-        e[0] = Enchantment.getEnchantmentByID(50);
-        e[2] = Enchantment.getEnchantmentByID(48);
-        e[3] = Enchantment.getEnchantmentByID(7);
-        e[1] = Enchantment.getEnchantmentByID(21);
+        e[0] = Enchantments.FLAME;
+        e[2] = Enchantments.POWER;
+        e[3] = Enchantments.THORNS;
+        e[1] = Enchantments.LOOTING;
 
 
+        switch (rand.nextInt(102)) {
 
-
-        switch (rand.nextInt(101)) {
-
-            default: {
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.DIAMOND_SWORD), e, 5, worldIn, pos);
-            }
             case 0: {
-                ExtraFunctions.summonMobsOnBreakBlock(new EntityZombie(worldIn), rand.nextInt(50), worldIn, pos);
+             ExtraFunctions.addEnchantsMany(new ItemStack(Items.DIAMOND_SWORD), e, 5, worldIn, pos);
                 break;
             }
             case 1: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.FLOWING_LAVA);
+              ExtraFunctions.summonMobsOnBreakBlock(EntityType.ZOMBIE, rand.nextInt(50), worldIn, pos, null);
                 break;
             }
             case 2: {
-                ExtraFunctions.hellWellStructure(worldIn, pos, rand);
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.GOLDEN_APPLE, 1, 1), 64, 1, 50);
+               worldIn.setBlockState(player.getPosition(), Blocks.LAVA.getDefaultState());
                 break;
             }
             case 3: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.DIAMOND_AXE));
+                ExtraFunctions.hellWellStructure(worldIn, new BlockPos(pos.getX(), pos.getY(), pos.getZ() + 2), rand);
+                   ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.ENCHANTED_GOLDEN_APPLE), 64, 1, 50);
                 break;
             }
             case 4: {
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.BOW), new Enchantment[]{Enchantment.getEnchantmentByID(48), Enchantment.getEnchantmentByID(50), Enchantment.getEnchantmentByID(49)}, 10, worldIn, pos);
-                break;
-            }
-            case 5: {
-                ExtraFunctions.chat("That Was Nothing Go Open Other Block", player);
-                break;
-            }
-            case 6: {
-                ExtraFunctions.lookUp(worldIn, player);
-                break;
-            }
-            case 7: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(ModItems.megaSword));
-                break;
-            }
-            case 8: {
-                ExtraFunctions.trollChat(player);
-                break;
-            }
-            case 9: {
-                ExtraFunctions.randomSixtyFourTower(worldIn, pos, rand);
-                break;
-            }
-            case 10: {
-                ExtraFunctions.setHoleWithMites(worldIn, player);
-                break;
-            }
-            case 11: {
-                ExtraFunctions.burgerStruct(worldIn, pos);
-                break;
-            }
-            case 12: {
-                ExtraFunctions.summonMobsOnBreakBlock(new EntityAlexirCraft(worldIn), 40, worldIn, pos);
-                break;
-            }
-            case 13: {
-                ExtraFunctions.holeDeathTrap(worldIn, pos);
-                break;
-            }
-            case 14: {
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.EGG), new Enchantment[]{Enchantment.getEnchantmentByID(20)}, 2, worldIn, pos);
-                break;
-            }
-            case 15: {
-                ExtraFunctions.summonMobsOnBreakBlock(new EntitySerialPlayer(worldIn), 2, worldIn, pos);
-                break;
-            }
-            case 16: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.APPLE));
-                break;
-            }
-            case 17: {
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.WOODEN_HOE), e, 10, worldIn, pos);
-                break;
-            }
-            case 18: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(ModItems.alexBoots));
-                break;
-            }
-            case 19: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(ModItems.alexChestplate));
-                break;
-            }
-            case 20: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(ModItems.alexHelmet));
-                break;
-            }
-            case 21: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(ModItems.alexLeggings));
-                break;
-            }
-            case 22: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.SPONGE));
-                break;
-            }
-            case 23: {
-                ExtraFunctions.luckyBlockTower(worldIn, pos);
-                break;
-            }
-            case 24: {
-                ExtraFunctions.musicKit(worldIn, pos);
-                ExtraFunctions.chat("Go Listen To Some Music...", player);
-                break;
-            }
-            case 25: {
-                ExtraFunctions.materialKit(worldIn, pos, rand);
-                break;
-            }
-            case 26: {
-                ExtraFunctions.setTntWithBlock(worldIn, pos, rand);
-                break;
-            }
-            case 27: {
-                ExtraFunctions.summonMobsOnBreakBlock(new EntityBlaze(worldIn), 5, worldIn, pos);
-                break;
-            }
-            case 28: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(ModItems.devilSword));
-                break;
-            }
-            case 29: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(ModItems.swordLogdotzip));
-                break;
-            }
-            case 30: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(ModItems.swordBlack));
-                break;
-            }
-            case 31: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(ModItems.alexBoots));
-                break;
-            }
-            case 32: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(ModItems.ytChestplate));
-                break;
-            }
-            case 33: {
-                ExtraFunctions.effectPlayer(player, new PotionEffect(PotionTypes.LEAPING.getEffects().get(0).getPotion(), 10, 10));
-                break;
-            }
-            case 34: {
-                ExtraFunctions.summonMobsOnBreakBlock(new EntityAlexirCraft(worldIn), 50, worldIn, pos);
-                break;
-            }
-            case 35: {
-                ExtraFunctions.summonMobsOnBreakBlock(new EntityIronGolem(worldIn), 50, worldIn, pos);
-                break;
-            }
-            case 36: {
-                ExtraFunctions.addEnchantsMany(new ItemStack(ModItems.snowSword), e, 4, worldIn, pos);
-                break;
-            }
-            case 37: {
-                ExtraFunctions.summonMobsOnBreakBlock(new EntityIronGolem(worldIn), rand.nextInt(5), worldIn, pos);
-                break;
-            }
-            case 38: {
-                ExtraFunctions.foodKit(worldIn, pos);
-                break;
-            }
-            case 39: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.TNT);
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.FLINT_AND_STEEL));
-                break;
-            }
-            case 40: {
-                ExtraFunctions.summonMobsOnBreakBlock(new EntityGhost(worldIn), 50, worldIn, pos);
-                break;
-            }
-            case 41: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(ModItems.levinSword), 1, 0, 0);
-                break;
-            }
-            case 42: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(ModItems.battleAxe));
-                break;
-            }
-            case 43: {
-                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, ModItems.rainbowBlade, "RAINBOW", Enchantment.getEnchantmentByID(16), 6);
-                break;
-            }
-            case 44: {
-                ExtraFunctions.tpPlayerInGround(player);
-                break;
-            }
-            case 45: {
-                ExtraFunctions.tntRain(worldIn, pos, 50, 0, player);
-                break;
-            }
-            case 46: {
-                EntityRabbit a = new EntityRabbit(worldIn);
-                a.setRabbitType(99);
-                ExtraFunctions.summonMobsOnBreakBlock(a, 50, worldIn, pos);
-                break;
-            }
-            case 47: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(ModItems.snowSword));
-                break;
-            }
-            case 48: {
-                Enchantment[] a = {Enchantment.getEnchantmentByID(6), Enchantment.getEnchantmentByID(18),
-                        Enchantment.getEnchantmentByID(3), Enchantment.getEnchantmentByID(19), Enchantment.getEnchantmentByID(48),
-                        Enchantment.getEnchantmentByID(21), Enchantment.getEnchantmentByID(20), Enchantment.getEnchantmentByID(16)};
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.DIAMOND_AXE), a, 3, worldIn, pos);
-
-                break;
-            }
-            case 49: {
-                Enchantment[] a = {Enchantment.getEnchantmentByID(6), Enchantment.getEnchantmentByID(18), Enchantment.getEnchantmentByID(3), Enchantment.getEnchantmentByID(48), Enchantment.getEnchantmentByID(21),
-                        Enchantment.getEnchantmentByID(20), Enchantment.getEnchantmentByID(16), Enchantment.getEnchantmentByID(32), Enchantment.getEnchantmentByID(2)};
-                ItemStack[] stack = {new ItemStack(Items.DIAMOND_AXE), new ItemStack(Items.DIAMOND_HOE), new ItemStack(Items.DIAMOND_SWORD), new ItemStack(Items.DIAMOND_SHOVEL)};
-                ExtraFunctions.addRandomEnchtToRandomItems(worldIn, stack, a, 8, pos, rand);
-                break;
-            }
-            case 50: {
-                ExtraFunctions.tpPlayer(player);
-                break;
-            }
-            case 51: {
-                ExtraFunctions.endWellStruct(worldIn, pos, rand);
-                ExtraFunctions.lookUp(worldIn, player);
-                ExtraFunctions.chat("Dont Die...", player);
-                break;
-            }
-            case 52: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.EMERALD_BLOCK), 64, 0, 0);
-                break;
-            }
-            case 53: {
-                ExtraFunctions.chat(ChatFormatting.AQUA + "Hello" + ChatFormatting.BLACK + " Just" + ChatFormatting.BLUE + " For" + ChatFormatting.BOLD + " Your" + ChatFormatting.DARK_AQUA + " Info " + ChatFormatting.DARK_BLUE + "This" + ChatFormatting.DARK_GRAY + " Is" + ChatFormatting.DARK_GREEN + " Made" + ChatFormatting.DARK_PURPLE + " By" + ChatFormatting.DARK_RED + " thvardhan", player);
-                break;
-            }
-            case 54: {
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.WOODEN_HOE), e, 60, worldIn, pos);
-                ExtraFunctions.chat("You Just Got A God Hoe", player);
-                break;
-            }
-            case 55: {
-                ExtraFunctions.orcArmy(worldIn, pos, rand.nextInt(60), rand);
-                break;
-            }
-            case 56: {
-                ExtraFunctions.summonCowNearby(worldIn, pos, 30, rand);
-                break;
-            }
-            case 57: {
-                ExtraFunctions.summonMobsNearby(new EntityZombie(worldIn), 14, worldIn, pos, rand);
-                break;
-            }
-            case 58: {
-                ExtraFunctions.randomSixtyFourTower(worldIn, pos, rand);
-                break;
-            }
-            case 59: {
-                ExtraFunctions.summonMobsOnBreakBlock(new EntityWither(worldIn), 2, worldIn, pos);
-                break;
-            }
-            case 60: {
-                ExtraFunctions.potionKit(worldIn, pos, rand);
-                break;
-            }
-            case 61: {
-                ExtraFunctions.chat("You May Want To Craft Anything :3", player);
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.CRAFTING_TABLE);
-                break;
-            }
-            case 62: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.BEDROCK), 64, 0, 0);
-                break;
-            }
-            case 63: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.OBSIDIAN), 64, 0, 0);
-                break;
-            }
-            case 64: {
-                ExtraFunctions.summonBlockAsDrop(pos, worldIn, ModBlocks.jeromeASFLuckyBlock);
-                break;
-            }
-            case 65: {
-                ExtraFunctions.trollChat(player);
-                break;
-            }
-            case 66: {
-                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.CAKE);
-
-                break;
-            }
-            case 67: {
-                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.DRAGON_EGG);
-
-                break;
-            }
-            case 68: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(ModItems.ytBoots));
-
-                break;
-            }
-            case 69: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(ModItems.ytChestplate));
-
-                break;
-            }
-            case 70: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(ModItems.ytHelmet));
-
-                break;
-            }
-            case 71: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(ModItems.ytLeggings));
-
-                break;
-            }
-            case 72: {
-                ExtraFunctions.summonTammedWolfs(worldIn, player, 10, pos);
-
-                break;
-            }
-            case 73: {
-                Enchantment[] a = {Enchantment.getEnchantmentByID(16), Enchantment.getEnchantmentByID(19), Enchantment.getEnchantmentByID(17), Enchantment.getEnchantmentByID(18)};
-                ExtraFunctions.addEnchantsMany(new ItemStack(ModItems.devilSword), a, 3, worldIn, pos);
-
-                break;
-            }
-            case 74: {
-                ExtraFunctions.toVoid(worldIn, pos);
-
-                break;
-            }
-            case 75: {
-                ExtraFunctions.summonBlockWithLoop(worldIn, pos, Blocks.GOLD_BLOCK, 64, 1, 25);
-
-                break;
-            }
-            case 76: {
-                ExtraFunctions.summonTammedWolfs(worldIn, player, 15, pos);
-
-                break;
-            }
-            case 77: {
-                ExtraFunctions.towerStruct(worldIn, pos);
-
-                break;
-            }
-            case 78: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(ModItems.levinSword));
-
-                break;
-            }
-            case 79: {
-                ExtraFunctions.setOneBlock(worldIn, pos, ModBlocks.youtube);
-
-                break;
-            }
-            case 80: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.CAKE);
-
-                break;
-            }
-            case 81: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.ANVIL);
-                ExtraFunctions.chat(ChatFormatting.DARK_BLUE + "You Should Be Happy It Dint Fell On Ya", player);
-
-                break;
-            }
-            case 82: {
-                ExtraFunctions.summonItemWithLoop(worldIn, pos, Items.DIAMOND, 12, 0, 0);
-
-                break;
-            }
-            case 83: {
-                Enchantment[] a = {Enchantment.getEnchantmentByID(20), Enchantment.getEnchantmentByID(6),
-                        Enchantment.getEnchantmentByID(1), Enchantment.getEnchantmentByID(0), Enchantment.getEnchantmentByID(5), Enchantment.getEnchantmentByID(4), Enchantment.getEnchantmentByID(3)};
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.DIAMOND_BOOTS), a, 5, worldIn, pos);
-
-                break;
-            }
-            case 84: {
-                Enchantment[] a = {Enchantment.getEnchantmentByID(20), Enchantment.getEnchantmentByID(6), Enchantment.getEnchantmentByID(1), Enchantment.getEnchantmentByID(0), Enchantment.getEnchantmentByID(5), Enchantment.getEnchantmentByID(4), Enchantment.getEnchantmentByID(3)};
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.DIAMOND_CHESTPLATE), a, 4, worldIn, pos);
-
-                break;
-            }
-            case 85: {
-                ExtraFunctions.tntFix(worldIn, pos, 5, player);
-                break;
-            }
-            case 86: {
-                ExtraFunctions.holeDeathTrap(worldIn, pos);
-                break;
-            }
-            case 87: {
-                ExtraFunctions.setOneBlock(worldIn, pos, ModBlocks.gamingWithJenLuckyBlock);
-                break;
-            }
-            case 88: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.COAL_BLOCK);
-                break;
-            }
-            case 89: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.MONSTER_EGG);
-                break;
-            }
-            case 90: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.PAPER));
-                break;
-            }
-            case 91: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.MELON_BLOCK));
-                break;
-            }
-            case 92: {
-                ExtraFunctions.summonMobsNearby(new EntityAlexirCraft(worldIn), 14, worldIn, pos, rand);
-                break;
-            }
-            case 93: {
-                ExtraFunctions.burgerStruct(worldIn, pos);
-                break;
-            }
-            case 94: {
-                ExtraFunctions.burgerStructOne(worldIn, pos);
-                break;
-            }
-            case 95: {
-                ExtraFunctions.summonCowNearby(worldIn, pos, 13, rand);
-                break;
-            }
-            case 96: {
-                ExtraFunctions.tntFix(worldIn, pos, 50, player);
-                break;
-            }
-            case 97: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.POTIONITEM));
-                break;
-            }
-            case 98: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.STONE_BUTTON));
-                break;
-            }
-            case 99: {
                 ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.DIAMOND_AXE));
                 break;
             }
+            case 5: {
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.BOW), new Enchantment[]{Enchantments.POWER, Enchantments.FLAME, Enchantments.PUNCH}, 10, worldIn, pos);
+                break;
+            }
+            case 6: {
+                 ExtraFunctions.chat("That Was Nothing Go Open Other Block", player);
+                break;
+            }
+            case 7: {
+                 ExtraFunctions.lookUp(worldIn, player);
+                break;
+            }
+            case 8: {
+               ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(RegistrationHandler.MEGA_SWORD.get()));
+                break;
+            }
+            case 9: {
+                 ExtraFunctions.trollChat(player);
+                break;
+            }
+            case 10: {
+                  ExtraFunctions.randomSixtyFourTower(worldIn, pos, rand);
+                break;
+            }
+            case 11: {
+                  ExtraFunctions.setHoleWithMites(worldIn, player);
+                break;
+            }
+            case 12: {
+                   ExtraFunctions.burgerStruct(worldIn, pos);
+                break;
+            }
+            case 13: {
+                 ExtraFunctions.summonMobsOnBreakBlock(RegistrationHandler.ALEXIRCRAFT.get(), 40, worldIn, pos, null);
+                break;
+            }
+            case 14: {
+                ExtraFunctions.holeDeathTrap(worldIn, pos);
+                break;
+            }
+            case 15: {
+               ExtraFunctions.addEnchantsMany(new ItemStack(Items.EGG), new Enchantment[]{Enchantments.FIRE_ASPECT}, 2, worldIn, pos);
+                break;
+            }
+            case 16: {
+                  ExtraFunctions.summonMobsOnBreakBlock(RegistrationHandler.SERIALPLAYER.get(), 2, worldIn, pos, null);
+                break;
+            }
+            case 17: {
+                 ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.APPLE));
+                break;
+            }
+            case 18: {
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.WOODEN_HOE), e, 10, worldIn, pos);
+                break;
+            }
+            case 19: {
+                 ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(RegistrationHandler.ALEX_BOOTS.get()));
+                break;
+            }
+            case 20: {
+                  ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(RegistrationHandler.ALEX_CHEST.get()));
+                break;
+            }
+            case 21: {
+                  ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(RegistrationHandler.ALEX_HELM.get()));
+                break;
+            }
+            case 22: {
+                 ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(RegistrationHandler.ALEX_LEGS.get()));
+                break;
+            }
+            case 23: {
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.SPONGE));
+                break;
+            }
+            case 24: {
+            // ExtraFunctions.luckyBlockTower(worldIn, pos);
+                break;
+            }
+            case 25: {
+                 ExtraFunctions.musicKit(worldIn, pos);
+                ExtraFunctions.chat("Go Listen To Some Music...", player);
+                break;
+            }
+            case 26: {
+               ExtraFunctions.materialKit(worldIn, pos, rand);
+                break;
+            }
+            case 27: {
+                ExtraFunctions.setTntWithBlock(worldIn, pos, rand);
+                break;
+            }
+            case 28: {
+                ExtraFunctions.summonMobsOnBreakBlock(EntityType.BLAZE, 5, worldIn, pos, null);
+                break;
+            }
+            case 29: {
+                 ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(RegistrationHandler.DEVIL_SWORD.get()));
+                break;
+            }
+            case 30: {
+                 ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(RegistrationHandler.LOG_SWORD.get()));
+                break;
+            }
+            case 31: {
+               ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(RegistrationHandler.BLACK_NEON_SWORD.get()));
+                break;
+            }
+            case 32: {
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(RegistrationHandler.ALEX_BOOTS.get()));
+                break;
+            }
+            case 33: {
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(RegistrationHandler.YT_CHEST.get()));
+                break;
+            }
+            case 34: {
+                  ExtraFunctions.effectPlayer(player, new EffectInstance(Effects.JUMP_BOOST, 200, 10));
+                break;
+            }
+            case 35: {
+               ExtraFunctions.summonMobsOnBreakBlock(RegistrationHandler.ALEXIRCRAFT.get(),50, worldIn, pos, null);
+                break;
+            }
+            case 36: {
+                  ExtraFunctions.summonMobsOnBreakBlock(EntityType.IRON_GOLEM, 50, worldIn, pos, null);
+                break;
+            }
+            case 37: {
+                ExtraFunctions.addEnchantsMany(new ItemStack(RegistrationHandler.SNOW_SWORD.get()), e, 4, worldIn, pos);
+                break;
+            }
+            case 38: {
+               Random rand = worldIn.getRandom();
+               int golemCount = rand.nextInt(5); // 0–4
+                  ExtraFunctions.summonMobsOnBreakBlock(EntityType.IRON_GOLEM, golemCount, worldIn, pos, null);
+                break;
+            }
+            case 39: {
+                ExtraFunctions.foodKit(worldIn, pos);
+                break;
+            }
+            case 40: {
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.TNT);
+                  ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.FLINT_AND_STEEL));
+                break;
+            }
+            case 41: {
+               ExtraFunctions.summonMobsOnBreakBlock(RegistrationHandler.GHOST.get(), 50, worldIn, pos, null);
+                break;
+            }
+            case 42: {
+               ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(RegistrationHandler.LEVIN_SWORD.get()), 1, 0, 0);
+                break;
+            }
+            case 43: {
+            ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(RegistrationHandler.BATTLE_AXE.get()));
+                break;
+            }
+            case 44: {
+                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, RegistrationHandler.RAINBOW_SWORD.get(), "RAINBOW", Enchantment.getEnchantmentByID(12), 6);
+                break;
+            }
+            case 45: {
+               ExtraFunctions.tpPlayerInGround(player);
+                break;
+            }
+            case 46: {
+               ExtraFunctions.tntRain(worldIn, pos, 50, 0, player);
+                break;
+            }
+            case 47: {
+                ExtraFunctions.summonMobsOnBreakBlock(EntityType.RABBIT, 50, worldIn, pos, rabbit -> {
+                   rabbit.setRabbitType(99); // customize the rabbit
+               });
+                break;
+            }
+            case 48: {
+                  ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(RegistrationHandler.SNOW_SWORD.get()));
+                break;
+            }
+            case 49: {
+                Enchantment[] a = {Enchantments.AQUA_AFFINITY, Enchantments.BANE_OF_ARTHROPODS,
+                        Enchantments.BLAST_PROTECTION, Enchantments.KNOCKBACK, Enchantments.POWER,
+                        Enchantments.LOOTING, Enchantments.FIRE_ASPECT, Enchantments.SHARPNESS};
+               ExtraFunctions.addEnchantsMany(new ItemStack(Items.DIAMOND_AXE), a, 3, worldIn, pos);
+                break;
+            }
+            case 50: {
+                Enchantment[] a = {Enchantments.AQUA_AFFINITY, Enchantments.BANE_OF_ARTHROPODS, Enchantments.BLAST_PROTECTION, Enchantments.POWER, Enchantments.LOOTING,
+                       Enchantments.FIRE_ASPECT, Enchantments.SHARPNESS, Enchantments.EFFICIENCY, Enchantments.FEATHER_FALLING};
+               ItemStack[] stack = {new ItemStack(Items.DIAMOND_AXE), new ItemStack(Items.DIAMOND_HOE), new ItemStack(Items.DIAMOND_SWORD), new ItemStack(Items.DIAMOND_SHOVEL)};
+                    ExtraFunctions.addRandomEnchtToRandomItems(worldIn, stack, a, 8, pos, rand);
+                break;
+            }
+            case 51: {
+                 ExtraFunctions.tpPlayer(player);
+                break;
+            }
+            case 52: {
+                  ExtraFunctions.endWellStruct(worldIn, new BlockPos(pos.getX(), pos.getY(), pos.getZ() + 2), rand);
+                ExtraFunctions.lookUp(worldIn, player);
+               ExtraFunctions.chat("Dont Die...", player);
+                break;
+            }
+
+            case 53: {
+                  ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.EMERALD_BLOCK), 64, 0, 0);
+                break;
+            }
+            case 54: {
+                  ExtraFunctions.chat(TextFormatting.AQUA + "Hello" + TextFormatting.BLACK + " Just" + TextFormatting.BLUE + " For" + TextFormatting.BOLD + " Your" + TextFormatting.DARK_AQUA + " Info " + TextFormatting.DARK_BLUE + "This" + TextFormatting.DARK_GRAY + " Is" + TextFormatting.DARK_GREEN + " Made" + TextFormatting.DARK_PURPLE + " By" + TextFormatting.DARK_RED + " thvardhan", player);
+                break;
+            }
+            case 55: {
+               ExtraFunctions.addEnchantsMany(new ItemStack(Items.WOODEN_HOE), e, 60, worldIn, pos);
+                  ExtraFunctions.chat("You Just Got A God Hoe", player);
+                break;
+            }
+            case 56: {
+               ExtraFunctions.orcArmy(worldIn, pos, rand.nextInt(60), rand);
+                break;
+            }
+            case 57: {
+                 ExtraFunctions.summonCowNearby(worldIn, pos, 30, rand);
+                break;
+            }
+            case 58: {
+                ExtraFunctions.summonMobsNearby(new ZombieEntity(worldIn), 14, worldIn, pos, rand);
+                break;
+            }
+            case 59: {
+                 ExtraFunctions.randomSixtyFourTower(worldIn, pos, rand);
+                break;
+            }
+            case 60: {
+                 ExtraFunctions.summonMobsOnBreakBlock(EntityType.WITHER, 2, worldIn, pos, null);
+                break;
+            }
+            case 61: {
+                   ExtraFunctions.potionKit(worldIn, pos, rand);
+                break;
+            }
+            case 62: {
+                 ExtraFunctions.chat("You May Want To Craft Anything :3", player);
+               ExtraFunctions.setOneBlock(worldIn, pos, Blocks.CRAFTING_TABLE);
+                break;
+            }
+            case 63: {
+                 ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.BEDROCK), 64, 0, 0);
+                break;
+            }
+            case 64: {
+                 ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.OBSIDIAN), 64, 0, 0);
+                break;
+            }
+            case 65: {
+                ExtraFunctions.summonBlockAsDrop(pos, worldIn, RegistrationHandler.JEROMEASF_LUCKY_BLOCK.get());
+                break;
+            }
+            case 66: {
+                  ExtraFunctions.trollChat(player);
+                break;
+            }
+            case 67: {
+                ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.CAKE);
+                break;
+            }
+            case 68: {
+                 ExtraFunctions.summonBlockAsDrop(pos, worldIn, Blocks.DRAGON_EGG);
+                break;
+            }
+            case 69: {
+                  ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(RegistrationHandler.YT_BOOTS.get()));
+                break;
+            }
+            case 70: {
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(RegistrationHandler.YT_CHEST.get()));
+                break;
+            }
+            case 71: {
+                 ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(RegistrationHandler.YT_HELM.get()));
+                break;
+            }
+            case 72: {
+                 ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(RegistrationHandler.YT_LEGS.get()));
+                break;
+            }
+            case 73: {
+                ExtraFunctions.summonTammedWolfs(worldIn, player, 10, pos);
+                break;
+            }
+            case 74: {
+                Enchantment[] a = {Enchantments.SHARPNESS, Enchantments.KNOCKBACK, Enchantments.SMITE, Enchantments.BANE_OF_ARTHROPODS};
+                  ExtraFunctions.addEnchantsMany(new ItemStack(RegistrationHandler.DEVIL_SWORD.get()), a, 3, worldIn, pos);
+                break;
+            }
+            case 75: {
+                 ExtraFunctions.toVoid(worldIn, pos);
+                break;
+            }
+            case 76: {
+                 ExtraFunctions.summonBlockWithLoop(worldIn, pos, Blocks.GOLD_BLOCK, 64, 1, 25);
+                break;
+            }
+            case 77: {
+                 ExtraFunctions.summonTammedWolfs(worldIn, player, 15, pos);
+                break;
+            }
+            case 78: {
+                 ExtraFunctions.towerStruct(worldIn, pos);
+                break;
+            }
+            case 79: {
+                 ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(RegistrationHandler.LEVIN_SWORD.get()));
+                break;
+            }
+            case 80: {
+              // ExtraFunctions.setOneBlock(worldIn, pos, RegistrationHandler.youtube);
+                break;
+            }
+            case 81: {
+                   ExtraFunctions.setOneBlock(worldIn, pos, Blocks.CAKE);
+                break;
+            }
+            case 82: {
+                  ExtraFunctions.setOneBlock(worldIn, pos, Blocks.ANVIL);
+              ExtraFunctions.chat(TextFormatting.DARK_BLUE + "You Should Be Happy It Dint Fell On Ya", player);
+                break;
+            }
+            case 83: {
+                ExtraFunctions.summonItemWithLoop(worldIn, pos, Items.DIAMOND, 12, 0, 0);
+                break;
+            }
+            case 84: {
+                Enchantment[] a = {Enchantments.FIRE_ASPECT, Enchantments.AQUA_AFFINITY, Enchantments.FIRE_PROTECTION, Enchantments.PROTECTION, Enchantments.RESPIRATION, Enchantments.PROJECTILE_PROTECTION, Enchantments.BLAST_PROTECTION};
+                 ExtraFunctions.addEnchantsMany(new ItemStack(Items.DIAMOND_BOOTS), a, 5, worldIn, pos);
+                break;
+            }
+            case 85: {
+                Enchantment[] a = {Enchantments.FIRE_ASPECT, Enchantments.AQUA_AFFINITY, Enchantments.FIRE_PROTECTION, Enchantments.PROTECTION, Enchantments.RESPIRATION, Enchantments.PROJECTILE_PROTECTION, Enchantments.BLAST_PROTECTION};
+                 ExtraFunctions.addEnchantsMany(new ItemStack(Items.DIAMOND_CHESTPLATE), a, 4, worldIn, pos);
+                break;
+            }
+            case 86: {
+                  ExtraFunctions.tntFix(worldIn, pos, 5, player);
+                break;
+            }
+            case 87: {
+                 ExtraFunctions.holeDeathTrap(worldIn, pos);
+                break;
+            }
+            case 88: {
+              //  ExtraFunctions.setOneBlock(worldIn, pos, ModBlocks.gamingWithJenLuckyBlock);
+                break;
+            }
+            case 89: {
+                 ExtraFunctions.setOneBlock(worldIn, pos, Blocks.COAL_BLOCK);
+                break;
+            }
+            case 90: {
+                  ExtraFunctions.setOneBlock(worldIn, pos, Blocks.INFESTED_STONE);
+                break;
+            }
+            case 91: {
+                 ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.PAPER));
+                break;
+            }
+            case 92: {
+                  ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.MELON));
+                break;
+            }
+            case 93: {
+                  ExtraFunctions.summonMobsNearby(new EntityAlexirCraft(RegistrationHandler.ALEXIRCRAFT.get(), worldIn), 14, worldIn, pos, rand);
+                break;
+            }
+            case 94: {
+                   ExtraFunctions.burgerStruct(worldIn, pos);
+                break;
+            }
+            case 95: {
+                   ExtraFunctions.burgerStructOne(worldIn, pos);
+                break;
+            }
+            case 96: {
+                  ExtraFunctions.summonCowNearby(worldIn, pos, 13, rand);
+                break;
+            }
+            case 97: {
+                   ExtraFunctions.tntFix(worldIn, pos, 50, player);
+                break;
+            }
+            case 98: {
+                ItemStack waterBottle = new ItemStack(Items.POTION);
+                waterBottle.getOrCreateTag().putString("Potion", "minecraft:water");
+
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, waterBottle);
+                break;
+            }
+            case 99: {
+                  ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.STONE_BUTTON));
+                break;
+            }
             case 100: {
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.DIAMOND_AXE));
+                break;
+            }
+            case 101: {
                 ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.DIAMOND_SWORD));
                 break;
             }
 
-
         }//switch ends
     }//method end
-
-
 }
