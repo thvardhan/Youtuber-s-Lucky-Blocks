@@ -1,5 +1,5 @@
 {
     "variants": {
-        "normal": { "model": "ytluckyblocks:youtube_block" }
+        "": { "model": "ytluckyblocks:block/youtube_block" }
     }
 }

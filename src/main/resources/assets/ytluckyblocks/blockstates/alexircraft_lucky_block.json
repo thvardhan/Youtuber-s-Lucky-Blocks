@@ -1,5 +1,5 @@
 {
     "variants": {
-        "normal": { "model": "ytluckyblocks:alexircraft_lucky_block" }
+        "": { "model": "ytluckyblocks:block/alexircraft_lucky_block" }
     }
 }

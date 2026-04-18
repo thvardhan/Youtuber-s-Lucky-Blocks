@@ -1,4 +1,5 @@
 {
+    "gui_light": "front",
     "parent":"ytluckyblocks:block/baby_leah_lucky_block",
     "display": {
         "thirdperson": {

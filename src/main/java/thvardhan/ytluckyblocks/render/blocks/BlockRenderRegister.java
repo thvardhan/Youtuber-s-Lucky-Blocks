@@ -1,10 +1,6 @@
 package thvardhan.ytluckyblocks.render.blocks;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.item.Item;
-import thvardhan.ytluckyblocks.Main;
 import thvardhan.ytluckyblocks.blocks.ModBlocks;
 
 public class BlockRenderRegister {
@@ -67,8 +63,7 @@ public class BlockRenderRegister {
     }
 
     public static void reg(Block block) {
-        Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(Item.getItemFromBlock(block), 0, new ModelResourceLocation(Main.MODID + ":" + block.getUnlocalizedName().substring(5), "inventory"));
-
+        // BlockItem models load from assets like items; no ModelLoader registration in 1.16+.
     }
 
 }

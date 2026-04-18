@@ -1,22 +1,21 @@
 package thvardhan.ytluckyblocks.blocks;
+import net.minecraft.entity.EntityType;
 
-import com.mojang.realmsclient.gui.ChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.monster.EntityBlaze;
-import net.minecraft.entity.monster.EntitySkeleton;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.block.Blocks;
+import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import thvardhan.ytluckyblocks.CommonProxy;
 import thvardhan.ytluckyblocks.entity.*;
 import thvardhan.ytluckyblocks.functions.ExtraFunctions;
@@ -25,28 +24,20 @@ import thvardhan.ytluckyblocks.items.ModItems;
 import java.util.Random;
 
 public class BabyDuckLuckyBlock extends Block {
-
-
     public BabyDuckLuckyBlock(String unlocalizedName, Material material, float hardness, float resistance) {
-        super(material);
-        this.setUnlocalizedName(unlocalizedName);
-        this.setRegistryName(unlocalizedName);
-        this.setCreativeTab(CommonProxy.tabYTStuffMod);
-        this.setHardness(hardness);
-        this.setResistance(resistance);
-        this.setLightLevel(0F);
+        super(net.minecraft.block.AbstractBlock.Properties.of(material).strength(hardness, resistance).noOcclusion().lightLevel(s -> (int)(15.0F * (0F))));
     }
 
     public BabyDuckLuckyBlock(String unlocalizedName, float hardness, float resistance) {
-        this(unlocalizedName, Material.ROCK, 0, 10000);
+        this(unlocalizedName, Material.STONE, 0, 10000);
     }
 
     public BabyDuckLuckyBlock(String unlocalizedName) {
         this(unlocalizedName, 2.0f, 10.0f);
     }
 
-    @SideOnly(Side.CLIENT)
-    public void randomDisplayTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+    @OnlyIn(Dist.CLIENT)
+    public void animateTick(BlockState state, World worldIn, BlockPos pos, Random rand) {
         for (int i = 0; i < 3; ++i) {
             int j = rand.nextInt(2) * 2 - 1;
             int k = rand.nextInt(2) * 2 - 1;
@@ -56,31 +47,33 @@ public class BabyDuckLuckyBlock extends Block {
             double d3 = (double) (rand.nextFloat() * (float) j);
             double d4 = ((double) rand.nextFloat() - 0.5D) * 0.125D;
             double d5 = (double) (rand.nextFloat() * (float) k);
-            worldIn.spawnParticle(EnumParticleTypes.CRIT_MAGIC, d0, d1, d2, d3, d4, d5);
+            worldIn.addParticle(ParticleTypes.CRIT, d0, d1, d2, d3, d4, d5);
         }
     }
 
     @Override
-    public boolean isOpaqueCube(IBlockState state) {
-        return false;
+    public void playerWillDestroy(net.minecraft.world.World world, net.minecraft.util.math.BlockPos pos, net.minecraft.block.BlockState state, net.minecraft.entity.player.PlayerEntity player) {
+        super.playerWillDestroy(world, pos, state, player);
+        LuckyBlock.creativeLuckyBreak(world, pos, player, () -> drops(world, pos, player));
     }
-    @Override
-    public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
-        if (!world.isRemote && player != null && !(player instanceof FakePlayer)) {
-            world.setBlockToAir(pos);
+
+
+@Override
+    public void playerDestroy(net.minecraft.world.World world, net.minecraft.entity.player.PlayerEntity player, net.minecraft.util.math.BlockPos pos, net.minecraft.block.BlockState state, @javax.annotation.Nullable net.minecraft.tileentity.TileEntity blockEntity, net.minecraft.item.ItemStack tool) {
+        if (!world.isClientSide() && player != null && !(player instanceof FakePlayer) && !player.abilities.instabuild) {
+            world.removeBlock(pos, false);
             drops(world, pos, player);
         }
-        return false;
     }
 
-    private void drops(World worldIn, BlockPos pos, EntityPlayer player) {
+    private void drops(World worldIn, BlockPos pos, PlayerEntity player) {
 
         Enchantment[] e = new Enchantment[5];
-        e[0] = Enchantment.getEnchantmentByID(50);
-        e[1] = Enchantment.getEnchantmentByID(19);
-        e[2] = Enchantment.getEnchantmentByID(48);
-        e[3] = Enchantment.getEnchantmentByID(7);
-        e[4] = Enchantment.getEnchantmentByID(21);
+        e[0] = ExtraFunctions.enchantmentByLegacyNumericId(50);
+        e[1] = ExtraFunctions.enchantmentByLegacyNumericId(19);
+        e[2] = ExtraFunctions.enchantmentByLegacyNumericId(48);
+        e[3] = ExtraFunctions.enchantmentByLegacyNumericId(7);
+        e[4] = ExtraFunctions.enchantmentByLegacyNumericId(21);
 
 
         Random rand = new Random();
@@ -102,17 +95,17 @@ public class BabyDuckLuckyBlock extends Block {
                 break;
             }
             case 2: {
-                ExtraFunctions.summonMobsNearby(new EntityGhost(worldIn), 5, worldIn, pos, rand);
+                ExtraFunctions.summonMobsNearby(EntityGhost.TYPE.create(worldIn), 5, worldIn, pos, rand);
 
                 break;
             }
             case 3: {
-                ExtraFunctions.summonMobsNearby(new EntityGhost(worldIn), 20, worldIn, pos, rand);
+                ExtraFunctions.summonMobsNearby(EntityGhost.TYPE.create(worldIn), 20, worldIn, pos, rand);
 
                 break;
             }
             case 4: {
-                ExtraFunctions.summonMobsNearby(new EntityCaptainSparklez(worldIn), 5, worldIn, pos, rand);
+                ExtraFunctions.summonMobsNearby(EntityCaptainSparklez.TYPE.create(worldIn), 5, worldIn, pos, rand);
 
                 break;
             }
@@ -156,11 +149,11 @@ public class BabyDuckLuckyBlock extends Block {
                 break;
             }
             case 13: {
-                ExtraFunctions.summonMobsOnBreakBlock(new EntityBlaze(worldIn), 5, worldIn, pos);
+                ExtraFunctions.summonMobsOnBreakBlock(EntityType.BLAZE.create(worldIn), 5, worldIn, pos);
                 break;
             }
             case 14: {
-                ExtraFunctions.summonMobsNearby(new EntitySkeleton(worldIn), 15, worldIn, pos, rand);
+                ExtraFunctions.summonMobsNearby(EntityType.SKELETON.create(worldIn), 15, worldIn, pos, rand);
                 break;
             }
             case 15: {
@@ -172,11 +165,11 @@ public class BabyDuckLuckyBlock extends Block {
                 break;
             }
             case 17: {
-                ExtraFunctions.summonMobsOnBreakBlock(new EntityLogDotZip(worldIn), 1, worldIn, pos);
+                ExtraFunctions.summonMobsOnBreakBlock(EntityLogDotZip.TYPE.create(worldIn), 1, worldIn, pos);
                 break;
             }
             case 18: {
-                ExtraFunctions.summonMobsOnBreakBlock(new EntityPopularMMO(worldIn), 5, worldIn, pos);
+                ExtraFunctions.summonMobsOnBreakBlock(EntityPopularMMO.TYPE.create(worldIn), 5, worldIn, pos);
                 break;
             }
             case 19: {
@@ -189,7 +182,7 @@ public class BabyDuckLuckyBlock extends Block {
                 break;
             }
             case 21: {
-                ExtraFunctions.summonMobsOnBreakBlock(new EntityAntVenom(worldIn), rand.nextInt(10) + 1, worldIn, pos);
+                ExtraFunctions.summonMobsOnBreakBlock(EntityAntVenom.TYPE.create(worldIn), rand.nextInt(10) + 1, worldIn, pos);
                 break;
             }
             case 22: {
@@ -198,16 +191,16 @@ public class BabyDuckLuckyBlock extends Block {
                 break;
             }
             case 23: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.DRAGON_EGG), 50, 1, 5);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.DRAGON_EGG.asItem()), 50, 1, 5);
                 ExtraFunctions.chat("How Are You Going To Train These Many Dragons?", player);
                 break;
             }
             case 24: {
-                ExtraFunctions.summonMobsOnBreakBlock(new EntityDanTDM(worldIn), 2, worldIn, pos);
+                ExtraFunctions.summonMobsOnBreakBlock(EntityDanTDM.TYPE.create(worldIn), 2, worldIn, pos);
                 break;
             }
             case 25: {
-                ExtraFunctions.summonMobsOnBreakBlock(new EntityGhost(worldIn), rand.nextInt(10), worldIn, pos);
+                ExtraFunctions.summonMobsOnBreakBlock(EntityGhost.TYPE.create(worldIn), rand.nextInt(10), worldIn, pos);
                 break;
             }
             case 26: {
@@ -220,7 +213,7 @@ public class BabyDuckLuckyBlock extends Block {
             }
             case 28: {
                 ExtraFunctions.setOneBlock(worldIn, pos, Blocks.COMMAND_BLOCK);
-                ExtraFunctions.chat(ChatFormatting.GOLD + "I Wonder If You Can Do Anything With This Command Block..", player);
+                ExtraFunctions.chat(TextFormatting.GOLD + "I Wonder If You Can Do Anything With This Command Block..", player);
                 break;
             }
             case 29: {
@@ -228,15 +221,15 @@ public class BabyDuckLuckyBlock extends Block {
                 break;
             }
             case 30: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.MELON_BLOCK), 25, 0, 0);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.MELON.asItem()), 25, 0, 0);
                 break;
             }
             case 31: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.PUMPKIN), 25, 0, 0);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.PUMPKIN.asItem()), 25, 0, 0);
                 break;
             }
             case 32: {
-                ExtraFunctions.summonMobsOnBreakBlock(new EntitySerialPlayer(worldIn), 30, worldIn, pos);
+                ExtraFunctions.summonMobsOnBreakBlock(EntitySerialPlayer.TYPE.create(worldIn), 30, worldIn, pos);
                 break;
             }
             case 33: {
@@ -301,7 +294,7 @@ public class BabyDuckLuckyBlock extends Block {
                 break;
             }
             case 47: {
-                ExtraFunctions.summonMobsOnBreakBlock(new EntityBabyDuck(worldIn), 30, worldIn, pos);
+                ExtraFunctions.summonMobsOnBreakBlock(EntityBabyDuck.TYPE.create(worldIn), 30, worldIn, pos);
                 break;
             }
             case 48: {
@@ -313,7 +306,7 @@ public class BabyDuckLuckyBlock extends Block {
                 break;
             }
             case 50: {
-                ExtraFunctions.summonMobsOnBreakBlock(new EntityBabyDuck(worldIn), 40, worldIn, pos);
+                ExtraFunctions.summonMobsOnBreakBlock(EntityBabyDuck.TYPE.create(worldIn), 40, worldIn, pos);
                 break;
             }
             case 51: {

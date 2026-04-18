@@ -1,5 +1,5 @@
 {
     "variants": {
-        "normal": { "model": "ytluckyblocks:gold_button_block" }
+        "": { "model": "ytluckyblocks:block/gold_button_block" }
     }
 }

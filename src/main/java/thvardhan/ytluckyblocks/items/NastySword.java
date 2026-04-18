@@ -1,34 +1,26 @@
 package thvardhan.ytluckyblocks.items;
 
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentFireAspect;
-import net.minecraft.enchantment.EnumEnchantmentType;
-import net.minecraft.item.Item;
+import net.minecraft.enchantment.Enchantments;
+import net.minecraft.item.IItemTier;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSword;
+import net.minecraft.item.SwordItem;
 import net.minecraft.util.NonNullList;
 import thvardhan.ytluckyblocks.CommonProxy;
 
-import java.util.List;
+public class NastySword extends SwordItem {
 
-public class NastySword extends ItemSword {
-
-    public NastySword(String string, ToolMaterial material) {
-        super(material);
-        this.setUnlocalizedName(string);
-        this.setRegistryName(string);
-        this.setCreativeTab(CommonProxy.tabYTStuffMod);
-
+    public NastySword(IItemTier tier) {
+        super(tier, 4, -2.4F, new net.minecraft.item.Item.Properties().tab(CommonProxy.tabYTStuffMod));
     }
 
     @Override
-    public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems) {
-        ItemStack s = new ItemStack(this);
-        s.addEnchantment(Enchantment.getEnchantmentByID(20), 60);
-        subItems.add(s);
-
+    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
+        if (this.allowdedIn(group)) {
+            ItemStack stack = new ItemStack(this);
+            stack.enchant(Enchantments.FIRE_ASPECT, 60);
+            items.add(stack);
+        }
     }
-
 
 }

@@ -1,12 +1,17 @@
 package thvardhan.ytluckyblocks.blocks;
 
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.Item;
 import net.minecraft.block.Block;
-import net.minecraft.item.ItemBlock;
-import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.IForgeRegistry;
 import thvardhan.ytluckyblocks.CommonProxy;
 import thvardhan.ytluckyblocks.Main;
-import thvardhan.ytluckyblocks.TabYTStuffMod;
 
+@Mod.EventBusSubscriber(modid = Main.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ModBlocks {
 
     public static Block luckyPressurePlate;
@@ -38,7 +43,6 @@ public class ModBlocks {
     public static Block pinkSheepYTLuckyBlock;
     public static Block vikkstar123LuckyBlock;
 
-
     public static Block babyDuckLuckyBlock;
     public static Block babyLeahLuckyBlock;
     public static Block babyMaxLuckyBlock;
@@ -66,82 +70,132 @@ public class ModBlocks {
     public static Block ironButton;
     public static Block diamondButton;
 
+    @SubscribeEvent
+    public static void onRegisterBlocks(final RegistryEvent.Register<Block> event) {
+        IForgeRegistry<Block> r = event.getRegistry();
+        registerBlock(r, youtubeLuckyBlock = new LuckyBlock("youtube_lucky_block"), "youtube_lucky_block");
+        registerBlock(r, serialPlayerLuckyBlock = new SPLuckyBlock("sp_lucky_block"), "sp_lucky_block");
+        registerBlock(r, popularMMOLuckyBlock = new PopularMMOLuckyBlock("pop_lucky_block"), "pop_lucky_block");
+        registerBlock(r, antVenomLuckyBlock = new AntVenomLuckyBlock("ant_lucky_block"), "ant_lucky_block");
+        registerBlock(r, captainSparkelzLuckyBlock = new CaptainSparkelzLuckyBlock("cap_lucky_block"), "cap_lucky_block");
+        registerBlock(r, skyDoesMinecraftLuckyBlock = new SkyDoesMinecraftLuckyBlock("sky_lucky_block"), "sky_lucky_block");
+        registerBlock(r, danTDMLuckyBlock = new DanTDMLuckyBlock("dan_lucky_block"), "dan_lucky_block");
+        registerBlock(r, iBallisticSquidLuckyBlock = new IBallisticSquidLuckyBlock("squid_lucky_block"), "squid_lucky_block");
+        registerBlock(r, gamingWithJenLuckyBlock = new GammingWithJenLuckyBlock("jen_lucky_block"), "jen_lucky_block");
+        registerBlock(r, trueMuLuckyBlock = new TrueMuLuckyBlock("truemu_lucky_block"), "truemu_lucky_block");
+        registerBlock(r, alexircraftLuckyBlock = new AlexircraftLuckyBlock("alexircraft_lucky_block"), "alexircraft_lucky_block");
+        registerBlock(r, bajanCanadianLuckyBlock = new BajanCanadianLuckyBlock("bajancanadian_lucky_block"), "bajancanadian_lucky_block");
+        registerBlock(r, frizzleandpopLuckyBlock = new FrizzleandpopLuckyBlock("frizzleandpop_lucky_block"), "frizzleandpop_lucky_block");
+        registerBlock(r, jeromeASFLuckyBlock = new JeromeASFLuckyBlock("jeromeasf_lucky_block"), "jeromeasf_lucky_block");
+        registerBlock(r, tewityLuckyBlock = new TewityLuckyBlock("tewity_lucky_block"), "tewity_lucky_block");
+        registerBlock(r, lDShadowLadyLuckyBlock = new LDShadowLadyLuckyBlock("ldshadowlady_lucky_block"), "ldshadowlady_lucky_block");
+        registerBlock(r, prestonPlayzLuckyBlock = new PrestonPlayzLuckyBlock("prestonplayz_lucky_block"), "prestonplayz_lucky_block");
+        registerBlock(r, sSundeeLuckyBlock = new SSundeeLuckyBlock("ssundee_lucky_block"), "ssundee_lucky_block");
+        registerBlock(r, stampylongheadLuckyBlock = new StampyLongHeadLuckyBlock("stampy_lucky_block"), "stampy_lucky_block");
+        registerBlock(r, iHasCupcakeLuckyBlock = new IHasCupcakeLuckyBlock("ihascupquake_lucky_block"), "ihascupquake_lucky_block");
+        registerBlock(r, thnxCyaLuckyBlock = new ThnxCyaLuckyBlock("thnxcya_lucky_block"), "thnxcya_lucky_block");
+        registerBlock(r, exploadingTNTLuckyBlock = new ExploadingTNTLuckyBlock("exploadingtnt_lucky_block"), "exploadingtnt_lucky_block");
+        registerBlock(r, lachlanLuckyBlock = new LachlanLuckyBlock("lachlan_lucky_block"), "lachlan_lucky_block");
+        registerBlock(r, mrwooflessLuckyBlock = new MrWooflessLuckyBlockLuckyBlock("mrwoofless_lucky_block"), "mrwoofless_lucky_block");
+        registerBlock(r, petaZahHuttLuckyBlock = new PetaZahHuttLuckyBlock("petazahhutt_lucky_block"), "petazahhutt_lucky_block");
+        registerBlock(r, pinkSheepYTLuckyBlock = new PinkSheepYTLuckyBlock("pinksheep_lucky_block"), "pinksheep_lucky_block");
+        registerBlock(r, vikkstar123LuckyBlock = new Vikkstar123LuckyBlock("vikkstar123_lucky_block"), "vikkstar123_lucky_block");
+        registerBlock(r, babyDuckLuckyBlock = new BabyDuckLuckyBlock("baby_duck_lucky_block"), "baby_duck_lucky_block");
+        registerBlock(r, babyLeahLuckyBlock = new BabyLeahLuckyBlock("baby_leah_lucky_block"), "baby_leah_lucky_block");
+        registerBlock(r, babyMaxLuckyBlock = new BabyMaxLuckyBlock("baby_max_lucky_block"), "baby_max_lucky_block");
+        registerBlock(r, cassieTheCatLuckyBlock = new CassieTheCatLuckyBlock("cassie_the_cat_lucky_block"), "cassie_the_cat_lucky_block");
+        registerBlock(r, donutTheDogLuckyBlock = new DonutTheDogLuckyBlock("donut_the_dog_lucky_block"), "donut_the_dog_lucky_block");
+        registerBlock(r, evilLittleKellyLuckyBlock = new EvilLittleKellyLuckyBlock("evil_little_kelly_lucky_block"), "evil_little_kelly_lucky_block");
+        registerBlock(r, littleAllyLuckyBlock = new LittleAllyLuckyBlock("little_ally_lucky_block"), "little_ally_lucky_block");
+        registerBlock(r, littleCarlyMcLuckyBlock = new LittleCarlyMcLuckyBlock("little_carly_lucky_block"), "little_carly_lucky_block");
+        registerBlock(r, littleDonnyLuckyBlock = new LittleDonnyLuckyBlock("little_donny_lucky_block"), "little_donny_lucky_block");
+        registerBlock(r, littleKellyMcLuckyBlock = new LittleKellyMcLuckyBlock("little_kelly_lucky_block"), "little_kelly_lucky_block");
+        registerBlock(r, littleLizardGamingLuckyBlock = new LittleLizardGamingLuckyBlock("little_lizard_gaming_lucky_block"), "little_lizard_gaming_lucky_block");
+        registerBlock(r, maxTheMonkeyLuckyBlock = new MaxTheMonkeyLuckyBlock("max_the_monkey_lucky_block"), "max_the_monkey_lucky_block");
+        registerBlock(r, sharkyLuckyBlock = new SharkyLuckyBlock("sharky_lucky_block"), "sharky_lucky_block");
+        registerBlock(r, tinyTurtleLuckyBlock = new TinyTurtleLuckyBlock("tiny_turtle_lucky_block"), "tiny_turtle_lucky_block");
+        registerBlock(r, scubaSteveLuckyBlock = new ScubaSteveLuckyBlock("scuba_steve_lucky_block"), "scuba_steve_lucky_block");
+        registerBlock(r, littleAngelLuckyBlock = new LittleAngelLuckyBlock("little_angel_lucky_block"), "little_angel_lucky_block");
+        registerBlock(r, aphmauLuckyBlock = new AphmauLuckyBlock("aphmau_lucky_block"), "aphmau_lucky_block");
+        registerBlock(r, littleRopoLuckyBlock = new LittleRopoLuckyBlock("little_ropo_lucky_block"), "little_ropo_lucky_block");
+        registerBlock(r, mrCrainerLuckyBlock = new MrCrainerLuckyBlock("mrcrainer_lucky_block"), "mrcrainer_lucky_block");
 
-    public static void createBlocks() {
-
-        registerBlock(youtubeLuckyBlock = new LuckyBlock("youtube_lucky_block"), "youtube_lucky_block");
-        registerBlock(serialPlayerLuckyBlock = new SPLuckyBlock("sp_lucky_block"), "sp_lucky_block");
-        registerBlock(popularMMOLuckyBlock = new PopularMMOLuckyBlock("pop_lucky_block"), "pop_lucky_block");
-        registerBlock(antVenomLuckyBlock = new AntVenomLuckyBlock("ant_lucky_block"), "ant_lucky_block");
-        registerBlock(captainSparkelzLuckyBlock = new CaptainSparkelzLuckyBlock("cap_lucky_block"), "");
-        registerBlock(skyDoesMinecraftLuckyBlock = new SkyDoesMinecraftLuckyBlock("sky_lucky_block"), "sky_lucky_block");
-        registerBlock(danTDMLuckyBlock = new DanTDMLuckyBlock("dan_lucky_block"), "dan_lucky_block");
-        registerBlock(iBallisticSquidLuckyBlock = new IBallisticSquidLuckyBlock("squid_lucky_block"), "squid_lucky_block");
-        registerBlock(gamingWithJenLuckyBlock = new GammingWithJenLuckyBlock("jen_lucky_block"), "jen_lucky_block");
-        registerBlock(trueMuLuckyBlock = new TrueMuLuckyBlock("truemu_lucky_block"), "truemu_lucky_block");
-        //nice posture update
-        registerBlock(alexircraftLuckyBlock = new AlexircraftLuckyBlock("alexircraft_lucky_block"), "alexircraft_lucky_block");
-        registerBlock(bajanCanadianLuckyBlock = new BajanCanadianLuckyBlock("bajancanadian_lucky_block"), "bajancanadian_lucky_block");
-        registerBlock(frizzleandpopLuckyBlock = new FrizzleandpopLuckyBlock("frizzleandpop_lucky_block"), "frizzleandpop_lucky_block");
-        registerBlock(jeromeASFLuckyBlock = new JeromeASFLuckyBlock("jeromeasf_lucky_block"), "jeromeasf_lucky_block");
-        registerBlock(tewityLuckyBlock = new TewityLuckyBlock("tewity_lucky_block"), "tewity_lucky_block");
-        //sublime update
-        registerBlock(lDShadowLadyLuckyBlock = new LDShadowLadyLuckyBlock("ldshadowlady_lucky_block"), "ldshadowlady_lucky_block");
-        registerBlock(prestonPlayzLuckyBlock = new PrestonPlayzLuckyBlock("prestonplayz_lucky_block"), "prestonplayz_lucky_block");
-        registerBlock(sSundeeLuckyBlock = new SSundeeLuckyBlock("ssundee_lucky_block"), "ssundee_lucky_block");
-        registerBlock(stampylongheadLuckyBlock = new StampyLongHeadLuckyBlock("stampy_lucky_block"), "stampy_lucky_block");
-        registerBlock(iHasCupcakeLuckyBlock = new IHasCupcakeLuckyBlock("ihascupquake_lucky_block"), "ihascupquake_lucky_block");
-        registerBlock(thnxCyaLuckyBlock = new ThnxCyaLuckyBlock("thnxcya_lucky_block"), "thnxcya_lucky_block");
-        //Sparkle Update
-        registerBlock(exploadingTNTLuckyBlock = new ExploadingTNTLuckyBlock("exploadingtnt_lucky_block"), "exploadingtnt_lucky_block");
-        registerBlock(lachlanLuckyBlock = new LachlanLuckyBlock("lachlan_lucky_block"), "lachlan_lucky_block");
-        registerBlock(mrwooflessLuckyBlock = new MrWooflessLuckyBlockLuckyBlock("mrwoofless_lucky_block"), "mrwoofless_lucky_block");
-        registerBlock(petaZahHuttLuckyBlock = new PetaZahHuttLuckyBlock("petazahhutt_lucky_block"), "petazahhutt_lucky_block");
-        registerBlock(pinkSheepYTLuckyBlock = new PinkSheepYTLuckyBlock("pinksheep_lucky_block"), "pinksheep_lucky_block");
-        registerBlock(vikkstar123LuckyBlock = new Vikkstar123LuckyBlock("vikkstar123_lucky_block"), "vikkstar123_lucky_block");
-        //Little update
-        registerBlock(babyDuckLuckyBlock = new BabyDuckLuckyBlock("baby_duck_lucky_block"), "baby_duck_lucky_block");
-        registerBlock(babyLeahLuckyBlock = new BabyLeahLuckyBlock("baby_leah_lucky_block"), "baby_leah_lucky_block");
-        registerBlock(babyMaxLuckyBlock = new BabyMaxLuckyBlock("baby_max_lucky_block"), "baby_max_lucky_block");
-        registerBlock(cassieTheCatLuckyBlock = new CassieTheCatLuckyBlock("cassie_the_cat_lucky_block"), "cassie_the_cat_lucky_block");
-        registerBlock(donutTheDogLuckyBlock = new DonutTheDogLuckyBlock("donut_the_dog_lucky_block"), "donut_the_dog_lucky_block");
-        registerBlock(evilLittleKellyLuckyBlock = new EvilLittleKellyLuckyBlock("evil_little_kelly_lucky_block"), "evil_little_kelly_lucky_block");
-        registerBlock(littleAllyLuckyBlock = new LittleAllyLuckyBlock("little_ally_lucky_block"), "little_ally_lucky_block");
-        registerBlock(littleCarlyMcLuckyBlock = new LittleCarlyMcLuckyBlock("little_carly_lucky_block"), "little_carly_lucky_block");
-        registerBlock(littleDonnyLuckyBlock = new LittleDonnyLuckyBlock("little_donny_lucky_block"), "little_donny_lucky_block");
-        registerBlock(littleKellyMcLuckyBlock = new LittleKellyMcLuckyBlock("little_kelly_lucky_block"), "little_kelly_lucky_block");
-        registerBlock(littleLizardGamingLuckyBlock = new LittleLizardGamingLuckyBlock("little_lizard_gaming_lucky_block"), "little_lizard_gaming_lucky_block");
-        registerBlock(maxTheMonkeyLuckyBlock = new MaxTheMonkeyLuckyBlock("max_the_monkey_lucky_block"), "max_the_monkey_lucky_block");
-        registerBlock(sharkyLuckyBlock = new SharkyLuckyBlock("sharky_lucky_block"), "sharky_lucky_block");
-        registerBlock(tinyTurtleLuckyBlock = new TinyTurtleLuckyBlock("tiny_turtle_lucky_block"), "tiny_turtle_lucky_block");
-        //Guardian Update
-        registerBlock(scubaSteveLuckyBlock = new ScubaSteveLuckyBlock("scuba_steve_lucky_block"), "scuba_steve_lucky_block");
-        registerBlock(littleAngelLuckyBlock = new LittleAngelLuckyBlock("little_angel_lucky_block"), "little_angel_lucky_block");
-        registerBlock(aphmauLuckyBlock = new AphmauLuckyBlock("aphmau_lucky_block"), "aphmau_lucky_block");
-        registerBlock(littleRopoLuckyBlock = new LittleRopoLuckyBlock("little_ropo_lucky_block"), "little_ropo_lucky_block");
-        registerBlock(mrCrainerLuckyBlock = new MrCrainerLuckyBlock("mrcrainer_lucky_block"), "mrcrainer_lucky_block");
-
-
-        registerBlock(luckyPressurePlate = new LuckyPressurePlate("lucky_pressure_plate"), "lucky_pressure_plate");
-        registerBlock(youtube = new YoutubeBlock("youtube_block"), "youtube_block");
-        registerBlock(mic = new MicBlock("mic_block"), "mic_block");
-        registerBlock(goldButton = new GoldButton("gold_button_block"), "gold_button_block");
-        registerBlock(ironButton = new IronButton("iron_button_block"), "iron_button_block");
-        registerBlock(diamondButton = new DiamondButton("diamond_button_block"), "diamond_button_block");
-
-
+        registerBlock(r, luckyPressurePlate = new LuckyPressurePlate("lucky_pressure_plate"), "lucky_pressure_plate");
+        registerBlock(r, youtube = new YoutubeBlock("youtube_block"), "youtube_block");
+        registerBlock(r, mic = new MicBlock("mic_block"), "mic_block");
+        registerBlock(r, goldButton = new GoldButton("gold_button_block"), "gold_button_block");
+        registerBlock(r, ironButton = new IronButton("iron_button_block"), "iron_button_block");
+        registerBlock(r, diamondButton = new DiamondButton("diamond_button_block"), "diamond_button_block");
     }
 
-    public static void registerBlock(Block block, String name) {
-        GameRegistry.register(block);
-        GameRegistry.register(new ItemBlock(block).setRegistryName(block.getRegistryName()));
+    @SubscribeEvent
+    public static void onRegisterItems(final RegistryEvent.Register<Item> event) {
+        IForgeRegistry<Item> r = event.getRegistry();
+        registerBlockItem(r, youtubeLuckyBlock);
+        registerBlockItem(r, serialPlayerLuckyBlock);
+        registerBlockItem(r, popularMMOLuckyBlock);
+        registerBlockItem(r, antVenomLuckyBlock);
+        registerBlockItem(r, captainSparkelzLuckyBlock);
+        registerBlockItem(r, skyDoesMinecraftLuckyBlock);
+        registerBlockItem(r, danTDMLuckyBlock);
+        registerBlockItem(r, iBallisticSquidLuckyBlock);
+        registerBlockItem(r, gamingWithJenLuckyBlock);
+        registerBlockItem(r, trueMuLuckyBlock);
+        registerBlockItem(r, alexircraftLuckyBlock);
+        registerBlockItem(r, bajanCanadianLuckyBlock);
+        registerBlockItem(r, frizzleandpopLuckyBlock);
+        registerBlockItem(r, jeromeASFLuckyBlock);
+        registerBlockItem(r, tewityLuckyBlock);
+        registerBlockItem(r, lDShadowLadyLuckyBlock);
+        registerBlockItem(r, prestonPlayzLuckyBlock);
+        registerBlockItem(r, sSundeeLuckyBlock);
+        registerBlockItem(r, stampylongheadLuckyBlock);
+        registerBlockItem(r, iHasCupcakeLuckyBlock);
+        registerBlockItem(r, thnxCyaLuckyBlock);
+        registerBlockItem(r, exploadingTNTLuckyBlock);
+        registerBlockItem(r, lachlanLuckyBlock);
+        registerBlockItem(r, mrwooflessLuckyBlock);
+        registerBlockItem(r, petaZahHuttLuckyBlock);
+        registerBlockItem(r, pinkSheepYTLuckyBlock);
+        registerBlockItem(r, vikkstar123LuckyBlock);
+        registerBlockItem(r, babyDuckLuckyBlock);
+        registerBlockItem(r, babyLeahLuckyBlock);
+        registerBlockItem(r, babyMaxLuckyBlock);
+        registerBlockItem(r, cassieTheCatLuckyBlock);
+        registerBlockItem(r, donutTheDogLuckyBlock);
+        registerBlockItem(r, evilLittleKellyLuckyBlock);
+        registerBlockItem(r, littleAllyLuckyBlock);
+        registerBlockItem(r, littleCarlyMcLuckyBlock);
+        registerBlockItem(r, littleDonnyLuckyBlock);
+        registerBlockItem(r, littleKellyMcLuckyBlock);
+        registerBlockItem(r, littleLizardGamingLuckyBlock);
+        registerBlockItem(r, maxTheMonkeyLuckyBlock);
+        registerBlockItem(r, sharkyLuckyBlock);
+        registerBlockItem(r, tinyTurtleLuckyBlock);
+        registerBlockItem(r, scubaSteveLuckyBlock);
+        registerBlockItem(r, littleAngelLuckyBlock);
+        registerBlockItem(r, aphmauLuckyBlock);
+        registerBlockItem(r, littleRopoLuckyBlock);
+        registerBlockItem(r, mrCrainerLuckyBlock);
+        registerBlockItem(r, luckyPressurePlate);
+        registerBlockItem(r, youtube);
+        registerBlockItem(r, mic);
+        registerBlockItem(r, goldButton);
+        registerBlockItem(r, ironButton);
+        registerBlockItem(r, diamondButton);
     }
 
-
-    public static void registerBlock(Block block, ItemBlock itemBlock) {
-        GameRegistry.register(block);
-        GameRegistry.register(itemBlock.setRegistryName(block.getRegistryName()));
+    private static void registerBlock(IForgeRegistry<Block> reg, Block block, String name) {
+        if (name == null || name.isEmpty()) {
+            name = "cap_lucky_block";
+        }
+        block.setRegistryName(new ResourceLocation(Main.MODID, name));
+        reg.register(block);
     }
 
-
+    private static void registerBlockItem(IForgeRegistry<Item> reg, Block block) {
+        BlockItem item = new BlockItem(block, new Item.Properties().tab(CommonProxy.tabYTStuffMod));
+        item.setRegistryName(block.getRegistryName());
+        reg.register(item);
+    }
 }

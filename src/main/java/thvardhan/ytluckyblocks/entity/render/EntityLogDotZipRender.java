@@ -1,62 +1,27 @@
 package thvardhan.ytluckyblocks.entity.render;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.ModelBiped;
-import net.minecraft.client.renderer.entity.RenderBiped;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.client.renderer.entity.BipedRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.util.ResourceLocation;
-import org.lwjgl.opengl.GL11;
 import thvardhan.ytluckyblocks.Main;
 import thvardhan.ytluckyblocks.entity.EntityLogDotZip;
+import thvardhan.ytluckyblocks.entity.model.EntityLogDotZipModel;
 
-public class EntityLogDotZipRender extends RenderBiped {
-    protected ResourceLocation logdotzip;
+public class EntityLogDotZipRender extends BipedRenderer<EntityLogDotZip, EntityLogDotZipModel> {
 
-    public EntityLogDotZipRender(ModelBiped par1ModelBase, float parShadowSize) {
+    private static final ResourceLocation TEX = new ResourceLocation(Main.MODID, "textures/entity/logdotzip.png");
 
-        super(Minecraft.getMinecraft().getRenderManager(), par1ModelBase, parShadowSize);
-
-        setEntityTexture();
+    public EntityLogDotZipRender(EntityRendererManager mgr, EntityLogDotZipModel model, float shadow) {
+        super(mgr, model, shadow);
     }
 
-    protected void preRenderCallback(EntityLivingBase entity, float f) {
-        preRenderCallbackLogDotZip((EntityLogDotZip) entity, f);
-
+    @Override
+    protected void scale(EntityLogDotZip entity, MatrixStack ms, float partialTick) {
+        ms.scale(2F, 2F, 2F);
     }
 
-    protected void preRenderCallbackLogDotZip(EntityLogDotZip entity, float f)
-
-    {
-
-        // some people do some G11 transformations or blends here, like you can do
-
-        GL11.glScalef(2F, 2F, 2F);
-
-        // which is used for Slime entities.  I suggest having the entity cast to
-
-        // your custom type to make it easier to access fields from your 
-
-        // custom entity, eg. GL11.glScalef(entity.scaleFactor, entity.scaleFactor, 
-
-        // entity.scaleFactor); 
-
+    @Override
+    public ResourceLocation getTextureLocation(EntityLogDotZip entity) {
+        return TEX;
     }
-
-    protected void setEntityTexture() {
-        logdotzip = new ResourceLocation(Main.MODID + ":textures/entity/logdotzip.png");
-
-    }
-
-
-    /**
-     * Returns the location of an entity's texture. Doesn't seem to be called
-     * unless you call Render.bindEntityTexture.
-     */
-    protected ResourceLocation getEntityTexture(Entity par1Entity) {
-        return logdotzip;
-
-    }
-
-
 }

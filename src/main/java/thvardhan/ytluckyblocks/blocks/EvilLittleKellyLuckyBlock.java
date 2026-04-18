@@ -1,27 +1,24 @@
 package thvardhan.ytluckyblocks.blocks;
+import net.minecraft.entity.EntityType;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 
-import com.mojang.realmsclient.gui.ChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.boss.EntityWither;
-import net.minecraft.entity.monster.EntityCreeper;
-import net.minecraft.entity.monster.EntityGhast;
-import net.minecraft.entity.monster.EntityIronGolem;
-import net.minecraft.entity.monster.EntitySkeleton;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.init.PotionTypes;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.block.Blocks;
+import net.minecraft.item.Items;
+import net.minecraft.potion.Potions;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import thvardhan.ytluckyblocks.CommonProxy;
 import thvardhan.ytluckyblocks.entity.EntityEvilLittleKelly;
 import thvardhan.ytluckyblocks.entity.EntityISquid;
@@ -32,32 +29,19 @@ import thvardhan.ytluckyblocks.items.ModItems;
 import java.util.Random;
 
 public class EvilLittleKellyLuckyBlock extends Block {
-
     public EvilLittleKellyLuckyBlock(String unlocalizedName, Material material, float hardness, float resistance) {
-        super(material);
-        this.setUnlocalizedName(unlocalizedName);
-        this.setRegistryName(unlocalizedName);
-        this.setCreativeTab(CommonProxy.tabYTStuffMod);
-        this.setHardness(hardness);
-        this.setResistance(resistance);
-        this.setLightLevel(0F);
+        super(net.minecraft.block.AbstractBlock.Properties.of(material).strength(hardness, resistance).noOcclusion().lightLevel(s -> (int)(15.0F * (0F))));
     }
 
     public EvilLittleKellyLuckyBlock(String unlocalizedName, float hardness, float resistance) {
-        this(unlocalizedName, Material.ROCK, 0, 10000);
+        this(unlocalizedName, Material.STONE, 0, 10000);
     }
 
     public EvilLittleKellyLuckyBlock(String unlocalizedName) {
         this(unlocalizedName, 2.0f, 10.0f);
     }
-
-    @Override
-    public boolean isOpaqueCube(IBlockState state) {
-        return false;
-    }
-
-    @SideOnly(Side.CLIENT)
-    public void randomDisplayTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+@OnlyIn(Dist.CLIENT)
+    public void animateTick(BlockState state, World worldIn, BlockPos pos, Random rand) {
         for (int i = 0; i < 3; ++i) {
             int j = rand.nextInt(2) * 2 - 1;
             int k = rand.nextInt(2) * 2 - 1;
@@ -67,28 +51,35 @@ public class EvilLittleKellyLuckyBlock extends Block {
             double d3 = (double) (rand.nextFloat() * (float) j);
             double d4 = ((double) rand.nextFloat() - 0.5D) * 0.125D;
             double d5 = (double) (rand.nextFloat() * (float) k);
-            worldIn.spawnParticle(EnumParticleTypes.CRIT_MAGIC, d0, d1, d2, d3, d4, d5);
+            worldIn.addParticle(ParticleTypes.CRIT, d0, d1, d2, d3, d4, d5);
         }
     }
-
 
     @Override
-    public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
-        if (!world.isRemote && player != null && !(player instanceof FakePlayer)) {
-            world.setBlockToAir(pos);
-            drops(world, pos, player);
-        }
-        return false;
+    public void playerWillDestroy(net.minecraft.world.World world, net.minecraft.util.math.BlockPos pos, net.minecraft.block.BlockState state, net.minecraft.entity.player.PlayerEntity player) {
+        super.playerWillDestroy(world, pos, state, player);
+        LuckyBlock.creativeLuckyBreak(world, pos, player, () -> drops(world, pos, player));
     }
 
-    private void drops(World worldIn, BlockPos pos, EntityPlayer player) {
+
+
+
+        @Override
+    public void playerDestroy(net.minecraft.world.World world, net.minecraft.entity.player.PlayerEntity player, net.minecraft.util.math.BlockPos pos, net.minecraft.block.BlockState state, @javax.annotation.Nullable net.minecraft.tileentity.TileEntity blockEntity, net.minecraft.item.ItemStack tool) {
+        if (!world.isClientSide() && player != null && !(player instanceof FakePlayer) && !player.abilities.instabuild) {
+            world.removeBlock(pos, false);
+            drops(world, pos, player);
+        }
+    }
+
+    private void drops(World worldIn, BlockPos pos, PlayerEntity player) {
 
         Enchantment[] e = new Enchantment[5];
-        e[0] = Enchantment.getEnchantmentByID(50);
-        e[1] = Enchantment.getEnchantmentByID(19);
-        e[2] = Enchantment.getEnchantmentByID(48);
-        e[3] = Enchantment.getEnchantmentByID(7);
-        e[4] = Enchantment.getEnchantmentByID(21);
+        e[0] = ExtraFunctions.enchantmentByLegacyNumericId(50);
+        e[1] = ExtraFunctions.enchantmentByLegacyNumericId(19);
+        e[2] = ExtraFunctions.enchantmentByLegacyNumericId(48);
+        e[3] = ExtraFunctions.enchantmentByLegacyNumericId(7);
+        e[4] = ExtraFunctions.enchantmentByLegacyNumericId(21);
 
 
         Random rand = new Random();
@@ -125,7 +116,7 @@ public class EvilLittleKellyLuckyBlock extends Block {
                 break;
             }
             case 6: {
-                ExtraFunctions.summonMobsOnBreakBlock(new EntityEvilLittleKelly(worldIn), 35, worldIn, pos);
+                ExtraFunctions.summonMobsOnBreakBlock(EntityEvilLittleKelly.TYPE.create(worldIn), 35, worldIn, pos);
                 break;
             }
             case 7: {
@@ -137,11 +128,11 @@ public class EvilLittleKellyLuckyBlock extends Block {
                 break;
             }
             case 9: {
-                ExtraFunctions.summonMobsOnBreakBlock(new EntityISquid(worldIn), 3, worldIn, pos);
+                ExtraFunctions.summonMobsOnBreakBlock(EntityISquid.TYPE.create(worldIn), 3, worldIn, pos);
                 break;
             }
             case 10: {
-                ExtraFunctions.effectPlayer(player, new PotionEffect(PotionTypes.POISON.getEffects().get(0).getPotion(), 600, 5));
+                ExtraFunctions.effectPlayer(player, new EffectInstance(Effects.POISON, 600, 5));
                 break;
             }
             case 11: {
@@ -177,7 +168,7 @@ public class EvilLittleKellyLuckyBlock extends Block {
                 break;
             }
             case 19: {
-                ExtraFunctions.effectPlayer(player, new PotionEffect(PotionTypes.NIGHT_VISION.getEffects().get(0).getPotion(), 600, 30));
+                ExtraFunctions.effectPlayer(player, new EffectInstance(Effects.NIGHT_VISION, 600, 30));
                 break;
             }
             case 20: {
@@ -189,19 +180,19 @@ public class EvilLittleKellyLuckyBlock extends Block {
                 break;
             }
             case 22: {
-                ExtraFunctions.effectPlayer(player, new PotionEffect(PotionTypes.SLOWNESS.getEffects().get(0).getPotion(), 1200, 30));
+                ExtraFunctions.effectPlayer(player, new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 1200, 30));
                 break;
             }
             case 23: {
-                ExtraFunctions.effectPlayer(player, new PotionEffect(PotionTypes.STRENGTH.getEffects().get(0).getPotion(), 600, 10));
+                ExtraFunctions.effectPlayer(player, new EffectInstance(Effects.DAMAGE_BOOST, 600, 10));
                 break;
             }
             case 24: {
-                ExtraFunctions.effectPlayer(player, new PotionEffect(PotionTypes.FIRE_RESISTANCE.getEffects().get(0).getPotion(), 1200, 1));
+                ExtraFunctions.effectPlayer(player, new EffectInstance(Effects.FIRE_RESISTANCE, 1200, 1));
                 break;
             }
             case 25: {
-                ExtraFunctions.summonMobsOnBreakBlock(new EntityEvilLittleKelly(worldIn), rand.nextInt(50) + 1, worldIn, pos);
+                ExtraFunctions.summonMobsOnBreakBlock(EntityEvilLittleKelly.TYPE.create(worldIn), rand.nextInt(50) + 1, worldIn, pos);
                 break;
             }
             case 26: {
@@ -217,7 +208,7 @@ public class EvilLittleKellyLuckyBlock extends Block {
                 break;
             }
             case 29: {
-                ExtraFunctions.summonMobsNearby(new EntityIronGolem(worldIn), 25, worldIn, pos, rand);
+                ExtraFunctions.summonMobsNearby(EntityType.IRON_GOLEM.create(worldIn), 25, worldIn, pos, rand);
                 break;
             }
             case 30: {
@@ -237,7 +228,7 @@ public class EvilLittleKellyLuckyBlock extends Block {
                 break;
             }
             case 34: {
-                ExtraFunctions.effectPlayer(player, new PotionEffect(PotionTypes.STRENGTH.getEffects().get(0).getPotion(), 1000, 20, true, true));
+                ExtraFunctions.effectPlayer(player, new EffectInstance(Effects.DAMAGE_BOOST, 1000, 20, true, true));
                 break;
             }
             case 35: {
@@ -245,11 +236,11 @@ public class EvilLittleKellyLuckyBlock extends Block {
                 break;
             }
             case 36: {
-                ExtraFunctions.summonMobsNearby(new EntitySkeleton(worldIn), 50, worldIn, pos, rand);
+                ExtraFunctions.summonMobsNearby(EntityType.SKELETON.create(worldIn), 50, worldIn, pos, rand);
                 break;
             }
             case 37: {
-                ExtraFunctions.addEnchantsMany(new ItemStack(ModItems.devilSword), new Enchantment[]{Enchantment.getEnchantmentByID(16)}, rand.nextInt(50) + 1, worldIn, pos);
+                ExtraFunctions.addEnchantsMany(new ItemStack(ModItems.devilSword), new Enchantment[]{ExtraFunctions.enchantmentByLegacyNumericId(16)}, rand.nextInt(50) + 1, worldIn, pos);
                 break;
             }
             case 38: {
@@ -257,12 +248,12 @@ public class EvilLittleKellyLuckyBlock extends Block {
                 break;
             }
             case 39: {
-                ExtraFunctions.summonMobsOnBreakBlock(new EntityWither(worldIn), rand.nextInt(5) + 1, worldIn, pos);
+                ExtraFunctions.summonMobsOnBreakBlock(EntityType.WITHER.create(worldIn), rand.nextInt(5) + 1, worldIn, pos);
                 break;
             }
             case 40: {
                 ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.APPLE), 40, 0, 0);
-                ExtraFunctions.chat(ChatFormatting.GOLD + "Normal Apples ^^", player);
+                ExtraFunctions.chat(TextFormatting.GOLD + "Normal Apples ^^", player);
                 break;
             }
             case 41: {
@@ -274,15 +265,15 @@ public class EvilLittleKellyLuckyBlock extends Block {
                 break;
             }
             case 43: {
-                ExtraFunctions.summonMobsOnBreakBlock(new EntityISquid(worldIn), rand.nextInt(10) + 1, worldIn, pos);
+                ExtraFunctions.summonMobsOnBreakBlock(EntityISquid.TYPE.create(worldIn), rand.nextInt(10) + 1, worldIn, pos);
                 break;
             }
             case 44: {
-                ExtraFunctions.summonMobsNearby(new EntityPopularMMO(worldIn), 5, worldIn, pos, rand);
+                ExtraFunctions.summonMobsNearby(EntityPopularMMO.TYPE.create(worldIn), 5, worldIn, pos, rand);
                 break;
             }
             case 45: {
-                ExtraFunctions.summonMobsNearby(new EntityCreeper(worldIn), 200, worldIn, pos, rand);
+                ExtraFunctions.summonMobsNearby(EntityType.CREEPER.create(worldIn), 200, worldIn, pos, rand);
                 break;
             }
             case 46: {
@@ -298,7 +289,7 @@ public class EvilLittleKellyLuckyBlock extends Block {
                 break;
             }
             case 49: {
-                ExtraFunctions.summonMobsOnBreakBlock(new EntityGhast(worldIn), 60, worldIn, pos);
+                ExtraFunctions.summonMobsOnBreakBlock(EntityType.GHAST.create(worldIn), 60, worldIn, pos);
                 break;
             }
             case 50: {

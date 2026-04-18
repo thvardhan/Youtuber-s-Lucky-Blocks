@@ -1,23 +1,24 @@
 package thvardhan.ytluckyblocks.blocks;
+import net.minecraft.entity.EntityType;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.monster.*;
-import net.minecraft.entity.passive.EntityRabbit;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.init.PotionTypes;
+import net.minecraft.entity.passive.RabbitEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.block.Blocks;
+import net.minecraft.item.Items;
+import net.minecraft.potion.Potions;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import thvardhan.ytluckyblocks.CommonProxy;
 import thvardhan.ytluckyblocks.entity.*;
 import thvardhan.ytluckyblocks.functions.ExtraFunctions;
@@ -26,32 +27,19 @@ import thvardhan.ytluckyblocks.items.ModItems;
 import java.util.Random;
 
 public class ThnxCyaLuckyBlock extends Block {
-
     public ThnxCyaLuckyBlock(String unlocalizedName, Material material, float hardness, float resistance) {
-        super(material);
-        this.setUnlocalizedName(unlocalizedName);
-        this.setRegistryName(unlocalizedName);
-        this.setCreativeTab(CommonProxy.tabYTStuffMod);
-        this.setHardness(hardness);
-        this.setResistance(resistance);
-        this.setLightLevel(0F);
+        super(net.minecraft.block.AbstractBlock.Properties.of(material).strength(hardness, resistance).noOcclusion().lightLevel(s -> (int)(15.0F * (0F))));
     }
 
     public ThnxCyaLuckyBlock(String unlocalizedName, float hardness, float resistance) {
-        this(unlocalizedName, Material.ROCK, 0, 10000);
+        this(unlocalizedName, Material.STONE, 0, 10000);
     }
 
     public ThnxCyaLuckyBlock(String unlocalizedName) {
         this(unlocalizedName, 2.0f, 10.0f);
     }
-
-    @Override
-    public boolean isOpaqueCube(IBlockState state) {
-        return false;
-    }
-
-    @SideOnly(Side.CLIENT)
-    public void randomDisplayTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+@OnlyIn(Dist.CLIENT)
+    public void animateTick(BlockState state, World worldIn, BlockPos pos, Random rand) {
         for (int i = 0; i < 3; ++i) {
             int j = rand.nextInt(2) * 2 - 1;
             int k = rand.nextInt(2) * 2 - 1;
@@ -61,27 +49,34 @@ public class ThnxCyaLuckyBlock extends Block {
             double d3 = (double) (rand.nextFloat() * (float) j);
             double d4 = ((double) rand.nextFloat() - 0.5D) * 0.125D;
             double d5 = (double) (rand.nextFloat() * (float) k);
-            worldIn.spawnParticle(EnumParticleTypes.SPELL_MOB, d0, d1, d2, d3, d4, d5);
+            worldIn.addParticle(ParticleTypes.ENTITY_EFFECT, d0, d1, d2, d3, d4, d5);
         }
     }
 
     @Override
-    public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
-        if (!world.isRemote && player != null && !(player instanceof FakePlayer)) {
-            world.setBlockToAir(pos);
-            drops(world, pos, player);
-        }
-        return false;
+    public void playerWillDestroy(net.minecraft.world.World world, net.minecraft.util.math.BlockPos pos, net.minecraft.block.BlockState state, net.minecraft.entity.player.PlayerEntity player) {
+        super.playerWillDestroy(world, pos, state, player);
+        LuckyBlock.creativeLuckyBreak(world, pos, player, () -> drops(world, pos, player));
     }
 
-    private void drops(World worldIn, BlockPos pos, EntityPlayer player) {
+
+
+        @Override
+    public void playerDestroy(net.minecraft.world.World world, net.minecraft.entity.player.PlayerEntity player, net.minecraft.util.math.BlockPos pos, net.minecraft.block.BlockState state, @javax.annotation.Nullable net.minecraft.tileentity.TileEntity blockEntity, net.minecraft.item.ItemStack tool) {
+        if (!world.isClientSide() && player != null && !(player instanceof FakePlayer) && !player.abilities.instabuild) {
+            world.removeBlock(pos, false);
+            drops(world, pos, player);
+        }
+    }
+
+    private void drops(World worldIn, BlockPos pos, PlayerEntity player) {
 
         Enchantment[] e = new Enchantment[5];
-        e[0] = Enchantment.getEnchantmentByID(50);
-        e[1] = Enchantment.getEnchantmentByID(19);
-        e[2] = Enchantment.getEnchantmentByID(48);
-        e[3] = Enchantment.getEnchantmentByID(7);
-        e[4] = Enchantment.getEnchantmentByID(21);
+        e[0] = ExtraFunctions.enchantmentByLegacyNumericId(50);
+        e[1] = ExtraFunctions.enchantmentByLegacyNumericId(19);
+        e[2] = ExtraFunctions.enchantmentByLegacyNumericId(48);
+        e[3] = ExtraFunctions.enchantmentByLegacyNumericId(7);
+        e[4] = ExtraFunctions.enchantmentByLegacyNumericId(21);
 
 
         Random rand = new Random();
@@ -217,7 +212,7 @@ public class ThnxCyaLuckyBlock extends Block {
                 break;
             }
             case 31: {
-                ExtraFunctions.summonMobsNearby(new EntityThnxCya(worldIn), 58, worldIn, pos, rand);
+                ExtraFunctions.summonMobsNearby(EntityThnxCya.TYPE.create(worldIn), 58, worldIn, pos, rand);
                 break;
             }
             case 32: {
@@ -277,11 +272,11 @@ public class ThnxCyaLuckyBlock extends Block {
                 break;
             }
             case 46: {
-                ExtraFunctions.summonMobsNearby(new EntityCreeper(worldIn), 50, worldIn, pos, rand);
+                ExtraFunctions.summonMobsNearby(EntityType.CREEPER.create(worldIn), 50, worldIn, pos, rand);
                 break;
             }
             case 47: {
-                ExtraFunctions.summonMobsNearby(new EntityIronGolem(worldIn), 35, worldIn, pos, rand);
+                ExtraFunctions.summonMobsNearby(EntityType.IRON_GOLEM.create(worldIn), 35, worldIn, pos, rand);
                 break;
             }
             case 48: {
@@ -297,7 +292,7 @@ public class ThnxCyaLuckyBlock extends Block {
                 break;
             }
             case 51: {
-                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, ModItems.levinSword, "ThnxCya's Own Sword", Enchantment.getEnchantmentByID(21), 10);
+                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, ModItems.levinSword, "ThnxCya's Own Sword", ExtraFunctions.enchantmentByLegacyNumericId(21), 10);
                 break;
             }
             case 52: {
@@ -317,11 +312,11 @@ public class ThnxCyaLuckyBlock extends Block {
                 break;
             }
             case 56: {
-                ExtraFunctions.summonMobsNearby(new EntityGhost(worldIn), 5, worldIn, pos, rand);
+                ExtraFunctions.summonMobsNearby(EntityGhost.TYPE.create(worldIn), 5, worldIn, pos, rand);
                 break;
             }
             case 57: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.STICKY_PISTON), 10, 1, 10);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.STICKY_PISTON.asItem()), 10, 1, 10);
                 break;
             }
             case 58: {
@@ -345,7 +340,7 @@ public class ThnxCyaLuckyBlock extends Block {
                 break;
             }
             case 63: {
-                ExtraFunctions.summonMobsNearby(new EntityJeromeASF(worldIn), 25, worldIn, pos, rand);
+                ExtraFunctions.summonMobsNearby(EntityJeromeASF.TYPE.create(worldIn), 25, worldIn, pos, rand);
                 break;
             }
             case 64: {
@@ -353,15 +348,15 @@ public class ThnxCyaLuckyBlock extends Block {
                 break;
             }
             case 65: {
-                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.POISONOUS_POTATO, "Eat Me!", Enchantment.getEnchantmentByID(19), 50);
+                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.POISONOUS_POTATO, "Eat Me!", ExtraFunctions.enchantmentByLegacyNumericId(19), 50);
                 break;
             }
             case 66: {
-                ExtraFunctions.effectPlayer(player, new PotionEffect(PotionTypes.FIRE_RESISTANCE.getEffects().get(0).getPotion(), 1000, 20));
+                ExtraFunctions.effectPlayer(player, new EffectInstance(Effects.FIRE_RESISTANCE, 1000, 20));
                 break;
             }
             case 67: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.GOLDEN_APPLE, 1, 1));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.ENCHANTED_GOLDEN_APPLE));
                 break;
             }
             case 68: {
@@ -385,17 +380,17 @@ public class ThnxCyaLuckyBlock extends Block {
                 break;
             }
             case 73: {
-                EntityRabbit rab = new EntityRabbit(worldIn);
+                RabbitEntity rab = EntityType.RABBIT.create(worldIn);
                 rab.setRabbitType(99);
                 ExtraFunctions.summonMobsOnBreakBlock(rab, 60, worldIn, pos);
                 break;
             }
             case 74: {
-                ExtraFunctions.summonMobsNearby(new EntityCreeper(worldIn), 15, worldIn, pos, rand);
+                ExtraFunctions.summonMobsNearby(EntityType.CREEPER.create(worldIn), 15, worldIn, pos, rand);
                 break;
             }
             case 75: {
-                ExtraFunctions.summonMobsNearby(new EntityIronGolem(worldIn), 11, worldIn, pos, rand);
+                ExtraFunctions.summonMobsNearby(EntityType.IRON_GOLEM.create(worldIn), 11, worldIn, pos, rand);
                 break;
             }
             case 76: {
@@ -403,15 +398,15 @@ public class ThnxCyaLuckyBlock extends Block {
                 break;
             }
             case 77: {
-                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.DIAMOND_SWORD, "I AM NOT DIAMOND", Enchantment.getEnchantmentByID(16), rand.nextInt(50) + 1);
+                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.DIAMOND_SWORD, "I AM NOT DIAMOND", ExtraFunctions.enchantmentByLegacyNumericId(16), rand.nextInt(50) + 1);
                 break;
             }
             case 78: {
-                ExtraFunctions.summonMobsNearby(new EntityBlaze(worldIn), 15, worldIn, pos, rand);
+                ExtraFunctions.summonMobsNearby(EntityType.BLAZE.create(worldIn), 15, worldIn, pos, rand);
                 break;
             }
             case 79: {
-                ExtraFunctions.summonMobsNearby(new EntityZombie(worldIn), 5, worldIn, pos, rand);
+                ExtraFunctions.summonMobsNearby(EntityType.ZOMBIE.create(worldIn), 5, worldIn, pos, rand);
                 break;
             }
             case 80: {
@@ -431,7 +426,7 @@ public class ThnxCyaLuckyBlock extends Block {
                 break;
             }
             case 84: {
-                ExtraFunctions.summonMobsOnBreakBlock(new EntityCaptainSparklez(worldIn), 10, worldIn, pos);
+                ExtraFunctions.summonMobsOnBreakBlock(EntityCaptainSparklez.TYPE.create(worldIn), 10, worldIn, pos);
                 break;
             }
             case 85: {
@@ -443,7 +438,7 @@ public class ThnxCyaLuckyBlock extends Block {
                 break;
             }
             case 87: {
-                ExtraFunctions.summonMobsOnBreakBlock(new EntityGhast(worldIn), 60, worldIn, pos);
+                ExtraFunctions.summonMobsOnBreakBlock(EntityType.GHAST.create(worldIn), 60, worldIn, pos);
                 break;
             }
             case 88: {
@@ -456,7 +451,7 @@ public class ThnxCyaLuckyBlock extends Block {
                 break;
             }
             case 90: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.TNT), 64, 1, 5);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.TNT.asItem()), 64, 1, 5);
                 ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.FLINT_AND_STEEL));
                 break;
             }
@@ -469,31 +464,31 @@ public class ThnxCyaLuckyBlock extends Block {
                 break;
             }
             case 93: {
-                ExtraFunctions.addEnchantsMany(new ItemStack(Items.BED), new Enchantment[]{Enchantment.getEnchantmentByID(16), Enchantment.getEnchantmentByID(19)}, 4, worldIn, pos);
+                ExtraFunctions.addEnchantsMany(new ItemStack(Items.WHITE_BED), new Enchantment[]{ExtraFunctions.enchantmentByLegacyNumericId(16), ExtraFunctions.enchantmentByLegacyNumericId(19)}, 4, worldIn, pos);
                 break;
             }
             case 94: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.CAKE));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.CAKE.asItem()));
                 break;
             }
             case 95: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.DRAGON_EGG));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.DRAGON_EGG.asItem()));
                 break;
             }
             case 96: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.BEDROCK));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.BEDROCK.asItem()));
                 break;
             }
             case 97: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.OBSIDIAN), 64, 1, 50);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.OBSIDIAN.asItem()), 64, 1, 50);
                 break;
             }
             case 98: {
-                ExtraFunctions.summonMobsOnBreakBlock(new EntityAntVenom(worldIn), 1, worldIn, pos);
+                ExtraFunctions.summonMobsOnBreakBlock(EntityAntVenom.TYPE.create(worldIn), 1, worldIn, pos);
                 break;
             }
             case 99: {
-                ExtraFunctions.summonMobsNearby(new EntityJeromeASF(worldIn), 35, worldIn, pos, rand);
+                ExtraFunctions.summonMobsNearby(EntityJeromeASF.TYPE.create(worldIn), 35, worldIn, pos, rand);
                 break;
             }
             case 100: {

@@ -1,33 +1,29 @@
 package thvardhan.ytluckyblocks.items;
 
-import com.mojang.realmsclient.gui.ChatFormatting;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSword;
+import net.minecraft.item.SwordItem;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
 import thvardhan.ytluckyblocks.CommonProxy;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
-public class SwordLogdotzip extends ItemSword {
+public class SwordLogdotzip extends SwordItem {
 
-    public SwordLogdotzip(String u, ToolMaterial material) {
-        super(material);
-        this.setUnlocalizedName(u);
-        this.setRegistryName(u);
-        this.setCreativeTab(CommonProxy.tabYTStuffMod);
-
+    public SwordLogdotzip(IItemTier tier) {
+        super(tier, 4, -2.4F, new net.minecraft.item.Item.Properties().tab(CommonProxy.tabYTStuffMod));
     }
-
 
     @Override
-    public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
-
-        tooltip.add(ChatFormatting.RED + "I Have Power Of Logdotzip");
-        tooltip.add(ChatFormatting.BLUE + "And I Seriously Dont Have Any Enchantments");
-
-
-        super.addInformation(stack, playerIn, tooltip, advanced);
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        tooltip.add(new StringTextComponent(TextFormatting.RED + "I Have Power Of Logdotzip"));
+        tooltip.add(new StringTextComponent(TextFormatting.BLUE + "And I Seriously Dont Have Any Enchantments"));
+        super.appendHoverText(stack, worldIn, tooltip, flagIn);
     }
-
 
 }

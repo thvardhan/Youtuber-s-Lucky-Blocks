@@ -1,5 +1,5 @@
 {
     "variants": {
-        "normal": { "model": "ytluckyblocks:ssundee_lucky_block" }
+        "": { "model": "ytluckyblocks:block/ssundee_lucky_block" }
     }
 }

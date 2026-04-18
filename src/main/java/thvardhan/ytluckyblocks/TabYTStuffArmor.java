@@ -1,21 +1,17 @@
 package thvardhan.ytluckyblocks;
 
-import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import thvardhan.ytluckyblocks.items.ModItems;
 
-public class TabYTStuffArmor extends CreativeTabs {
+public class TabYTStuffArmor extends ItemGroup {
 
-    public TabYTStuffArmor(int index, String label) {
-        super(index, label);
+    public TabYTStuffArmor() {
+        super(ItemGroup.TABS.length, Main.MODID + ".yt_armor");
     }
 
-    @SideOnly(Side.CLIENT)
-    public ItemStack getTabIconItem() {
+    @Override
+    public ItemStack makeIcon() {
         return new ItemStack(ModItems.ytChestplate);
     }
-
-
 }

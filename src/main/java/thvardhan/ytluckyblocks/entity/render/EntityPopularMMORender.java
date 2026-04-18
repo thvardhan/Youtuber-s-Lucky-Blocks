@@ -1,63 +1,27 @@
 package thvardhan.ytluckyblocks.entity.render;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.ModelBiped;
-import net.minecraft.client.renderer.entity.RenderBiped;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.client.renderer.entity.BipedRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.util.ResourceLocation;
-import org.lwjgl.opengl.GL11;
 import thvardhan.ytluckyblocks.Main;
 import thvardhan.ytluckyblocks.entity.EntityPopularMMO;
+import thvardhan.ytluckyblocks.entity.model.EntityPopularMMOModel;
 
-public class EntityPopularMMORender extends RenderBiped {
+public class EntityPopularMMORender extends BipedRenderer<EntityPopularMMO, EntityPopularMMOModel> {
 
-    protected ResourceLocation Popularmmo;
+    private static final ResourceLocation TEX = new ResourceLocation(Main.MODID, "textures/entity/popularmmo.png");
 
-    public EntityPopularMMORender(ModelBiped par1ModelBase, float parShadowSize) {
-
-        super(Minecraft.getMinecraft().getRenderManager(), par1ModelBase, parShadowSize);
-
-        setEntityTexture();
+    public EntityPopularMMORender(EntityRendererManager mgr, EntityPopularMMOModel model, float shadow) {
+        super(mgr, model, shadow);
     }
 
-    protected void preRenderCallback(EntityLivingBase entity, float f) {
-        preRenderCallbackPopularMMO((EntityPopularMMO) entity, f);
-
+    @Override
+    protected void scale(EntityPopularMMO entity, MatrixStack ms, float partialTick) {
+        ms.scale(3F, 3F, 3F);
     }
 
-    protected void preRenderCallbackPopularMMO(EntityPopularMMO entity, float f)
-
-    {
-
-        // some people do some G11 transformations or blends here, like you can do
-
-        GL11.glScalef(3F, 3F, 3F);
-
-        // which is used for Slime entities.  I suggest having the entity cast to
-
-        // your custom type to make it easier to access fields from your 
-
-        // custom entity, eg. GL11.glScalef(entity.scaleFactor, entity.scaleFactor, 
-
-        // entity.scaleFactor); 
-
+    @Override
+    public ResourceLocation getTextureLocation(EntityPopularMMO entity) {
+        return TEX;
     }
-
-    protected void setEntityTexture() {
-        Popularmmo = new ResourceLocation(Main.MODID + ":textures/entity/popularmmo.png");
-
-    }
-
-
-    /**
-     * Returns the location of an entity's texture. Doesn't seem to be called
-     * unless you call Render.bindEntityTexture.
-     */
-    protected ResourceLocation getEntityTexture(Entity par1Entity) {
-        return Popularmmo;
-
-    }
-
-
 }

@@ -1,17 +1,13 @@
 package thvardhan.ytluckyblocks.items;
 
-import net.minecraft.item.ItemSword;
+import net.minecraft.item.IItemTier;
+import net.minecraft.item.SwordItem;
 import thvardhan.ytluckyblocks.CommonProxy;
 
-public class SnowSword extends ItemSword {
+public class SnowSword extends SwordItem {
 
-    public SnowSword(String u, ToolMaterial material) {
-        super(material);
-        this.setUnlocalizedName(u);
-        this.setRegistryName(u);
-        this.setCreativeTab(CommonProxy.tabYTStuffMod);
-
-
+    public SnowSword(IItemTier tier) {
+        super(tier, 4, -2.4F, new net.minecraft.item.Item.Properties().tab(CommonProxy.tabYTStuffMod));
     }
 
 }

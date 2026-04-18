@@ -1,62 +1,21 @@
 package thvardhan.ytluckyblocks.entity.render;
-
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.ModelBiped;
-import net.minecraft.client.renderer.entity.RenderBiped;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.client.renderer.entity.BipedRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.util.ResourceLocation;
 import thvardhan.ytluckyblocks.Main;
 import thvardhan.ytluckyblocks.entity.EntityLuckyMob;
+import thvardhan.ytluckyblocks.entity.model.EntityLuckyMobModel;
 
-public class EntityLuckyMobRender extends RenderBiped {
-    protected ResourceLocation luckyMob;
+public class EntityLuckyMobRender extends BipedRenderer<EntityLuckyMob, EntityLuckyMobModel> {
 
-    public EntityLuckyMobRender(ModelBiped par1ModelBase, float parShadowSize) {
+    private static final ResourceLocation TEX = new ResourceLocation(Main.MODID, "textures/entity/lucky_mob.png");
 
-        super(Minecraft.getMinecraft().getRenderManager(), par1ModelBase, parShadowSize);
-
-        setEntityTexture();
+    public EntityLuckyMobRender(EntityRendererManager mgr, EntityLuckyMobModel model, float shadow) {
+        super(mgr, model, shadow);
     }
 
-    protected void preRenderCallback(EntityLivingBase entity, float f) {
-        preRenderCallbackLogDotZip((EntityLuckyMob) entity, f);
-
+    @Override
+    public ResourceLocation getTextureLocation(EntityLuckyMob entity) {
+        return TEX;
     }
-
-    protected void preRenderCallbackLogDotZip(EntityLuckyMob entity, float f)
-
-    {
-
-        // some people do some G11 transformations or blends here, like you can do
-
-        //     GL11.glScalef(2F, 2F, 2F);
-
-        // which is used for Slime entities.  I suggest having the entity cast to
-
-        // your custom type to make it easier to access fields from your 
-
-        // custom entity, eg. GL11.glScalef(entity.scaleFactor, entity.scaleFactor, 
-
-        // entity.scaleFactor); 
-
-    }
-
-    protected void setEntityTexture() {
-        luckyMob = new ResourceLocation(Main.MODID + ":textures/entity/lucky_mob.png");
-
-    }
-
-
-    /**
-     * Returns the location of an entity's texture. Doesn't seem to be called
-     * unless you call Render.bindEntityTexture.
-     */
-    protected ResourceLocation getEntityTexture(Entity par1Entity) {
-        return luckyMob;
-
-    }
-
-
 }

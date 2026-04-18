@@ -1,23 +1,21 @@
 package thvardhan.ytluckyblocks.blocks;
+import net.minecraft.entity.EntityType;
 
-import com.mojang.realmsclient.gui.ChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.monster.EntityBlaze;
-import net.minecraft.entity.monster.EntitySkeleton;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.block.Blocks;
+import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import thvardhan.ytluckyblocks.CommonProxy;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import thvardhan.ytluckyblocks.entity.EntityGhost;
 import thvardhan.ytluckyblocks.entity.EntityLogDotZip;
 import thvardhan.ytluckyblocks.entity.EntityPopularMMO;
@@ -27,56 +25,58 @@ import thvardhan.ytluckyblocks.items.ModItems;
 import java.util.Random;
 
 public class LuckyBlock extends Block {
-
     public LuckyBlock(String unlocalizedName, Material material, float hardness, float resistance) {
-        super(material);
-        this.setUnlocalizedName(unlocalizedName);
-        this.setRegistryName(unlocalizedName);
-        this.setCreativeTab(CommonProxy.tabYTStuffMod);
-        this.setHardness(hardness);
-        this.setResistance(resistance);
-
+        super(net.minecraft.block.AbstractBlock.Properties.of(material).strength(hardness, resistance).noOcclusion());
     }
 
     public LuckyBlock(String unlocalizedName, float hardness, float resistance) {
-        this(unlocalizedName, Material.ROCK, 0, 18000000);
+        this(unlocalizedName, Material.STONE, 0, 18000000);
     }
 
     public LuckyBlock(String unlocalizedName) {
         this(unlocalizedName, 2.0f, 10.0f);
     }
 
-    @Override
-    public boolean isOpaqueCube(IBlockState state) {
-        return false;
+    /**
+     * 1.11 used {@code removedByPlayer}, which runs for creative breaks. In 1.16 creative does not call
+     * {@link #playerDestroy}; call this from {@link #playerWillDestroy} so drops still run in creative.
+     */
+    public static void creativeLuckyBreak(net.minecraft.world.World world, net.minecraft.util.math.BlockPos pos, net.minecraft.entity.player.PlayerEntity player, java.lang.Runnable runDropsAfterAir) {
+        if (world.isClientSide() || player == null || player instanceof FakePlayer || !player.abilities.instabuild) {
+            return;
+        }
+        world.removeBlock(pos, false);
+        runDropsAfterAir.run();
     }
 
+    @Override
+    public void playerWillDestroy(net.minecraft.world.World world, net.minecraft.util.math.BlockPos pos, net.minecraft.block.BlockState state, net.minecraft.entity.player.PlayerEntity player) {
+        super.playerWillDestroy(world, pos, state, player);
+        creativeLuckyBreak(world, pos, player, () -> drops(world, pos, player));
+    }
 
     @Override
-    public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
-        if (!world.isRemote && player != null && !(player instanceof FakePlayer)) {
+    public void playerDestroy(net.minecraft.world.World world, net.minecraft.entity.player.PlayerEntity player, net.minecraft.util.math.BlockPos pos, net.minecraft.block.BlockState state, @javax.annotation.Nullable net.minecraft.tileentity.TileEntity blockEntity, net.minecraft.item.ItemStack tool) {
+        if (!world.isClientSide() && player != null && !(player instanceof FakePlayer) && !player.abilities.instabuild) {
 
-            world.setBlockToAir(pos);
+            world.removeBlock(pos, false);
             drops(world, pos, player);
         }
-
-        return false;
-
     }
 
 
-    private void drops(World worldIn, BlockPos pos, EntityPlayer player) {
+    private void drops(World worldIn, BlockPos pos, PlayerEntity player) {
         Random rand = new Random();
 
 
         switch (rand.nextInt(55)) {//you must have cases that is (4)-1=3
 
             default: {
-                ExtraFunctions.summonMobsNearby(new EntityBlaze(worldIn), 52, worldIn, pos, rand);
+                ExtraFunctions.summonMobsNearby(EntityType.BLAZE.create(worldIn), 52, worldIn, pos, rand);
                 break;
             }
             case 0: {
-                ExtraFunctions.summonMobsNearby(new EntityGhost(worldIn), 15, worldIn, pos, rand);
+                ExtraFunctions.summonMobsNearby(EntityGhost.TYPE.create(worldIn), 15, worldIn, pos, rand);
                 break;
             }
             case 1: {
@@ -96,15 +96,15 @@ public class LuckyBlock extends Block {
                 break;
             }
             case 5: {
-                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.APPLE, "Super Apple", Enchantment.getEnchantmentByID(16), 10);
+                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.APPLE, "Super Apple", ExtraFunctions.enchantmentByLegacyNumericId(16), 10);
                 break;
             }
             case 6: {
-                ExtraFunctions.summonMobsNearby(new EntityLogDotZip(worldIn), 15, worldIn, pos, rand);
+                ExtraFunctions.summonMobsNearby(EntityLogDotZip.TYPE.create(worldIn), 15, worldIn, pos, rand);
                 break;
             }
             case 7: {
-                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.MELON_SEEDS, "Seeds?", Enchantment.getEnchantmentByID(20), 20);
+                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.MELON_SEEDS, "Seeds?", ExtraFunctions.enchantmentByLegacyNumericId(20), 20);
                 break;
             }
             case 8: {
@@ -116,27 +116,27 @@ public class LuckyBlock extends Block {
                 break;
             }
             case 10: {
-                ExtraFunctions.summonMobsNearby(new EntityBlaze(worldIn), 5, worldIn, pos, rand);
+                ExtraFunctions.summonMobsNearby(EntityType.BLAZE.create(worldIn), 5, worldIn, pos, rand);
                 break;
             }
             case 11: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.FLOWING_LAVA);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.LAVA);
                 break;
             }
             case 12: {
-                ExtraFunctions.summonItemWithLoop(worldIn, pos, Items.BED, 64, 0, 0);
+                ExtraFunctions.summonItemWithLoop(worldIn, pos, Items.WHITE_BED, 64, 0, 0);
                 break;
             }
             case 13: {
-                ExtraFunctions.summonMobsNearby(new EntityLogDotZip(worldIn), 51, worldIn, pos, rand);
+                ExtraFunctions.summonMobsNearby(EntityLogDotZip.TYPE.create(worldIn), 51, worldIn, pos, rand);
                 break;
             }
             case 14: {
-                ExtraFunctions.summonMobsNearby(new EntityLogDotZip(worldIn), 21, worldIn, pos, rand);
+                ExtraFunctions.summonMobsNearby(EntityLogDotZip.TYPE.create(worldIn), 21, worldIn, pos, rand);
                 break;
             }
             case 15: {
-                ExtraFunctions.summonMobsNearby(new EntityPopularMMO(worldIn), 5, worldIn, pos, rand);
+                ExtraFunctions.summonMobsNearby(EntityPopularMMO.TYPE.create(worldIn), 5, worldIn, pos, rand);
                 break;
             }
             case 16: {
@@ -156,7 +156,7 @@ public class LuckyBlock extends Block {
                 break;
             }
             case 20: {
-                ExtraFunctions.summonMobsNearby(new EntitySkeleton(worldIn), 52, worldIn, pos, rand);
+                ExtraFunctions.summonMobsNearby(EntityType.SKELETON.create(worldIn), 52, worldIn, pos, rand);
                 break;
             }
             case 21: {
@@ -164,27 +164,27 @@ public class LuckyBlock extends Block {
                 break;
             }
             case 22: {
-                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.DIAMOND_BOOTS, ChatFormatting.BLUE + "Log.zip Not So Lucky Boots", Enchantment.getEnchantmentByID(2), 30);
+                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.DIAMOND_BOOTS, TextFormatting.BLUE + "Log.zip Not So Lucky Boots", ExtraFunctions.enchantmentByLegacyNumericId(2), 30);
                 break;
             }
             case 23: {
-                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.DIAMOND_CHESTPLATE, ChatFormatting.BLUE + "Log.zip Not So Lucky Chestplate", Enchantment.getEnchantmentByID(7), 10);
+                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.DIAMOND_CHESTPLATE, TextFormatting.BLUE + "Log.zip Not So Lucky Chestplate", ExtraFunctions.enchantmentByLegacyNumericId(7), 10);
                 break;
             }
             case 24: {
-                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.DIAMOND_LEGGINGS, ChatFormatting.BLUE + "Log.zip Not So Lucky Leggings", Enchantment.getEnchantmentByID(3), 6);
+                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.DIAMOND_LEGGINGS, TextFormatting.BLUE + "Log.zip Not So Lucky Leggings", ExtraFunctions.enchantmentByLegacyNumericId(3), 6);
             }
             case 25: {
-                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.DIAMOND_HELMET, ChatFormatting.BLUE + "Log.zip Not So Lucky Helmet", Enchantment.getEnchantmentByID(4), 15);
+                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.DIAMOND_HELMET, TextFormatting.BLUE + "Log.zip Not So Lucky Helmet", ExtraFunctions.enchantmentByLegacyNumericId(4), 15);
                 break;
             }
             case 26: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.BEACON));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.BEACON.asItem()));
                 break;
             }
             case 27: {
                 ExtraFunctions.summonItemWithLoop(worldIn, pos, Items.BUCKET, 64, 0, 0);
-                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.BUCKET, "You Found Me~!" + ChatFormatting.AQUA, Enchantment.getEnchantmentByID(20), 10);
+                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.BUCKET, "You Found Me~!" + TextFormatting.AQUA, ExtraFunctions.enchantmentByLegacyNumericId(20), 10);
                 break;
             }
             case 28: {
@@ -252,8 +252,8 @@ public class LuckyBlock extends Block {
                 ItemStack[] stack = {new ItemStack(Items.DIAMOND_SWORD), new ItemStack(Items.DIAMOND_AXE)
                         , new ItemStack(Items.WOODEN_SWORD), new ItemStack(Items.BONE), new ItemStack(Items.GOLDEN_BOOTS),
                         new ItemStack(Items.DIAMOND_PICKAXE)};
-                Enchantment[] ench = {Enchantment.getEnchantmentByID(35), Enchantment.getEnchantmentByID(20), Enchantment.getEnchantmentByID(49), Enchantment.getEnchantmentByID(32), Enchantment.getEnchantmentByID(50)
-                        , Enchantment.getEnchantmentByID(34), Enchantment.getEnchantmentByID(51), Enchantment.getEnchantmentByID(21)};
+                Enchantment[] ench = {ExtraFunctions.enchantmentByLegacyNumericId(35), ExtraFunctions.enchantmentByLegacyNumericId(20), ExtraFunctions.enchantmentByLegacyNumericId(49), ExtraFunctions.enchantmentByLegacyNumericId(32), ExtraFunctions.enchantmentByLegacyNumericId(50)
+                        , ExtraFunctions.enchantmentByLegacyNumericId(34), ExtraFunctions.enchantmentByLegacyNumericId(51), ExtraFunctions.enchantmentByLegacyNumericId(21)};
 
 
                 ExtraFunctions.addRandomEnchtToRandomItems(worldIn, stack, ench, 8, pos, rand);
@@ -272,8 +272,8 @@ public class LuckyBlock extends Block {
                 ItemStack[] s = {new ItemStack(Items.STONE_AXE), new ItemStack(Items.STONE_HOE)
                         , new ItemStack(Items.STONE_PICKAXE), new ItemStack(Items.STONE_SWORD), new ItemStack(Items.DIAMOND_CHESTPLATE),
                         new ItemStack(Items.ACACIA_DOOR)};
-                Enchantment[] ench = {Enchantment.getEnchantmentByID(35), Enchantment.getEnchantmentByID(20), Enchantment.getEnchantmentByID(49), Enchantment.getEnchantmentByID(32), Enchantment.getEnchantmentByID(50)
-                        , Enchantment.getEnchantmentByID(34), Enchantment.getEnchantmentByID(51), Enchantment.getEnchantmentByID(21)};
+                Enchantment[] ench = {ExtraFunctions.enchantmentByLegacyNumericId(35), ExtraFunctions.enchantmentByLegacyNumericId(20), ExtraFunctions.enchantmentByLegacyNumericId(49), ExtraFunctions.enchantmentByLegacyNumericId(32), ExtraFunctions.enchantmentByLegacyNumericId(50)
+                        , ExtraFunctions.enchantmentByLegacyNumericId(34), ExtraFunctions.enchantmentByLegacyNumericId(51), ExtraFunctions.enchantmentByLegacyNumericId(21)};
 
 
                 ExtraFunctions.addRandomEnchtToRandomItems(worldIn, s, ench, 8, pos, rand);
@@ -326,8 +326,8 @@ public class LuckyBlock extends Block {
     }
 
 
-    @SideOnly(Side.CLIENT)
-    public void randomDisplayTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+    @OnlyIn(Dist.CLIENT)
+    public void animateTick(BlockState state, World worldIn, BlockPos pos, Random rand) {
         for (int i = 0; i < 3; ++i) {
             int j = rand.nextInt(2) * 2 - 1;
             int k = rand.nextInt(2) * 2 - 1;
@@ -337,7 +337,7 @@ public class LuckyBlock extends Block {
             double d3 = (double) (rand.nextFloat() * (float) j);
             double d4 = ((double) rand.nextFloat() - 0.5D) * 0.125D;
             double d5 = (double) (rand.nextFloat() * (float) k);
-            worldIn.spawnParticle(EnumParticleTypes.PORTAL, d0, d1, d2, d3, d4, d5);
+            worldIn.addParticle(ParticleTypes.PORTAL, d0, d1, d2, d3, d4, d5);
         }
     }
 

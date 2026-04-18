@@ -1,26 +1,24 @@
 package thvardhan.ytluckyblocks.blocks;
+import net.minecraft.entity.EntityType;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.monster.EntityBlaze;
-import net.minecraft.entity.monster.EntityCreeper;
-import net.minecraft.entity.monster.EntityIronGolem;
-import net.minecraft.entity.monster.EntitySkeleton;
-import net.minecraft.entity.passive.EntityRabbit;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.init.PotionTypes;
+import net.minecraft.entity.passive.RabbitEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.block.Blocks;
+import net.minecraft.item.Items;
+import net.minecraft.potion.Potions;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import thvardhan.ytluckyblocks.CommonProxy;
 import thvardhan.ytluckyblocks.entity.*;
 import thvardhan.ytluckyblocks.functions.ExtraFunctions;
@@ -29,32 +27,19 @@ import thvardhan.ytluckyblocks.items.ModItems;
 import java.util.Random;
 
 public class StampyLongHeadLuckyBlock extends Block {
-
     public StampyLongHeadLuckyBlock(String unlocalizedName, Material material, float hardness, float resistance) {
-        super(material);
-        this.setUnlocalizedName(unlocalizedName);
-        this.setRegistryName(unlocalizedName);
-        this.setCreativeTab(CommonProxy.tabYTStuffMod);
-        this.setHardness(hardness);
-        this.setResistance(resistance);
-        this.setLightLevel(0F);
+        super(net.minecraft.block.AbstractBlock.Properties.of(material).strength(hardness, resistance).noOcclusion().lightLevel(s -> (int)(15.0F * (0F))));
     }
 
     public StampyLongHeadLuckyBlock(String unlocalizedName, float hardness, float resistance) {
-        this(unlocalizedName, Material.ROCK, 0, 10000);
+        this(unlocalizedName, Material.STONE, 0, 10000);
     }
 
     public StampyLongHeadLuckyBlock(String unlocalizedName) {
         this(unlocalizedName, 2.0f, 10.0f);
     }
-
-    @Override
-    public boolean isOpaqueCube(IBlockState state) {
-        return false;
-    }
-
-    @SideOnly(Side.CLIENT)
-    public void randomDisplayTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+@OnlyIn(Dist.CLIENT)
+    public void animateTick(BlockState state, World worldIn, BlockPos pos, Random rand) {
         for (int i = 0; i < 3; ++i) {
             int j = rand.nextInt(2) * 2 - 1;
             int k = rand.nextInt(2) * 2 - 1;
@@ -64,27 +49,34 @@ public class StampyLongHeadLuckyBlock extends Block {
             double d3 = (double) (rand.nextFloat() * (float) j);
             double d4 = ((double) rand.nextFloat() - 0.5D) * 0.125D;
             double d5 = (double) (rand.nextFloat() * (float) k);
-            worldIn.spawnParticle(EnumParticleTypes.SPELL_MOB, d0, d1, d2, d3, d4, d5);
+            worldIn.addParticle(ParticleTypes.ENTITY_EFFECT, d0, d1, d2, d3, d4, d5);
         }
     }
 
     @Override
-    public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
-        if (!world.isRemote && player != null && !(player instanceof FakePlayer)) {
-            world.setBlockToAir(pos);
-            drops(world, pos, player);
-        }
-        return false;
+    public void playerWillDestroy(net.minecraft.world.World world, net.minecraft.util.math.BlockPos pos, net.minecraft.block.BlockState state, net.minecraft.entity.player.PlayerEntity player) {
+        super.playerWillDestroy(world, pos, state, player);
+        LuckyBlock.creativeLuckyBreak(world, pos, player, () -> drops(world, pos, player));
     }
 
-    private void drops(World worldIn, BlockPos pos, EntityPlayer player) {
+
+
+        @Override
+    public void playerDestroy(net.minecraft.world.World world, net.minecraft.entity.player.PlayerEntity player, net.minecraft.util.math.BlockPos pos, net.minecraft.block.BlockState state, @javax.annotation.Nullable net.minecraft.tileentity.TileEntity blockEntity, net.minecraft.item.ItemStack tool) {
+        if (!world.isClientSide() && player != null && !(player instanceof FakePlayer) && !player.abilities.instabuild) {
+            world.removeBlock(pos, false);
+            drops(world, pos, player);
+        }
+    }
+
+    private void drops(World worldIn, BlockPos pos, PlayerEntity player) {
 
         Enchantment[] e = new Enchantment[5];
-        e[0] = Enchantment.getEnchantmentByID(50);
-        e[1] = Enchantment.getEnchantmentByID(19);
-        e[2] = Enchantment.getEnchantmentByID(48);
-        e[3] = Enchantment.getEnchantmentByID(7);
-        e[4] = Enchantment.getEnchantmentByID(21);
+        e[0] = ExtraFunctions.enchantmentByLegacyNumericId(50);
+        e[1] = ExtraFunctions.enchantmentByLegacyNumericId(19);
+        e[2] = ExtraFunctions.enchantmentByLegacyNumericId(48);
+        e[3] = ExtraFunctions.enchantmentByLegacyNumericId(7);
+        e[4] = ExtraFunctions.enchantmentByLegacyNumericId(21);
 
 
         Random rand = new Random();
@@ -156,17 +148,17 @@ public class StampyLongHeadLuckyBlock extends Block {
                 break;
             }
             case 15: {
-                ExtraFunctions.summonMobsOnBreakBlock(new EntityAntVenom(worldIn), rand.nextInt(10) + 1, worldIn, pos);
+                ExtraFunctions.summonMobsOnBreakBlock(EntityAntVenom.TYPE.create(worldIn), rand.nextInt(10) + 1, worldIn, pos);
                 break;
             }
             case 16: {
-                EntityRabbit rab = new EntityRabbit(worldIn);
+                RabbitEntity rab = EntityType.RABBIT.create(worldIn);
                 rab.setRabbitType(99);
                 ExtraFunctions.summonMobsOnBreakBlock(rab, rand.nextInt(5), worldIn, pos);
                 break;
             }
             case 17: {
-                ExtraFunctions.summonMobsNearby(new EntityBlaze(worldIn), 35, worldIn, pos, rand);
+                ExtraFunctions.summonMobsNearby(EntityType.BLAZE.create(worldIn), 35, worldIn, pos, rand);
                 break;
             }
             case 18: {
@@ -182,7 +174,7 @@ public class StampyLongHeadLuckyBlock extends Block {
                 break;
             }
             case 21: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.FLOWING_LAVA);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.LAVA);
                 break;
             }
             case 22: {
@@ -206,7 +198,7 @@ public class StampyLongHeadLuckyBlock extends Block {
                 break;
             }
             case 27: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.OBSIDIAN), 30, 0, 0);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.OBSIDIAN.asItem()), 30, 0, 0);
                 break;
             }
             case 28: {
@@ -254,7 +246,7 @@ public class StampyLongHeadLuckyBlock extends Block {
                 break;
             }
             case 39: {
-                Enchantment[] ea = {Enchantment.getEnchantmentByID(16), Enchantment.getEnchantmentByID(19), Enchantment.getEnchantmentByID(20)};
+                Enchantment[] ea = {ExtraFunctions.enchantmentByLegacyNumericId(16), ExtraFunctions.enchantmentByLegacyNumericId(19), ExtraFunctions.enchantmentByLegacyNumericId(20)};
                 ExtraFunctions.addEnchantsMany(new ItemStack(Items.WOODEN_HOE), ea, 60, worldIn, pos);
                 ExtraFunctions.chat("Someone Just Got A God Hoe", player);
                 break;
@@ -268,7 +260,7 @@ public class StampyLongHeadLuckyBlock extends Block {
                 break;
             }
             case 42: {
-                ExtraFunctions.summonMobsNearby(new EntityStampylonghead(worldIn), 25, worldIn, pos, rand);
+                ExtraFunctions.summonMobsNearby(EntityStampylonghead.TYPE.create(worldIn), 25, worldIn, pos, rand);
                 break;
             }
             case 43: {
@@ -284,7 +276,7 @@ public class StampyLongHeadLuckyBlock extends Block {
                 break;
             }
             case 46: {
-                ExtraFunctions.summonMobsOnBreakBlock(new EntitySerialPlayer(worldIn), 10, worldIn, pos);
+                ExtraFunctions.summonMobsOnBreakBlock(EntitySerialPlayer.TYPE.create(worldIn), 10, worldIn, pos);
                 break;
             }
             case 47: {
@@ -308,7 +300,7 @@ public class StampyLongHeadLuckyBlock extends Block {
                 break;
             }
             case 52: {
-                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, ModItems.stampy_Boots, "Boots", Enchantment.getEnchantmentByID(0), 5);
+                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, ModItems.stampy_Boots, "Boots", ExtraFunctions.enchantmentByLegacyNumericId(0), 5);
                 break;
             }
             case 53: {
@@ -320,11 +312,11 @@ public class StampyLongHeadLuckyBlock extends Block {
                 break;
             }
             case 55: {
-                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, ModItems.snowSword, "Icy", Enchantment.getEnchantmentByID(17), 10);
+                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, ModItems.snowSword, "Icy", ExtraFunctions.enchantmentByLegacyNumericId(17), 10);
                 break;
             }
             case 56: {
-                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, ModItems.megaSword, "MegaKilla", Enchantment.getEnchantmentByID(16), 6);
+                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, ModItems.megaSword, "MegaKilla", ExtraFunctions.enchantmentByLegacyNumericId(16), 6);
                 break;
             }
             case 57: {
@@ -353,7 +345,7 @@ public class StampyLongHeadLuckyBlock extends Block {
                 break;
             }
             case 63: {
-                ExtraFunctions.summonMobsNearby(new EntityStampylonghead(worldIn), 50, worldIn, pos, rand);
+                ExtraFunctions.summonMobsNearby(EntityStampylonghead.TYPE.create(worldIn), 50, worldIn, pos, rand);
                 break;
             }
             case 64: {
@@ -362,15 +354,15 @@ public class StampyLongHeadLuckyBlock extends Block {
                 break;
             }
             case 65: {
-                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.POISONOUS_POTATO, "Eat Me!", Enchantment.getEnchantmentByID(19), 50);
+                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.POISONOUS_POTATO, "Eat Me!", ExtraFunctions.enchantmentByLegacyNumericId(19), 50);
                 break;
             }
             case 66: {
-                ExtraFunctions.effectPlayer(player, new PotionEffect(PotionTypes.FIRE_RESISTANCE.getEffects().get(0).getPotion(), 1000, 20));
+                ExtraFunctions.effectPlayer(player, new EffectInstance(Effects.FIRE_RESISTANCE, 1000, 20));
                 break;
             }
             case 67: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.GOLDEN_APPLE, 1, 1));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.ENCHANTED_GOLDEN_APPLE));
                 break;
             }
             case 68: {
@@ -394,17 +386,17 @@ public class StampyLongHeadLuckyBlock extends Block {
                 break;
             }
             case 73: {
-                EntityRabbit rab = new EntityRabbit(worldIn);
+                RabbitEntity rab = EntityType.RABBIT.create(worldIn);
                 rab.setRabbitType(99);
                 ExtraFunctions.summonMobsOnBreakBlock(rab, 60, worldIn, pos);
                 break;
             }
             case 74: {
-                ExtraFunctions.summonMobsNearby(new EntityCreeper(worldIn), 51, worldIn, pos, rand);
+                ExtraFunctions.summonMobsNearby(EntityType.CREEPER.create(worldIn), 51, worldIn, pos, rand);
                 break;
             }
             case 75: {
-                ExtraFunctions.summonMobsNearby(new EntityIronGolem(worldIn), 20, worldIn, pos, rand);
+                ExtraFunctions.summonMobsNearby(EntityType.IRON_GOLEM.create(worldIn), 20, worldIn, pos, rand);
                 break;
             }
             case 76: {
@@ -432,15 +424,15 @@ public class StampyLongHeadLuckyBlock extends Block {
                 break;
             }
             case 82: {
-                ExtraFunctions.summonMobsOnBreakBlock(new EntityCaptainSparklez(worldIn), 40, worldIn, pos);
+                ExtraFunctions.summonMobsOnBreakBlock(EntityCaptainSparklez.TYPE.create(worldIn), 40, worldIn, pos);
                 break;
             }
             case 83: {
-                ExtraFunctions.summonMobsNearby(new EntityGhost(worldIn), 5, worldIn, pos, rand);
+                ExtraFunctions.summonMobsNearby(EntityGhost.TYPE.create(worldIn), 5, worldIn, pos, rand);
                 break;
             }
             case 84: {
-                ExtraFunctions.summonMobsNearby(new EntityCreeper(worldIn), 35, worldIn, pos, rand);
+                ExtraFunctions.summonMobsNearby(EntityType.CREEPER.create(worldIn), 35, worldIn, pos, rand);
                 break;
             }
             case 85: {
@@ -448,15 +440,15 @@ public class StampyLongHeadLuckyBlock extends Block {
                 break;
             }
             case 86: {
-                ExtraFunctions.summonMobsOnBreakBlock(new EntityTruemu(worldIn), 10, worldIn, pos);
+                ExtraFunctions.summonMobsOnBreakBlock(EntityTruemu.TYPE.create(worldIn), 10, worldIn, pos);
                 break;
             }
             case 87: {
-                ExtraFunctions.summonMobsNearby(new EntityJeromeASF(worldIn), 5, worldIn, pos, rand);
+                ExtraFunctions.summonMobsNearby(EntityJeromeASF.TYPE.create(worldIn), 5, worldIn, pos, rand);
                 break;
             }
             case 88: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.MONSTER_EGG));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.INFESTED_STONE.asItem()));
                 break;
             }
             case 89: {
@@ -472,11 +464,11 @@ public class StampyLongHeadLuckyBlock extends Block {
                 break;
             }
             case 92: {
-                ExtraFunctions.summonMobsNearby(new EntitySkeleton(worldIn), 40, worldIn, pos, rand);
+                ExtraFunctions.summonMobsNearby(EntityType.SKELETON.create(worldIn), 40, worldIn, pos, rand);
                 break;
             }
             case 93: {
-                ExtraFunctions.summonMobsOnBreakBlock(new EntityGhost(worldIn), 10, worldIn, pos);
+                ExtraFunctions.summonMobsOnBreakBlock(EntityGhost.TYPE.create(worldIn), 10, worldIn, pos);
                 break;
             }
             case 94: {
@@ -488,7 +480,7 @@ public class StampyLongHeadLuckyBlock extends Block {
                 break;
             }
             case 96: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.BEDROCK), 64, 1, 40);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.BEDROCK.asItem()), 64, 1, 40);
                 break;
             }
             case 97: {
@@ -500,7 +492,7 @@ public class StampyLongHeadLuckyBlock extends Block {
                 break;
             }
             case 99: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.SPONGE));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.SPONGE.asItem()));
                 break;
             }
             case 100: {

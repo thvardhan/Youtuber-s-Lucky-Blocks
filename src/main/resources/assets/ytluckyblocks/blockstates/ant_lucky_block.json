@@ -1,5 +1,5 @@
 {
     "variants": {
-        "normal": { "model": "ytluckyblocks:ant_lucky_block" }
+        "": { "model": "ytluckyblocks:block/ant_lucky_block" }
     }
 }

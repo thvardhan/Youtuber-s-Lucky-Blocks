@@ -1,23 +1,20 @@
 package thvardhan.ytluckyblocks.blocks;
+import net.minecraft.entity.EntityType;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.boss.EntityWither;
-import net.minecraft.entity.monster.EntityCreeper;
-import net.minecraft.entity.monster.EntityIronGolem;
-import net.minecraft.entity.monster.EntityZombie;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.block.Blocks;
+import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import thvardhan.ytluckyblocks.CommonProxy;
 import thvardhan.ytluckyblocks.entity.EntityJeromeASF;
 import thvardhan.ytluckyblocks.entity.EntityPeteZahHutt;
@@ -28,30 +25,18 @@ import java.util.Random;
 
 public class PetaZahHuttLuckyBlock extends Block {
     public PetaZahHuttLuckyBlock(String unlocalizedName, Material material, float hardness, float resistance) {
-        super(material);
-        this.setUnlocalizedName(unlocalizedName);
-        this.setRegistryName(unlocalizedName);
-        this.setCreativeTab(CommonProxy.tabYTStuffMod);
-        this.setHardness(hardness);
-        this.setResistance(resistance);
-
+        super(net.minecraft.block.AbstractBlock.Properties.of(material).strength(hardness, resistance).noOcclusion());
     }
 
     public PetaZahHuttLuckyBlock(String unlocalizedName, float hardness, float resistance) {
-        this(unlocalizedName, Material.ROCK, 0, 10000);
+        this(unlocalizedName, Material.STONE, 0, 10000);
     }
 
     public PetaZahHuttLuckyBlock(String unlocalizedName) {
         this(unlocalizedName, 2.0f, 10.0f);
     }
-
-    @Override
-    public boolean isOpaqueCube(IBlockState state) {
-        return false;
-    }
-
-    @SideOnly(Side.CLIENT)
-    public void randomDisplayTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+@OnlyIn(Dist.CLIENT)
+    public void animateTick(BlockState state, World worldIn, BlockPos pos, Random rand) {
         for (int i = 0; i < 3; ++i) {
             int j = rand.nextInt(2) * 2 - 1;
             int k = rand.nextInt(2) * 2 - 1;
@@ -61,28 +46,35 @@ public class PetaZahHuttLuckyBlock extends Block {
             double d3 = (double) (rand.nextFloat() * (float) j);
             double d4 = ((double) rand.nextFloat() - 0.5D) * 0.125D;
             double d5 = (double) (rand.nextFloat() * (float) k);
-            worldIn.spawnParticle(EnumParticleTypes.SPELL_WITCH, d0, d1, d2, d3, d4, d5);
+            worldIn.addParticle(ParticleTypes.WITCH, d0, d1, d2, d3, d4, d5);
         }
     }
-
 
     @Override
-    public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
-        if (!world.isRemote && player != null && !(player instanceof FakePlayer)) {
-            world.setBlockToAir(pos);
-            drops(world, pos, player);
-        }
-        return false;
+    public void playerWillDestroy(net.minecraft.world.World world, net.minecraft.util.math.BlockPos pos, net.minecraft.block.BlockState state, net.minecraft.entity.player.PlayerEntity player) {
+        super.playerWillDestroy(world, pos, state, player);
+        LuckyBlock.creativeLuckyBreak(world, pos, player, () -> drops(world, pos, player));
     }
 
-    private void drops(World worldIn, BlockPos pos, EntityPlayer player) {
+
+
+
+        @Override
+    public void playerDestroy(net.minecraft.world.World world, net.minecraft.entity.player.PlayerEntity player, net.minecraft.util.math.BlockPos pos, net.minecraft.block.BlockState state, @javax.annotation.Nullable net.minecraft.tileentity.TileEntity blockEntity, net.minecraft.item.ItemStack tool) {
+        if (!world.isClientSide() && player != null && !(player instanceof FakePlayer) && !player.abilities.instabuild) {
+            world.removeBlock(pos, false);
+            drops(world, pos, player);
+        }
+    }
+
+    private void drops(World worldIn, BlockPos pos, PlayerEntity player) {
 
         Enchantment[] e = new Enchantment[5];
-        e[0] = Enchantment.getEnchantmentByID(50);
-        e[1] = Enchantment.getEnchantmentByID(19);
-        e[2] = Enchantment.getEnchantmentByID(48);
-        e[3] = Enchantment.getEnchantmentByID(7);
-        e[4] = Enchantment.getEnchantmentByID(21);
+        e[0] = ExtraFunctions.enchantmentByLegacyNumericId(50);
+        e[1] = ExtraFunctions.enchantmentByLegacyNumericId(19);
+        e[2] = ExtraFunctions.enchantmentByLegacyNumericId(48);
+        e[3] = ExtraFunctions.enchantmentByLegacyNumericId(7);
+        e[4] = ExtraFunctions.enchantmentByLegacyNumericId(21);
 
 
         Random rand = new Random();
@@ -134,19 +126,19 @@ public class PetaZahHuttLuckyBlock extends Block {
                 break;
             }
             case 10: {
-                ExtraFunctions.summonMobsNearby(new EntityPeteZahHutt(worldIn), 15, worldIn, pos, rand);
+                ExtraFunctions.summonMobsNearby(EntityPeteZahHutt.TYPE.create(worldIn), 15, worldIn, pos, rand);
                 break;
             }
             case 11: {
-                ExtraFunctions.summonMobsNearby(new EntityIronGolem(worldIn), 5, worldIn, pos, rand);
+                ExtraFunctions.summonMobsNearby(EntityType.IRON_GOLEM.create(worldIn), 5, worldIn, pos, rand);
                 break;
             }
             case 12: {
-                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.FLOWER_POT), 23, 1, 2);
+                ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Blocks.FLOWER_POT.asItem()), 23, 1, 2);
                 break;
             }
             case 13: {
-                ExtraFunctions.summonMobsOnBreakBlock(new EntityWither(worldIn), 1, worldIn, pos);
+                ExtraFunctions.summonMobsOnBreakBlock(EntityType.WITHER.create(worldIn), 1, worldIn, pos);
                 break;
             }
             case 14: {
@@ -154,7 +146,7 @@ public class PetaZahHuttLuckyBlock extends Block {
                 break;
             }
             case 15: {
-                ExtraFunctions.summonMobsNearby(new EntityCreeper(worldIn), 111, worldIn, pos, rand);
+                ExtraFunctions.summonMobsNearby(EntityType.CREEPER.create(worldIn), 111, worldIn, pos, rand);
                 break;
             }
             case 16: {
@@ -198,7 +190,7 @@ public class PetaZahHuttLuckyBlock extends Block {
                 break;
             }
             case 26: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.FLOWING_LAVA);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.LAVA);
                 break;
             }
             case 27: {
@@ -250,11 +242,11 @@ public class PetaZahHuttLuckyBlock extends Block {
                 break;
             }
             case 39: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.BARRIER));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.BARRIER.asItem()));
                 break;
             }
             case 40: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.BED);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.WHITE_BED);
                 break;
             }
             case 41: {
@@ -266,11 +258,11 @@ public class PetaZahHuttLuckyBlock extends Block {
                 break;
             }
             case 43: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.BEACON));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.BEACON.asItem()));
                 break;
             }
             case 44: {
-                ExtraFunctions.summonMobsNearby(new EntityZombie(worldIn), 5, worldIn, pos, rand);
+                ExtraFunctions.summonMobsNearby(EntityType.ZOMBIE.create(worldIn), 5, worldIn, pos, rand);
                 break;
             }
             case 45: {
@@ -278,7 +270,7 @@ public class PetaZahHuttLuckyBlock extends Block {
                 break;
             }
             case 46: {
-                ExtraFunctions.summonMobsNearby(new EntityJeromeASF(worldIn), 25, worldIn, pos, rand);
+                ExtraFunctions.summonMobsNearby(EntityJeromeASF.TYPE.create(worldIn), 25, worldIn, pos, rand);
                 break;
             }
             case 47: {

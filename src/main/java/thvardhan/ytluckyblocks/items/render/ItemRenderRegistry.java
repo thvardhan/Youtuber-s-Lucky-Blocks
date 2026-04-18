@@ -1,10 +1,6 @@
 package thvardhan.ytluckyblocks.items.render;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
-import net.minecraftforge.client.model.ModelLoader;
-import thvardhan.ytluckyblocks.Main;
 import thvardhan.ytluckyblocks.items.ModItems;
 
 public class ItemRenderRegistry {
@@ -219,8 +215,7 @@ public class ItemRenderRegistry {
     }
 
     private static void reg(Item item) {
-        Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, 0, new ModelResourceLocation(Main.MODID + ":" + item.getUnlocalizedName().substring(5), "inventory"));
-        //ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(Main.MODID+ ":" +item.getUnlocalizedName().substring(5)));
+        // 1.16+ resolves item models from registry name + assets/.../models/item/*.json (no ModelLoader mesh registration).
     }
 
 

@@ -1,5 +1,5 @@
 {
     "variants": {
-        "normal": { "model": "ytluckyblocks:iron_button_block" }
+        "": { "model": "ytluckyblocks:block/iron_button_block" }
     }
 }

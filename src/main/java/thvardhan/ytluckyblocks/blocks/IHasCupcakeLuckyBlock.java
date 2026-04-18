@@ -1,23 +1,23 @@
 package thvardhan.ytluckyblocks.blocks;
+import net.minecraft.entity.EntityType;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.boss.EntityWither;
-import net.minecraft.entity.monster.*;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.init.PotionTypes;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.block.Blocks;
+import net.minecraft.item.Items;
+import net.minecraft.potion.Potions;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import thvardhan.ytluckyblocks.CommonProxy;
 import thvardhan.ytluckyblocks.entity.*;
 import thvardhan.ytluckyblocks.functions.ExtraFunctions;
@@ -26,32 +26,19 @@ import thvardhan.ytluckyblocks.items.ModItems;
 import java.util.Random;
 
 public class IHasCupcakeLuckyBlock extends Block {
-
     public IHasCupcakeLuckyBlock(String unlocalizedName, Material material, float hardness, float resistance) {
-        super(material);
-        this.setUnlocalizedName(unlocalizedName);
-        this.setRegistryName(unlocalizedName);
-        this.setCreativeTab(CommonProxy.tabYTStuffMod);
-        this.setHardness(hardness);
-        this.setResistance(resistance);
-        this.setLightLevel(0F);
+        super(net.minecraft.block.AbstractBlock.Properties.of(material).strength(hardness, resistance).noOcclusion().lightLevel(s -> (int)(15.0F * (0F))));
     }
 
     public IHasCupcakeLuckyBlock(String unlocalizedName, float hardness, float resistance) {
-        this(unlocalizedName, Material.ROCK, 0, 10000);
+        this(unlocalizedName, Material.STONE, 0, 10000);
     }
 
     public IHasCupcakeLuckyBlock(String unlocalizedName) {
         this(unlocalizedName, 2.0f, 10.0f);
     }
-
-    @Override
-    public boolean isOpaqueCube(IBlockState state) {
-        return false;
-    }
-
-    @SideOnly(Side.CLIENT)
-    public void randomDisplayTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+@OnlyIn(Dist.CLIENT)
+    public void animateTick(BlockState state, World worldIn, BlockPos pos, Random rand) {
         for (int i = 0; i < 3; ++i) {
             int j = rand.nextInt(2) * 2 - 1;
             int k = rand.nextInt(2) * 2 - 1;
@@ -61,33 +48,38 @@ public class IHasCupcakeLuckyBlock extends Block {
             double d3 = (double) (rand.nextFloat() * (float) j);
             double d4 = ((double) rand.nextFloat() - 0.5D) * 0.125D;
             double d5 = (double) (rand.nextFloat() * (float) k);
-            worldIn.spawnParticle(EnumParticleTypes.SPELL_MOB, d0, d1, d2, d3, d4, d5);
+            worldIn.addParticle(ParticleTypes.ENTITY_EFFECT, d0, d1, d2, d3, d4, d5);
         }
     }
 
     @Override
-    public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+    public void playerWillDestroy(net.minecraft.world.World world, net.minecraft.util.math.BlockPos pos, net.minecraft.block.BlockState state, net.minecraft.entity.player.PlayerEntity player) {
+        super.playerWillDestroy(world, pos, state, player);
+        LuckyBlock.creativeLuckyBreak(world, pos, player, () -> drops(world, pos, player));
+    }
 
-        if (!world.isRemote && player != null && !(player instanceof FakePlayer)) {
 
-            world.setBlockToAir(pos);
+
+        @Override
+    public void playerDestroy(net.minecraft.world.World world, net.minecraft.entity.player.PlayerEntity player, net.minecraft.util.math.BlockPos pos, net.minecraft.block.BlockState state, @javax.annotation.Nullable net.minecraft.tileentity.TileEntity blockEntity, net.minecraft.item.ItemStack tool) {
+
+        if (!world.isClientSide() && player != null && !(player instanceof FakePlayer) && !player.abilities.instabuild) {
+
+            world.removeBlock(pos, false);
             drops(world, pos, player);
 
 
         }
-        return false;
-
-        //super.onBlockDestroyedByPlayer(worldIn, pos, state);
     }
 
 
-    private void drops(World worldIn, BlockPos pos, EntityPlayer player) {
+    private void drops(World worldIn, BlockPos pos, PlayerEntity player) {
 
         Enchantment[] e = new Enchantment[4];
-        e[0] = Enchantment.getEnchantmentByID(50);
-        e[2] = Enchantment.getEnchantmentByID(48);
-        e[3] = Enchantment.getEnchantmentByID(7);
-        e[1] = Enchantment.getEnchantmentByID(21);
+        e[0] = ExtraFunctions.enchantmentByLegacyNumericId(50);
+        e[2] = ExtraFunctions.enchantmentByLegacyNumericId(48);
+        e[3] = ExtraFunctions.enchantmentByLegacyNumericId(7);
+        e[1] = ExtraFunctions.enchantmentByLegacyNumericId(21);
 
 
         Random rand = new Random();
@@ -123,19 +115,19 @@ public class IHasCupcakeLuckyBlock extends Block {
                 break;
             }
             case 6: {
-                ExtraFunctions.summonMobsOnBreakBlock(new EntityISquid(worldIn), 10, worldIn, pos);
+                ExtraFunctions.summonMobsOnBreakBlock(EntityISquid.TYPE.create(worldIn), 10, worldIn, pos);
                 break;
             }
             case 7: {
-                ExtraFunctions.summonMobsNearby(new EntityIhasCupquake(worldIn), 25, worldIn, pos, rand);
+                ExtraFunctions.summonMobsNearby(EntityIhasCupquake.TYPE.create(worldIn), 25, worldIn, pos, rand);
                 break;
             }
             case 8: {
-                ExtraFunctions.summonMobsNearby(new EntityBlaze(worldIn), 5, worldIn, pos, rand);
+                ExtraFunctions.summonMobsNearby(EntityType.BLAZE.create(worldIn), 5, worldIn, pos, rand);
                 break;
             }
             case 9: {
-                ExtraFunctions.summonMobsNearby(new EntityIronGolem(worldIn), 25, worldIn, pos, rand);
+                ExtraFunctions.summonMobsNearby(EntityType.IRON_GOLEM.create(worldIn), 25, worldIn, pos, rand);
                 break;
             }
             case 10: {
@@ -148,12 +140,12 @@ public class IHasCupcakeLuckyBlock extends Block {
                 break;
             }
             case 12: {
-                ExtraFunctions.effectPlayer(player, new PotionEffect(PotionTypes.FIRE_RESISTANCE.getEffects().get(0).getPotion(), 1000, 24));
+                ExtraFunctions.effectPlayer(player, new EffectInstance(Effects.FIRE_RESISTANCE, 1000, 24));
                 break;
             }
             case 13: {
                 ExtraFunctions.summonItemStackWithLoop(worldIn, pos, new ItemStack(Items.ARROW), 40, 1, 40);
-                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.BOW, "KnockBow", Enchantment.getEnchantmentByID(49), 4);
+                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, Items.BOW, "KnockBow", ExtraFunctions.enchantmentByLegacyNumericId(49), 4);
                 break;
             }
             case 14: {
@@ -175,7 +167,7 @@ public class IHasCupcakeLuckyBlock extends Block {
                 break;
             }
             case 18: {
-                ExtraFunctions.summonMobsOnBreakBlock(new EntityEndermite(worldIn), 40, worldIn, pos);
+                ExtraFunctions.summonMobsOnBreakBlock(EntityType.ENDERMITE.create(worldIn), 40, worldIn, pos);
                 break;
             }
             case 19: {
@@ -248,19 +240,19 @@ public class IHasCupcakeLuckyBlock extends Block {
                 break;
             }
             case 36: {
-                ExtraFunctions.summonMobsNearby(new EntitySkeleton(worldIn), 5, worldIn, pos, rand);
+                ExtraFunctions.summonMobsNearby(EntityType.SKELETON.create(worldIn), 5, worldIn, pos, rand);
                 break;
             }
             case 37: {
-                ExtraFunctions.summonMobsNearby(new EntityCreeper(worldIn), 25, worldIn, pos, rand);
+                ExtraFunctions.summonMobsNearby(EntityType.CREEPER.create(worldIn), 25, worldIn, pos, rand);
                 break;
             }
             case 38: {
-                ExtraFunctions.summonMobsOnBreakBlock(new EntityWither(worldIn), 1, worldIn, pos);
+                ExtraFunctions.summonMobsOnBreakBlock(EntityType.WITHER.create(worldIn), 1, worldIn, pos);
                 break;
             }
             case 39: {
-                ExtraFunctions.summonMobsNearby(new EntityGuardian(worldIn), 15, worldIn, pos, rand);
+                ExtraFunctions.summonMobsNearby(EntityType.GUARDIAN.create(worldIn), 15, worldIn, pos, rand);
                 break;
             }
             case 40: {
@@ -269,7 +261,7 @@ public class IHasCupcakeLuckyBlock extends Block {
                 break;
             }
             case 41: {
-                ExtraFunctions.effectPlayer(player, new PotionEffect(PotionTypes.REGENERATION.getEffects().get(0).getPotion(), 1200, 5));
+                ExtraFunctions.effectPlayer(player, new EffectInstance(Effects.REGENERATION, 1200, 5));
                 break;
             }
             case 42: {
@@ -285,7 +277,7 @@ public class IHasCupcakeLuckyBlock extends Block {
                 break;
             }
             case 45: {
-                ExtraFunctions.summonMobsNearby(new EntityPopularMMO(worldIn), 5, worldIn, pos, rand);
+                ExtraFunctions.summonMobsNearby(EntityPopularMMO.TYPE.create(worldIn), 5, worldIn, pos, rand);
                 break;
 
             }
@@ -360,7 +352,7 @@ public class IHasCupcakeLuckyBlock extends Block {
                 break;
             }
             case 63: {
-                ExtraFunctions.summonMobsNearby(new EntityIhasCupquake(worldIn), 15, worldIn, pos, rand);
+                ExtraFunctions.summonMobsNearby(EntityIhasCupquake.TYPE.create(worldIn), 15, worldIn, pos, rand);
                 break;
             }
             case 64: {
@@ -432,7 +424,7 @@ public class IHasCupcakeLuckyBlock extends Block {
                 break;
             }
             case 81: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.CAKE));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Blocks.CAKE.asItem()));
                 break;
             }
             case 82: {
@@ -440,7 +432,7 @@ public class IHasCupcakeLuckyBlock extends Block {
                 break;
             }
             case 83: {
-                ExtraFunctions.summonMobsNearby(new EntityZombie(worldIn), 25, worldIn, pos, rand);
+                ExtraFunctions.summonMobsNearby(EntityType.ZOMBIE.create(worldIn), 25, worldIn, pos, rand);
                 break;
             }
             case 84: {
@@ -453,15 +445,15 @@ public class IHasCupcakeLuckyBlock extends Block {
             }
             case 86: {
 
-                ExtraFunctions.effectPlayer(player, new PotionEffect(PotionTypes.STRENGTH.getEffects().get(0).getPotion(), 1000, 24));
+                ExtraFunctions.effectPlayer(player, new EffectInstance(Effects.DAMAGE_BOOST, 1000, 24));
                 break;
             }
             case 87: {
-                ExtraFunctions.summonMobsNearby(new EntityBajanCanadian(worldIn), 35, worldIn, pos, rand);
+                ExtraFunctions.summonMobsNearby(EntityBajanCanadian.TYPE.create(worldIn), 35, worldIn, pos, rand);
                 break;
             }
             case 88: {
-                ExtraFunctions.summonMobsOnBreakBlock(new EntityWither(worldIn), 1, worldIn, pos);
+                ExtraFunctions.summonMobsOnBreakBlock(EntityType.WITHER.create(worldIn), 1, worldIn, pos);
                 break;
             }
             case 89: {
@@ -501,11 +493,11 @@ public class IHasCupcakeLuckyBlock extends Block {
                 break;
             }
             case 98: {
-                ExtraFunctions.summonMobsNearby(new EntitySSundee(worldIn), 5, worldIn, pos, rand);
+                ExtraFunctions.summonMobsNearby(EntitySSundee.TYPE.create(worldIn), 5, worldIn, pos, rand);
                 break;
             }
             case 99: {
-                ExtraFunctions.summonMobsNearby(new EntityIhasCupquake(worldIn), 15, worldIn, pos, rand);
+                ExtraFunctions.summonMobsNearby(EntityIhasCupquake.TYPE.create(worldIn), 15, worldIn, pos, rand);
                 break;
             }
             case 100: {

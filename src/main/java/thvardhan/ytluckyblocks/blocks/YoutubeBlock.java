@@ -2,10 +2,10 @@ package thvardhan.ytluckyblocks.blocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import thvardhan.ytluckyblocks.CommonProxy;
+import net.minecraftforge.common.util.FakePlayer;
 import thvardhan.ytluckyblocks.functions.ExtraFunctions;
 
 import java.util.Random;
@@ -13,17 +13,11 @@ import java.util.Random;
 public class YoutubeBlock extends Block {
     //push
     public YoutubeBlock(String unlocalizedName, Material material, float hardness, float resistance) {
-        super(material);
-        this.setUnlocalizedName(unlocalizedName);
-        this.setRegistryName(unlocalizedName);
-        this.setCreativeTab(CommonProxy.tabYTStuffMod);
-        this.setHardness(hardness);
-        this.setResistance(resistance);
-        this.setLightLevel(0F);
+        super(net.minecraft.block.AbstractBlock.Properties.of(material).strength(hardness, resistance).noOcclusion().lightLevel(s -> (int)(15.0F * (0F))));
     }
 
     public YoutubeBlock(String unlocalizedName, float hardness, float resistance) {
-        this(unlocalizedName, Material.ROCK, 0, 10000);
+        this(unlocalizedName, Material.STONE, 0, 10000);
     }
 
     public YoutubeBlock(String unlocalizedName) {
@@ -31,14 +25,23 @@ public class YoutubeBlock extends Block {
     }
 
     @Override
-    public boolean isOpaqueCube(IBlockState state) {
-        return false;
+    public void playerWillDestroy(World worldIn, BlockPos pos, BlockState state, net.minecraft.entity.player.PlayerEntity player) {
+        super.playerWillDestroy(worldIn, pos, state, player);
+        if (!worldIn.isClientSide() && player != null && !(player instanceof FakePlayer) && player.abilities.instabuild) {
+            youtubeRoll(worldIn, pos);
+        }
     }
+
     @Override
-    public void onBlockDestroyedByPlayer(World worldIn, BlockPos pos, IBlockState state) {
-        if (!worldIn.isRemote) {
-            Random rand = new Random();
-            switch (rand.nextInt(46)) {
+    public void playerDestroy(World worldIn, net.minecraft.entity.player.PlayerEntity player, BlockPos pos, BlockState state, @javax.annotation.Nullable net.minecraft.tileentity.TileEntity blockEntity, net.minecraft.item.ItemStack tool) {
+        if (!worldIn.isClientSide() && player != null && !(player instanceof FakePlayer) && !player.abilities.instabuild) {
+            youtubeRoll(worldIn, pos);
+        }
+    }
+
+    private void youtubeRoll(World worldIn, BlockPos pos) {
+        Random rand = new Random();
+        switch (rand.nextInt(46)) {
                 case 0: {
                     ExtraFunctions.summonBlockAsDrop(pos, worldIn, ModBlocks.youtubeLuckyBlock);
                     break;
@@ -229,7 +232,6 @@ public class YoutubeBlock extends Block {
 
 
             }
-        }
     }
 
 

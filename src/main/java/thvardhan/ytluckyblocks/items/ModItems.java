@@ -1,82 +1,189 @@
 package thvardhan.ytluckyblocks.items;
 
-import net.minecraft.block.Block;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.IArmorMaterial;
+import net.minecraft.item.IItemTier;
 import net.minecraft.item.Item;
-import net.minecraft.item.Item.ToolMaterial;
-import net.minecraft.item.ItemArmor.ArmorMaterial;
-import net.minecraft.item.ItemBlock;
-import net.minecraftforge.common.util.EnumHelper;
-import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.SoundEvents;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.IForgeRegistry;
+import thvardhan.ytluckyblocks.Main;
 
+@Mod.EventBusSubscriber(modid = Main.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ModItems {
 
-    //------------------------------tool mat.
-    public static ToolMaterial NastySword = EnumHelper.addToolMaterial("Nastysword", 0, 20, 0, 0F, 0);
-    public static ToolMaterial YTSword = EnumHelper.addToolMaterial("YTsword", 0, 1000, 0, 5F, 0);
-    public static ToolMaterial MSword = EnumHelper.addToolMaterial("Msword", 0, 1000, 0, 3F, 0);
-    public static ToolMaterial Black = EnumHelper.addToolMaterial("Black", 0, 2005, 0, 1F, 22);
-    public static ToolMaterial Log = EnumHelper.addToolMaterial("log", 0, 4000, 0, 1.5F, 40);
-    public static ToolMaterial Devil = EnumHelper.addToolMaterial("devil", 0, 5000, 0, 3F, 100);
-    public static ToolMaterial Levin = EnumHelper.addToolMaterial("levin", 0, 1, 0, 996F, 0);
-    public static ToolMaterial Snow = EnumHelper.addToolMaterial("snow", 0, 150, 0, 0.5F, 0);
-    public static ToolMaterial Mega = EnumHelper.addToolMaterial("mega", 0, 1000, 0, 1.5F, 30);
-    public static ToolMaterial Battle = EnumHelper.addToolMaterial("battle", 0, 2000, 0, 2F, 100);
-    public static ToolMaterial Rainbow = EnumHelper.addToolMaterial("rainbow", 0, 300, 0, 3F, 0);
+    private static IItemTier tool(final int harvestLevel, final int maxUses, final float efficiency,
+            final float attackDamageBonus, final int enchantability) {
+        return new IItemTier() {
+            @Override
+            public int getUses() {
+                return maxUses;
+            }
 
+            @Override
+            public float getSpeed() {
+                return efficiency;
+            }
 
-    //-----------------------------Armors
-    public static ArmorMaterial DuckArmor = EnumHelper.addArmorMaterial("DuckArmor", "ytluckyblocks:duckarmor", 80, new int[]{4, 8, 6, 4}, 1, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 2.5F);
-    public static ArmorMaterial LeahArmor = EnumHelper.addArmorMaterial("LeahArmor", "ytluckyblocks:leaharmor", 80, new int[]{4, 8, 6, 4}, 1, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 2.5F);
-    public static ArmorMaterial MaxArmor = EnumHelper.addArmorMaterial("MaxArmor", "ytluckyblocks:maxarmor", 80, new int[]{4, 8, 6, 4}, 1, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 2.5F);
-    public static ArmorMaterial CassieTheCat = EnumHelper.addArmorMaterial("CassieTheCat", "ytluckyblocks:cassiethecat", 80, new int[]{4, 8, 6, 4}, 1, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 2.5F);
-    public static ArmorMaterial DonutArmor = EnumHelper.addArmorMaterial("DonutArmor", "ytluckyblocks:donutarmor", 80, new int[]{4, 8, 6, 4}, 1, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 2.5F);
-    public static ArmorMaterial EvilLittleKellyArmor = EnumHelper.addArmorMaterial("EvilLittleKellyArmor", "ytluckyblocks:evillittlekellyarmor", 80, new int[]{4, 8, 6, 4}, 1, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 2.5F);
-    public static ArmorMaterial LittleAllyArmor = EnumHelper.addArmorMaterial("LittleAllyArmor", "ytluckyblocks:littleallyarmor", 80, new int[]{4, 8, 6, 4}, 1, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 2.5F);
-    public static ArmorMaterial LittleCarlyArmor = EnumHelper.addArmorMaterial("LittleCarlyArmor", "ytluckyblocks:littlecarlyarmor", 80, new int[]{4, 8, 6, 4}, 1, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 2.5F);
-    public static ArmorMaterial LittleDonnyArmor = EnumHelper.addArmorMaterial("LittleDonnyArmor", "ytluckyblocks:littledonnyarmor", 80, new int[]{4, 8, 6, 4}, 1, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 2.5F);
-    public static ArmorMaterial LittleKellyArmor = EnumHelper.addArmorMaterial("LittleKellyArmor", "ytluckyblocks:littlekellyarmor", 80, new int[]{4, 8, 6, 4}, 1, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 2.5F);
-    public static ArmorMaterial LittleLizardGaming = EnumHelper.addArmorMaterial("LittleLizardGaming", "ytluckyblocks:littlelizardgaming", 80, new int[]{4, 8, 6, 4}, 1, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 2.5F);
-    public static ArmorMaterial MaxTheMonkeyArmor = EnumHelper.addArmorMaterial("MaxTheMonkeyArmor", "ytluckyblocks:maxthemonkeyarmor", 80, new int[]{4, 8, 6, 4}, 1, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 2.5F);
-    public static ArmorMaterial SharkyArmor = EnumHelper.addArmorMaterial("SharkyArmor", "ytluckyblocks:sharkyarmor", 80, new int[]{4, 8, 6, 4}, 1, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 2.5F);
-    public static ArmorMaterial TinyTurtuleArmor = EnumHelper.addArmorMaterial("TinyTurtuleArmor", "ytluckyblocks:tinyturtulearmor", 80, new int[]{4, 8, 6, 4}, 1, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 2.5F);
+            @Override
+            public float getAttackDamageBonus() {
+                return attackDamageBonus;
+            }
 
-    public static ArmorMaterial aphmauArmor = EnumHelper.addArmorMaterial("aphmauArmor", "ytluckyblocks:aphmauarmor", 80, new int[]{4, 8, 6, 4}, 1, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 2.5F);
-    public static ArmorMaterial ropoArmor = EnumHelper.addArmorMaterial("ropoArmor", "ytluckyblocks:ropoarmor", 80, new int[]{4, 8, 6, 4}, 1, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 2.5F);
-    public static ArmorMaterial scubaArmor = EnumHelper.addArmorMaterial("scubaArmor", "ytluckyblocks:scubaarmor", 80, new int[]{4, 8, 6, 4}, 1, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 2.5F);
-    public static ArmorMaterial crainerArmor = EnumHelper.addArmorMaterial("crainerArmor", "ytluckyblocks:crainerarmor", 80, new int[]{4, 8, 6, 4}, 1, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 2.5F);
-    public static ArmorMaterial angelArmor = EnumHelper.addArmorMaterial("angelArmor", "ytluckyblocks:angelarmor", 80, new int[]{4, 8, 6, 4}, 1, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 2.5F);
+            @Override
+            public int getLevel() {
+                return harvestLevel;
+            }
 
-    public static ArmorMaterial TntArmor = EnumHelper.addArmorMaterial("TntArmor", "ytluckyblocks:tnt", 80, new int[]{4, 8, 6, 4}, 1, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 2.5F);
-    public static ArmorMaterial LacArmor = EnumHelper.addArmorMaterial("LacArmor", "ytluckyblocks:lac", 80, new int[]{4, 8, 6, 4}, 1, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 2.5F);
-    public static ArmorMaterial MrArmor = EnumHelper.addArmorMaterial("MrArmor", "ytluckyblocks:mr", 80, new int[]{4, 8, 6, 4}, 1, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 2.5F);
-    public static ArmorMaterial PetaArmor = EnumHelper.addArmorMaterial("PetaArmor", "ytluckyblocks:peta", 80, new int[]{4, 8, 6, 4}, 1, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 2.5F);
-    public static ArmorMaterial PinkArmor = EnumHelper.addArmorMaterial("PinkArmor", "ytluckyblocks:pink", 80, new int[]{4, 8, 6, 4}, 1, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 2.5F);
-    public static ArmorMaterial VikArmor = EnumHelper.addArmorMaterial("VikArmor", "ytluckyblocks:vik", 80, new int[]{4, 8, 6, 4}, 1, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 2.5F);
-    public static ArmorMaterial IHasArmor = EnumHelper.addArmorMaterial("IHasArmor", "ytluckyblocks:ihasarmor", 80, new int[]{4, 8, 6, 4}, 1, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 2.5F);
-    public static ArmorMaterial LDArmor = EnumHelper.addArmorMaterial("LDArmor", "ytluckyblocks:ldarmor", 80, new int[]{4, 8, 6, 4}, 1, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 2.5F);
-    public static ArmorMaterial PrestonArmor = EnumHelper.addArmorMaterial("PrestonArmor", "ytluckyblocks:prestonarmor", 80, new int[]{4, 8, 6, 4}, 1, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 2.5F);
-    public static ArmorMaterial SArmor = EnumHelper.addArmorMaterial("SArmor", "ytluckyblocks:sarmor", 80, new int[]{4, 8, 6, 4}, 1, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 2.5F);
-    public static ArmorMaterial StampyArmor = EnumHelper.addArmorMaterial("StampyArmor", "ytluckyblocks:stampyarmor", 80, new int[]{4, 8, 6, 4}, 1, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 2.5F);
-    public static ArmorMaterial ThnxArmor = EnumHelper.addArmorMaterial("ThnxArmor", "ytluckyblocks:thnxarmor", 80, new int[]{4, 8, 6, 4}, 1, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 2.5F);
-    public static ArmorMaterial YtArmor = EnumHelper.addArmorMaterial("YtArmor", "ytluckyblocks:ytarmor", 100, new int[]{4, 7, 5, 4}, 1, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 2.5F);
-    public static ArmorMaterial AntArmor = EnumHelper.addArmorMaterial("AntArmor", "ytluckyblocks:antarmor", 80, new int[]{7, 4, 5, 4}, 25, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 2.5F);
-    public static ArmorMaterial CapArmor = EnumHelper.addArmorMaterial("CapArmor", "ytluckyblocks:caparmor", 80, new int[]{4, 8, 5, 4}, 25, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 2.5F);
-    public static ArmorMaterial DanArmor = EnumHelper.addArmorMaterial("DanArmor", "ytluckyblocks:danarmor", 80, new int[]{4, 7, 5, 4}, 25, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 2.5F);
-    public static ArmorMaterial SquidArmor = EnumHelper.addArmorMaterial("SquidArmor", "ytluckyblocks:squidarmor", 80, new int[]{4, 8, 6, 4}, 25, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 2.5F);
-    public static ArmorMaterial LogArmor = EnumHelper.addArmorMaterial("LogArmor", "ytluckyblocks:logarmor", 80, new int[]{4, 8, 6, 4}, 25, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 2.5F);
-    public static ArmorMaterial PopArmor = EnumHelper.addArmorMaterial("PopArmor", "ytluckyblocks:poparmor", 80, new int[]{4, 8, 6, 4}, 25, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 2.5F);
-    public static ArmorMaterial SpArmor = EnumHelper.addArmorMaterial("SpArmor", "ytluckyblocks:sparmor", 80, new int[]{4, 8, 6, 4}, 25, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 2.5F);
-    public static ArmorMaterial SkyArmor = EnumHelper.addArmorMaterial("SkyArmor", "ytluckyblocks:skyarmor", 80, new int[]{4, 8, 6, 4}, 25, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 2.5F);
-    public static ArmorMaterial SuperArmor = EnumHelper.addArmorMaterial("SuperArmor", "ytluckyblocks:superarmor", 80, new int[]{4, 8, 6, 4}, 25, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 2.5F);
-    public static ArmorMaterial TrueArmor = EnumHelper.addArmorMaterial("TrueArmor", "ytluckyblocks:truearmor", 80, new int[]{4, 8, 6, 4}, 25, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 2.5F);
-    public static ArmorMaterial AlexArmor = EnumHelper.addArmorMaterial("AlexArmor", "ytluckyblocks:alexarmor", 80, new int[]{4, 8, 6, 4}, 25, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 2.5F);
-    public static ArmorMaterial BajanArmor = EnumHelper.addArmorMaterial("BajanArmor", "ytluckyblocks:bajanarmor", 80, new int[]{4, 8, 6, 4}, 25, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 2.5F);
-    public static ArmorMaterial FrizzArmor = EnumHelper.addArmorMaterial("FrizzArmor", "ytluckyblocks:frizzarmor", 80, new int[]{4, 8, 6, 4}, 25, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 2.5F);
-    public static ArmorMaterial JeromeArmor = EnumHelper.addArmorMaterial("JeromeArmor", "ytluckyblocks:jeromearmor", 80, new int[]{4, 8, 6, 4}, 25, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 2.5F);
-    public static ArmorMaterial TewityArmor = EnumHelper.addArmorMaterial("TewityArmor", "ytluckyblocks:tewityarmor", 80, new int[]{4, 8, 6, 4}, 25, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 2.5F);
-    //--------------------------------ITEMS
+            @Override
+            public int getEnchantmentValue() {
+                return enchantability;
+            }
+
+            @Override
+            public Ingredient getRepairIngredient() {
+                return Ingredient.EMPTY;
+            }
+        };
+    }
+
+    private static IArmorMaterial armorMat(final ResourceLocation tex, final int durabilityFactor,
+            final int feet, final int legs, final int chest, final int head,
+            final int enchantability, final SoundEvent equipSound, final float toughness) {
+        return new IArmorMaterial() {
+            @Override
+            public int getDurabilityForSlot(EquipmentSlotType slot) {
+                switch (slot) {
+                    case FEET:
+                        return 13 * durabilityFactor;
+                    case LEGS:
+                        return 15 * durabilityFactor;
+                    case CHEST:
+                        return 16 * durabilityFactor;
+                    case HEAD:
+                        return 11 * durabilityFactor;
+                    default:
+                        return 0;
+                }
+            }
+
+            @Override
+            public int getDefenseForSlot(EquipmentSlotType slot) {
+                switch (slot) {
+                    case FEET:
+                        return feet;
+                    case LEGS:
+                        return legs;
+                    case CHEST:
+                        return chest;
+                    case HEAD:
+                        return head;
+                    default:
+                        return 0;
+                }
+            }
+
+            @Override
+            public int getEnchantmentValue() {
+                return enchantability;
+            }
+
+            @Override
+            public SoundEvent getEquipSound() {
+                return equipSound;
+            }
+
+            @Override
+            public Ingredient getRepairIngredient() {
+                return Ingredient.EMPTY;
+            }
+
+            @Override
+            public String getName() {
+                return tex.getNamespace() + "_" + tex.getPath().replace('/', '_');
+            }
+
+            @Override
+            public float getToughness() {
+                return toughness;
+            }
+
+            @Override
+            public float getKnockbackResistance() {
+                return 0.0F;
+            }
+        };
+    }
+
+    private static ResourceLocation tex(String rl) {
+        return new ResourceLocation(rl);
+    }
+
+    private static final IItemTier TIER_NASTY = tool(0, 20, 0.0F, 0.0F, 0);
+    private static final IItemTier TIER_YT = tool(0, 1000, 0.0F, 5.0F, 0);
+    private static final IItemTier TIER_M = tool(0, 1000, 0.0F, 3.0F, 0);
+    private static final IItemTier TIER_BLACK = tool(0, 2005, 0.0F, 1.0F, 22);
+    private static final IItemTier TIER_LOG = tool(0, 4000, 0.0F, 1.5F, 40);
+    private static final IItemTier TIER_DEVIL = tool(0, 5000, 0.0F, 3.0F, 100);
+    private static final IItemTier TIER_LEVIN = tool(0, 1, 0.0F, 996.0F, 0);
+    private static final IItemTier TIER_SNOW = tool(0, 150, 0.0F, 0.5F, 0);
+    private static final IItemTier TIER_MEGA = tool(0, 1000, 0.0F, 1.5F, 30);
+    private static final IItemTier TIER_BATTLE = tool(0, 2000, 0.0F, 2.0F, 100);
+    private static final IItemTier TIER_RAINBOW = tool(0, 300, 0.0F, 3.0F, 0);
+
+    private static final IArmorMaterial DUCK_ARMOR = armorMat(tex("ytluckyblocks:duckarmor"), 80, 4, 8, 6, 4, 1, SoundEvents.ARMOR_EQUIP_DIAMOND, 2.5F);
+    private static final IArmorMaterial LEAH_ARMOR = armorMat(tex("ytluckyblocks:leaharmor"), 80, 4, 8, 6, 4, 1, SoundEvents.ARMOR_EQUIP_DIAMOND, 2.5F);
+    private static final IArmorMaterial MAX_ARMOR = armorMat(tex("ytluckyblocks:maxarmor"), 80, 4, 8, 6, 4, 1, SoundEvents.ARMOR_EQUIP_DIAMOND, 2.5F);
+    private static final IArmorMaterial CASSIE_THE_CAT_ARMOR = armorMat(tex("ytluckyblocks:cassiethecat"), 80, 4, 8, 6, 4, 1, SoundEvents.ARMOR_EQUIP_DIAMOND, 2.5F);
+    private static final IArmorMaterial DONUT_ARMOR = armorMat(tex("ytluckyblocks:donutarmor"), 80, 4, 8, 6, 4, 1, SoundEvents.ARMOR_EQUIP_DIAMOND, 2.5F);
+    private static final IArmorMaterial EVIL_LITTLE_KELLY_ARMOR = armorMat(tex("ytluckyblocks:evillittlekellyarmor"), 80, 4, 8, 6, 4, 1, SoundEvents.ARMOR_EQUIP_DIAMOND, 2.5F);
+    private static final IArmorMaterial LITTLE_ALLY_ARMOR = armorMat(tex("ytluckyblocks:littleallyarmor"), 80, 4, 8, 6, 4, 1, SoundEvents.ARMOR_EQUIP_DIAMOND, 2.5F);
+    private static final IArmorMaterial LITTLE_CARLY_ARMOR = armorMat(tex("ytluckyblocks:littlecarlyarmor"), 80, 4, 8, 6, 4, 1, SoundEvents.ARMOR_EQUIP_DIAMOND, 2.5F);
+    private static final IArmorMaterial LITTLE_DONNY_ARMOR = armorMat(tex("ytluckyblocks:littledonnyarmor"), 80, 4, 8, 6, 4, 1, SoundEvents.ARMOR_EQUIP_DIAMOND, 2.5F);
+    private static final IArmorMaterial LITTLE_KELLY_ARMOR = armorMat(tex("ytluckyblocks:littlekellyarmor"), 80, 4, 8, 6, 4, 1, SoundEvents.ARMOR_EQUIP_DIAMOND, 2.5F);
+    private static final IArmorMaterial LITTLE_LIZARD_GAMING_ARMOR = armorMat(tex("ytluckyblocks:littlelizardgaming"), 80, 4, 8, 6, 4, 1, SoundEvents.ARMOR_EQUIP_DIAMOND, 2.5F);
+    private static final IArmorMaterial MAX_THE_MONKEY_ARMOR = armorMat(tex("ytluckyblocks:maxthemonkeyarmor"), 80, 4, 8, 6, 4, 1, SoundEvents.ARMOR_EQUIP_DIAMOND, 2.5F);
+    private static final IArmorMaterial SHARKY_ARMOR = armorMat(tex("ytluckyblocks:sharkyarmor"), 80, 4, 8, 6, 4, 1, SoundEvents.ARMOR_EQUIP_DIAMOND, 2.5F);
+    private static final IArmorMaterial TINY_TURTULE_ARMOR = armorMat(tex("ytluckyblocks:tinyturtulearmor"), 80, 4, 8, 6, 4, 1, SoundEvents.ARMOR_EQUIP_DIAMOND, 2.5F);
+    private static final IArmorMaterial APHMAU_ARMOR = armorMat(tex("ytluckyblocks:aphmauarmor"), 80, 4, 8, 6, 4, 1, SoundEvents.ARMOR_EQUIP_DIAMOND, 2.5F);
+    private static final IArmorMaterial ROPO_ARMOR = armorMat(tex("ytluckyblocks:ropoarmor"), 80, 4, 8, 6, 4, 1, SoundEvents.ARMOR_EQUIP_DIAMOND, 2.5F);
+    private static final IArmorMaterial SCUBA_ARMOR = armorMat(tex("ytluckyblocks:scubaarmor"), 80, 4, 8, 6, 4, 1, SoundEvents.ARMOR_EQUIP_DIAMOND, 2.5F);
+    private static final IArmorMaterial CRAINER_ARMOR = armorMat(tex("ytluckyblocks:crainerarmor"), 80, 4, 8, 6, 4, 1, SoundEvents.ARMOR_EQUIP_DIAMOND, 2.5F);
+    private static final IArmorMaterial ANGEL_ARMOR = armorMat(tex("ytluckyblocks:angelarmor"), 80, 4, 8, 6, 4, 1, SoundEvents.ARMOR_EQUIP_DIAMOND, 2.5F);
+    private static final IArmorMaterial TNT_ARMOR = armorMat(tex("ytluckyblocks:tnt"), 80, 4, 8, 6, 4, 1, SoundEvents.ARMOR_EQUIP_DIAMOND, 2.5F);
+    private static final IArmorMaterial LAC_ARMOR = armorMat(tex("ytluckyblocks:lac"), 80, 4, 8, 6, 4, 1, SoundEvents.ARMOR_EQUIP_DIAMOND, 2.5F);
+    private static final IArmorMaterial MR_ARMOR = armorMat(tex("ytluckyblocks:mr"), 80, 4, 8, 6, 4, 1, SoundEvents.ARMOR_EQUIP_DIAMOND, 2.5F);
+    private static final IArmorMaterial PETA_ARMOR = armorMat(tex("ytluckyblocks:peta"), 80, 4, 8, 6, 4, 1, SoundEvents.ARMOR_EQUIP_DIAMOND, 2.5F);
+    private static final IArmorMaterial PINK_ARMOR = armorMat(tex("ytluckyblocks:pink"), 80, 4, 8, 6, 4, 1, SoundEvents.ARMOR_EQUIP_DIAMOND, 2.5F);
+    private static final IArmorMaterial VIK_ARMOR = armorMat(tex("ytluckyblocks:vik"), 80, 4, 8, 6, 4, 1, SoundEvents.ARMOR_EQUIP_DIAMOND, 2.5F);
+    private static final IArmorMaterial IHAS_ARMOR = armorMat(tex("ytluckyblocks:ihasarmor"), 80, 4, 8, 6, 4, 1, SoundEvents.ARMOR_EQUIP_DIAMOND, 2.5F);
+    private static final IArmorMaterial LD_ARMOR = armorMat(tex("ytluckyblocks:ldarmor"), 80, 4, 8, 6, 4, 1, SoundEvents.ARMOR_EQUIP_DIAMOND, 2.5F);
+    private static final IArmorMaterial PRESTON_ARMOR = armorMat(tex("ytluckyblocks:prestonarmor"), 80, 4, 8, 6, 4, 1, SoundEvents.ARMOR_EQUIP_DIAMOND, 2.5F);
+    private static final IArmorMaterial S_ARMOR = armorMat(tex("ytluckyblocks:sarmor"), 80, 4, 8, 6, 4, 1, SoundEvents.ARMOR_EQUIP_DIAMOND, 2.5F);
+    private static final IArmorMaterial STAMPY_ARMOR = armorMat(tex("ytluckyblocks:stampyarmor"), 80, 4, 8, 6, 4, 1, SoundEvents.ARMOR_EQUIP_DIAMOND, 2.5F);
+    private static final IArmorMaterial THNX_ARMOR = armorMat(tex("ytluckyblocks:thnxarmor"), 80, 4, 8, 6, 4, 1, SoundEvents.ARMOR_EQUIP_DIAMOND, 2.5F);
+    private static final IArmorMaterial YT_ARMOR = armorMat(tex("ytluckyblocks:ytarmor"), 100, 4, 7, 5, 4, 1, SoundEvents.ARMOR_EQUIP_DIAMOND, 2.5F);
+    private static final IArmorMaterial ANT_ARMOR = armorMat(tex("ytluckyblocks:antarmor"), 80, 7, 4, 5, 4, 25, SoundEvents.ARMOR_EQUIP_DIAMOND, 2.5F);
+    private static final IArmorMaterial CAP_ARMOR = armorMat(tex("ytluckyblocks:caparmor"), 80, 4, 8, 5, 4, 25, SoundEvents.ARMOR_EQUIP_DIAMOND, 2.5F);
+    private static final IArmorMaterial DAN_ARMOR = armorMat(tex("ytluckyblocks:danarmor"), 80, 4, 7, 5, 4, 25, SoundEvents.ARMOR_EQUIP_DIAMOND, 2.5F);
+    private static final IArmorMaterial SQUID_ARMOR = armorMat(tex("ytluckyblocks:squidarmor"), 80, 4, 8, 6, 4, 25, SoundEvents.ARMOR_EQUIP_DIAMOND, 2.5F);
+    private static final IArmorMaterial LOG_ARMOR = armorMat(tex("ytluckyblocks:logarmor"), 80, 4, 8, 6, 4, 25, SoundEvents.ARMOR_EQUIP_DIAMOND, 2.5F);
+    private static final IArmorMaterial POP_ARMOR = armorMat(tex("ytluckyblocks:poparmor"), 80, 4, 8, 6, 4, 25, SoundEvents.ARMOR_EQUIP_DIAMOND, 2.5F);
+    private static final IArmorMaterial SP_ARMOR = armorMat(tex("ytluckyblocks:sparmor"), 80, 4, 8, 6, 4, 25, SoundEvents.ARMOR_EQUIP_DIAMOND, 2.5F);
+    private static final IArmorMaterial SKY_ARMOR = armorMat(tex("ytluckyblocks:skyarmor"), 80, 4, 8, 6, 4, 25, SoundEvents.ARMOR_EQUIP_DIAMOND, 2.5F);
+    private static final IArmorMaterial SUPER_ARMOR = armorMat(tex("ytluckyblocks:superarmor"), 80, 4, 8, 6, 4, 25, SoundEvents.ARMOR_EQUIP_DIAMOND, 2.5F);
+    private static final IArmorMaterial TRUE_ARMOR = armorMat(tex("ytluckyblocks:truearmor"), 80, 4, 8, 6, 4, 25, SoundEvents.ARMOR_EQUIP_DIAMOND, 2.5F);
+    private static final IArmorMaterial ALEX_ARMOR = armorMat(tex("ytluckyblocks:alexarmor"), 80, 4, 8, 6, 4, 25, SoundEvents.ARMOR_EQUIP_DIAMOND, 2.5F);
+    private static final IArmorMaterial BAJAN_ARMOR = armorMat(tex("ytluckyblocks:bajanarmor"), 80, 4, 8, 6, 4, 25, SoundEvents.ARMOR_EQUIP_DIAMOND, 2.5F);
+    private static final IArmorMaterial FRIZZ_ARMOR = armorMat(tex("ytluckyblocks:frizzarmor"), 80, 4, 8, 6, 4, 25, SoundEvents.ARMOR_EQUIP_DIAMOND, 2.5F);
+    private static final IArmorMaterial JEROME_ARMOR = armorMat(tex("ytluckyblocks:jeromearmor"), 80, 4, 8, 6, 4, 25, SoundEvents.ARMOR_EQUIP_DIAMOND, 2.5F);
+    private static final IArmorMaterial TEWITY_ARMOR = armorMat(tex("ytluckyblocks:tewityarmor"), 80, 4, 8, 6, 4, 25, SoundEvents.ARMOR_EQUIP_DIAMOND, 2.5F);
+
     public static Item nastySword;
     public static Item yt_Sword;
     public static Item m_sword;
@@ -90,7 +197,7 @@ public class ModItems {
     public static Item rainbowBlade;
     public static Item mic;
     public static Item ytIcon;
-    //-------------------------------ARMS
+
     public static Item tntHelmet;
     public static Item tntChestplate;
     public static Item tntLeggings;
@@ -261,7 +368,6 @@ public class ModItems {
     public static Item turtleLeggings;
     public static Item turtleBoots;
 
-
     public static Item aphmauHelmet;
     public static Item aphmauChestplate;
     public static Item aphmauLeggings;
@@ -283,224 +389,222 @@ public class ModItems {
     public static Item angelLeggings;
     public static Item angelBoots;
 
+    @SubscribeEvent
+    public static void onRegisterItems(final RegistryEvent.Register<Item> event) {
+        IForgeRegistry<Item> r = event.getRegistry();
 
-    public static void createTools() {
+        register(r, nastySword = new NastySword(TIER_NASTY), "nasty_sword");
+        register(r, swordBlack = new SwordBlack(TIER_BLACK), "black_sword");
+        register(r, swordLogdotzip = new SwordLogdotzip(TIER_LOG), "logdotzip_sword");
+        register(r, devilSword = new DevilSword(TIER_DEVIL), "devil_sword");
+        register(r, levinSword = new LevinSword(TIER_LEVIN), "levin_sword");
+        register(r, mic = new MicItem(), "mic");
+        register(r, ytIcon = new YtIcon(), "yticon");
+        register(r, snowSword = new SnowSword(TIER_SNOW), "snow_sword");
+        register(r, megaSword = new MagaSword(TIER_MEGA), "mega_sword");
+        register(r, battleAxe = new BattleAxe(TIER_BATTLE), "battle_axe");
+        register(r, rainbowBlade = new RainbowBlade(TIER_RAINBOW), "rainbow_blade");
+        register(r, m_sword = new M_sword(TIER_M), "m_sword");
+        register(r, yt_Sword = new YT_Sword(TIER_YT), "yt_sword");
 
-        //-------------------ITEMS
+        register(r, tntHelmet = new ItemModArmor(TNT_ARMOR, EquipmentSlotType.HEAD, tex("ytluckyblocks:tnt")), "tnt_helmet");
+        register(r, tntChestplate = new ItemModArmor(TNT_ARMOR, EquipmentSlotType.CHEST, tex("ytluckyblocks:tnt")), "tnt_chestplate");
+        register(r, tntLeggings = new ItemModArmor(TNT_ARMOR, EquipmentSlotType.LEGS, tex("ytluckyblocks:tnt")), "tnt_leggings");
+        register(r, tntBoots = new ItemModArmor(TNT_ARMOR, EquipmentSlotType.FEET, tex("ytluckyblocks:tnt")), "tnt_boots");
+        register(r, lacHelmet = new ItemModArmor(LAC_ARMOR, EquipmentSlotType.HEAD, tex("ytluckyblocks:lac")), "lac_helmet");
+        register(r, lacChestplate = new ItemModArmor(LAC_ARMOR, EquipmentSlotType.CHEST, tex("ytluckyblocks:lac")), "lac_chestplate");
+        register(r, lacLeggings = new ItemModArmor(LAC_ARMOR, EquipmentSlotType.LEGS, tex("ytluckyblocks:lac")), "lac_leggings");
+        register(r, lacBoots = new ItemModArmor(LAC_ARMOR, EquipmentSlotType.FEET, tex("ytluckyblocks:lac")), "lac_boots");
+        register(r, mrHelmet = new ItemModArmor(MR_ARMOR, EquipmentSlotType.HEAD, tex("ytluckyblocks:mr")), "mr_helmet");
+        register(r, mrChestplate = new ItemModArmor(MR_ARMOR, EquipmentSlotType.CHEST, tex("ytluckyblocks:mr")), "mr_chestplate");
+        register(r, mrLeggings = new ItemModArmor(MR_ARMOR, EquipmentSlotType.LEGS, tex("ytluckyblocks:mr")), "mr_leggings");
+        register(r, mrBoots = new ItemModArmor(MR_ARMOR, EquipmentSlotType.FEET, tex("ytluckyblocks:mr")), "mr_boots");
+        register(r, petaHelmet = new ItemModArmor(PETA_ARMOR, EquipmentSlotType.HEAD, tex("ytluckyblocks:peta")), "peta_helmet");
+        register(r, petaChestplate = new ItemModArmor(PETA_ARMOR, EquipmentSlotType.CHEST, tex("ytluckyblocks:peta")), "peta_chestplate");
+        register(r, petaLeggings = new ItemModArmor(PETA_ARMOR, EquipmentSlotType.LEGS, tex("ytluckyblocks:peta")), "peta_leggings");
+        register(r, petaBoots = new ItemModArmor(PETA_ARMOR, EquipmentSlotType.FEET, tex("ytluckyblocks:peta")), "peta_boots");
+        register(r, pinkHelmet = new ItemModArmor(PINK_ARMOR, EquipmentSlotType.HEAD, tex("ytluckyblocks:pink")), "pink_helmet");
+        register(r, pinkChestplate = new ItemModArmor(PINK_ARMOR, EquipmentSlotType.CHEST, tex("ytluckyblocks:pink")), "pink_chestplate");
+        register(r, pinkLeggings = new ItemModArmor(PINK_ARMOR, EquipmentSlotType.LEGS, tex("ytluckyblocks:pink")), "pink_leggings");
+        register(r, pinkBoots = new ItemModArmor(PINK_ARMOR, EquipmentSlotType.FEET, tex("ytluckyblocks:pink")), "pink_boots");
+        register(r, vikHelmet = new ItemModArmor(VIK_ARMOR, EquipmentSlotType.HEAD, tex("ytluckyblocks:vik")), "vik_helmet");
+        register(r, vikChestplate = new ItemModArmor(VIK_ARMOR, EquipmentSlotType.CHEST, tex("ytluckyblocks:vik")), "vik_chestplate");
+        register(r, vikLeggings = new ItemModArmor(VIK_ARMOR, EquipmentSlotType.LEGS, tex("ytluckyblocks:vik")), "vik_leggings");
+        register(r, vikBoots = new ItemModArmor(VIK_ARMOR, EquipmentSlotType.FEET, tex("ytluckyblocks:vik")), "vik_boots");
 
-        registerItem(nastySword = new NastySword("nasty_sword", NastySword), "nasty_sword");
-        registerItem(swordBlack = new SwordBlack("black_sword", Black), "black_sword");
-        registerItem(swordLogdotzip = new SwordLogdotzip("logdotzip_sword", Log), "logdotzip_sword");
-        registerItem(devilSword = new DevilSword("devil_sword", Devil), "devil_sword");
-        registerItem(levinSword = new LevinSword("levin_sword", Levin), "levin_sword");
-        registerItem(mic = new MicItem("mic"), "mic");
-        registerItem(ytIcon = new YtIcon("yticon"), "yticon");
-        registerItem(snowSword = new SnowSword("snow_sword", Snow), "snow_sword");
-        registerItem(megaSword = new MagaSword("mega_sword", Mega), "mega_sword");
-        registerItem(battleAxe = new BattleAxe("battle_axe", Battle), "battle_axe");
-        registerItem(rainbowBlade = new RainbowBlade("rainbow_blade", Rainbow), "rainbow_blade");
-        registerItem(m_sword = new M_sword("m_sword", MSword), "m_sword");
-        registerItem(yt_Sword = new YT_Sword("yt_sword", YTSword), "yt_sword");
+        register(r, ytHelmet = new ItemModArmor(YT_ARMOR, EquipmentSlotType.HEAD, tex("ytluckyblocks:ytarmor")), "yt_helmet");
+        register(r, ytChestplate = new ItemModArmor(YT_ARMOR, EquipmentSlotType.CHEST, tex("ytluckyblocks:ytarmor")), "yt_chestplate");
+        register(r, ytLeggings = new ItemModArmor(YT_ARMOR, EquipmentSlotType.LEGS, tex("ytluckyblocks:ytarmor")), "yt_leggings");
+        register(r, ytBoots = new ItemModArmor(YT_ARMOR, EquipmentSlotType.FEET, tex("ytluckyblocks:ytarmor")), "yt_boots");
+        register(r, antHelmet = new ItemModArmor(ANT_ARMOR, EquipmentSlotType.HEAD, tex("ytluckyblocks:antarmor")), "ant_helmet");
+        register(r, antChestplate = new ItemModArmor(ANT_ARMOR, EquipmentSlotType.CHEST, tex("ytluckyblocks:antarmor")), "ant_chestplate");
+        register(r, antLeggings = new ItemModArmor(ANT_ARMOR, EquipmentSlotType.LEGS, tex("ytluckyblocks:antarmor")), "ant_leggings");
+        register(r, antBoots = new ItemModArmor(ANT_ARMOR, EquipmentSlotType.FEET, tex("ytluckyblocks:antarmor")), "ant_boots");
+        register(r, capHelmet = new ItemModArmor(CAP_ARMOR, EquipmentSlotType.HEAD, tex("ytluckyblocks:caparmor")), "cap_helmet");
+        register(r, capChestplate = new ItemModArmor(CAP_ARMOR, EquipmentSlotType.CHEST, tex("ytluckyblocks:caparmor")), "cap_chestplate");
+        register(r, capLeggings = new ItemModArmor(CAP_ARMOR, EquipmentSlotType.LEGS, tex("ytluckyblocks:caparmor")), "cap_leggings");
+        register(r, capBoots = new ItemModArmor(CAP_ARMOR, EquipmentSlotType.FEET, tex("ytluckyblocks:caparmor")), "cap_boots");
+        register(r, danHelmet = new ItemModArmor(DAN_ARMOR, EquipmentSlotType.HEAD, tex("ytluckyblocks:danarmor")), "dan_helmet");
+        register(r, danChestplate = new ItemModArmor(DAN_ARMOR, EquipmentSlotType.CHEST, tex("ytluckyblocks:danarmor")), "dan_chestplate");
+        register(r, danLeggings = new ItemModArmor(DAN_ARMOR, EquipmentSlotType.LEGS, tex("ytluckyblocks:danarmor")), "dan_leggings");
+        register(r, danBoots = new ItemModArmor(DAN_ARMOR, EquipmentSlotType.FEET, tex("ytluckyblocks:danarmor")), "dan_boots");
+        register(r, squidHelmet = new ItemModArmor(SQUID_ARMOR, EquipmentSlotType.HEAD, tex("ytluckyblocks:squidarmor")), "squid_helmet");
+        register(r, squidChestplate = new ItemModArmor(SQUID_ARMOR, EquipmentSlotType.CHEST, tex("ytluckyblocks:squidarmor")), "squid_chestplate");
+        register(r, squidLeggings = new ItemModArmor(SQUID_ARMOR, EquipmentSlotType.LEGS, tex("ytluckyblocks:squidarmor")), "squid_leggings");
+        register(r, squidBoots = new ItemModArmor(SQUID_ARMOR, EquipmentSlotType.FEET, tex("ytluckyblocks:squidarmor")), "squid_boots");
+        register(r, logHelmet = new ItemModArmor(LOG_ARMOR, EquipmentSlotType.HEAD, tex("ytluckyblocks:logarmor")), "log_helmet");
+        register(r, logChestplate = new ItemModArmor(LOG_ARMOR, EquipmentSlotType.CHEST, tex("ytluckyblocks:logarmor")), "log_chestplate");
+        register(r, logLeggings = new ItemModArmor(LOG_ARMOR, EquipmentSlotType.LEGS, tex("ytluckyblocks:logarmor")), "log_leggings");
+        register(r, logBoots = new ItemModArmor(LOG_ARMOR, EquipmentSlotType.FEET, tex("ytluckyblocks:logarmor")), "log_boots");
+        register(r, popHelmet = new ItemModArmor(POP_ARMOR, EquipmentSlotType.HEAD, tex("ytluckyblocks:poparmor")), "pop_helmet");
+        register(r, popChestplate = new ItemModArmor(POP_ARMOR, EquipmentSlotType.CHEST, tex("ytluckyblocks:poparmor")), "pop_chestplate");
+        register(r, popLeggings = new ItemModArmor(POP_ARMOR, EquipmentSlotType.LEGS, tex("ytluckyblocks:poparmor")), "pop_leggings");
+        register(r, popBoots = new ItemModArmor(POP_ARMOR, EquipmentSlotType.FEET, tex("ytluckyblocks:poparmor")), "pop_boots");
+        register(r, spHelmet = new ItemModArmor(SP_ARMOR, EquipmentSlotType.HEAD, tex("ytluckyblocks:sparmor")), "sp_helmet");
+        register(r, spChestplate = new ItemModArmor(SP_ARMOR, EquipmentSlotType.CHEST, tex("ytluckyblocks:sparmor")), "sp_chestplate");
+        register(r, spLeggings = new ItemModArmor(SP_ARMOR, EquipmentSlotType.LEGS, tex("ytluckyblocks:sparmor")), "sp_leggings");
+        register(r, spBoots = new ItemModArmor(SP_ARMOR, EquipmentSlotType.FEET, tex("ytluckyblocks:sparmor")), "sp_boots");
+        register(r, skyHelmet = new ItemModArmor(SKY_ARMOR, EquipmentSlotType.HEAD, tex("ytluckyblocks:skyarmor")), "sky_helmet");
+        register(r, skyChestplate = new ItemModArmor(SKY_ARMOR, EquipmentSlotType.CHEST, tex("ytluckyblocks:skyarmor")), "sky_chestplate");
+        register(r, skyLeggings = new ItemModArmor(SKY_ARMOR, EquipmentSlotType.LEGS, tex("ytluckyblocks:skyarmor")), "sky_leggings");
+        register(r, skyBoots = new ItemModArmor(SKY_ARMOR, EquipmentSlotType.FEET, tex("ytluckyblocks:skyarmor")), "sky_boots");
+        register(r, superHelmet = new ItemModArmor(SUPER_ARMOR, EquipmentSlotType.HEAD, tex("ytluckyblocks:superarmor")), "super_helmet");
+        register(r, superChestplate = new ItemModArmor(SUPER_ARMOR, EquipmentSlotType.CHEST, tex("ytluckyblocks:superarmor")), "super_chestplate");
+        register(r, superLeggings = new ItemModArmor(SUPER_ARMOR, EquipmentSlotType.LEGS, tex("ytluckyblocks:superarmor")), "super_leggings");
+        register(r, superBoots = new ItemModArmor(SUPER_ARMOR, EquipmentSlotType.FEET, tex("ytluckyblocks:superarmor")), "super_boots");
+        register(r, trueHelmet = new ItemModArmor(TRUE_ARMOR, EquipmentSlotType.HEAD, tex("ytluckyblocks:truearmor")), "true_helmet");
+        register(r, trueChestplate = new ItemModArmor(TRUE_ARMOR, EquipmentSlotType.CHEST, tex("ytluckyblocks:truearmor")), "true_chestplate");
+        register(r, trueLeggings = new ItemModArmor(TRUE_ARMOR, EquipmentSlotType.LEGS, tex("ytluckyblocks:truearmor")), "true_leggings");
+        register(r, trueBoots = new ItemModArmor(TRUE_ARMOR, EquipmentSlotType.FEET, tex("ytluckyblocks:truearmor")), "true_boots");
+        register(r, alexHelmet = new ItemModArmor(ALEX_ARMOR, EquipmentSlotType.HEAD, tex("ytluckyblocks:alexarmor")), "alex_helmet");
+        register(r, alexChestplate = new ItemModArmor(ALEX_ARMOR, EquipmentSlotType.CHEST, tex("ytluckyblocks:alexarmor")), "alex_chestplate");
+        register(r, alexLeggings = new ItemModArmor(ALEX_ARMOR, EquipmentSlotType.LEGS, tex("ytluckyblocks:alexarmor")), "alex_leggings");
+        register(r, alexBoots = new ItemModArmor(ALEX_ARMOR, EquipmentSlotType.FEET, tex("ytluckyblocks:alexarmor")), "alex_boots");
+        register(r, bajanHelmet = new ItemModArmor(BAJAN_ARMOR, EquipmentSlotType.HEAD, tex("ytluckyblocks:bajanarmor")), "bajan_helmet");
+        register(r, bajanChestplate = new ItemModArmor(BAJAN_ARMOR, EquipmentSlotType.CHEST, tex("ytluckyblocks:bajanarmor")), "bajan_chestplate");
+        register(r, bajanLeggings = new ItemModArmor(BAJAN_ARMOR, EquipmentSlotType.LEGS, tex("ytluckyblocks:bajanarmor")), "bajan_leggings");
+        register(r, bajanBoots = new ItemModArmor(BAJAN_ARMOR, EquipmentSlotType.FEET, tex("ytluckyblocks:bajanarmor")), "bajan_boots");
+        register(r, frizzHelmet = new ItemModArmor(FRIZZ_ARMOR, EquipmentSlotType.HEAD, tex("ytluckyblocks:frizzarmor")), "frizz_helmet");
+        register(r, frizzChestplate = new ItemModArmor(FRIZZ_ARMOR, EquipmentSlotType.CHEST, tex("ytluckyblocks:frizzarmor")), "frizz_chestplate");
+        register(r, frizzLeggings = new ItemModArmor(FRIZZ_ARMOR, EquipmentSlotType.LEGS, tex("ytluckyblocks:frizzarmor")), "frizz_leggings");
+        register(r, frizzBoots = new ItemModArmor(FRIZZ_ARMOR, EquipmentSlotType.FEET, tex("ytluckyblocks:frizzarmor")), "frizz_boots");
+        register(r, jeromeHelmet = new ItemModArmor(JEROME_ARMOR, EquipmentSlotType.HEAD, tex("ytluckyblocks:jeromearmor")), "jerome_helmet");
+        register(r, jeromeChestplate = new ItemModArmor(JEROME_ARMOR, EquipmentSlotType.CHEST, tex("ytluckyblocks:jeromearmor")), "jerome_chestplate");
+        register(r, jeromeLeggings = new ItemModArmor(JEROME_ARMOR, EquipmentSlotType.LEGS, tex("ytluckyblocks:jeromearmor")), "jerome_leggings");
+        register(r, jeromeBoots = new ItemModArmor(JEROME_ARMOR, EquipmentSlotType.FEET, tex("ytluckyblocks:jeromearmor")), "jerome_boots");
+        register(r, tewityHelmet = new ItemModArmor(TEWITY_ARMOR, EquipmentSlotType.HEAD, tex("ytluckyblocks:tewityarmor")), "tewity_helmet");
+        register(r, tewityChestplate = new ItemModArmor(TEWITY_ARMOR, EquipmentSlotType.CHEST, tex("ytluckyblocks:tewityarmor")), "tewity_chestplate");
+        register(r, tewityLeggings = new ItemModArmor(TEWITY_ARMOR, EquipmentSlotType.LEGS, tex("ytluckyblocks:tewityarmor")), "tewity_leggings");
+        register(r, tewityBoots = new ItemModArmor(TEWITY_ARMOR, EquipmentSlotType.FEET, tex("ytluckyblocks:tewityarmor")), "tewity_boots");
+        register(r, ihas_Helmet = new ItemModArmor(IHAS_ARMOR, EquipmentSlotType.HEAD, tex("ytluckyblocks:ihasarmor")), "ihas_helmet");
+        register(r, ihas_Chestplate = new ItemModArmor(IHAS_ARMOR, EquipmentSlotType.CHEST, tex("ytluckyblocks:ihasarmor")), "ihas_chestplate");
+        register(r, ihas_Leggings = new ItemModArmor(IHAS_ARMOR, EquipmentSlotType.LEGS, tex("ytluckyblocks:ihasarmor")), "ihas_leggings");
+        register(r, ihas_Boots = new ItemModArmor(IHAS_ARMOR, EquipmentSlotType.FEET, tex("ytluckyblocks:ihasarmor")), "ihas_boots");
+        register(r, ld_Helmet = new ItemModArmor(LD_ARMOR, EquipmentSlotType.HEAD, tex("ytluckyblocks:ldarmor")), "ld_helmet");
+        register(r, ld_Chestplate = new ItemModArmor(LD_ARMOR, EquipmentSlotType.CHEST, tex("ytluckyblocks:ldarmor")), "ld_chestplate");
+        register(r, ld_Leggings = new ItemModArmor(LD_ARMOR, EquipmentSlotType.LEGS, tex("ytluckyblocks:ldarmor")), "ld_leggings");
+        register(r, ld_Boots = new ItemModArmor(LD_ARMOR, EquipmentSlotType.FEET, tex("ytluckyblocks:ldarmor")), "ld_boots");
+        register(r, preston_Helmet = new ItemModArmor(PRESTON_ARMOR, EquipmentSlotType.HEAD, tex("ytluckyblocks:prestonarmor")), "preston_helmet");
+        register(r, preston_Chestplate = new ItemModArmor(PRESTON_ARMOR, EquipmentSlotType.CHEST, tex("ytluckyblocks:prestonarmor")), "preston_chestplate");
+        register(r, preston_Leggings = new ItemModArmor(PRESTON_ARMOR, EquipmentSlotType.LEGS, tex("ytluckyblocks:prestonarmor")), "preston_leggings");
+        register(r, preston_Boots = new ItemModArmor(PRESTON_ARMOR, EquipmentSlotType.FEET, tex("ytluckyblocks:prestonarmor")), "preston_boots");
+        register(r, s_Helmet = new ItemModArmor(S_ARMOR, EquipmentSlotType.HEAD, tex("ytluckyblocks:sarmor")), "s_helmet");
+        register(r, s_Chestplate = new ItemModArmor(S_ARMOR, EquipmentSlotType.CHEST, tex("ytluckyblocks:sarmor")), "s_chestplate");
+        register(r, s_Leggings = new ItemModArmor(S_ARMOR, EquipmentSlotType.LEGS, tex("ytluckyblocks:sarmor")), "s_leggings");
+        register(r, s_Boots = new ItemModArmor(S_ARMOR, EquipmentSlotType.FEET, tex("ytluckyblocks:sarmor")), "s_boots");
+        register(r, stampy_Helmet = new ItemModArmor(STAMPY_ARMOR, EquipmentSlotType.HEAD, tex("ytluckyblocks:stampyarmor")), "stampy_helmet");
+        register(r, stampy_Chestplate = new ItemModArmor(STAMPY_ARMOR, EquipmentSlotType.CHEST, tex("ytluckyblocks:stampyarmor")), "stampy_chestplate");
+        register(r, stampy_Leggings = new ItemModArmor(STAMPY_ARMOR, EquipmentSlotType.LEGS, tex("ytluckyblocks:stampyarmor")), "stampy_leggings");
+        register(r, stampy_Boots = new ItemModArmor(STAMPY_ARMOR, EquipmentSlotType.FEET, tex("ytluckyblocks:stampyarmor")), "stampy_boots");
+        register(r, thnx_Helmet = new ItemModArmor(THNX_ARMOR, EquipmentSlotType.HEAD, tex("ytluckyblocks:thnxarmor")), "thnx_helmet");
+        register(r, thnx_Chestplate = new ItemModArmor(THNX_ARMOR, EquipmentSlotType.CHEST, tex("ytluckyblocks:thnxarmor")), "thnx_chestplate");
+        register(r, thnx_Leggings = new ItemModArmor(THNX_ARMOR, EquipmentSlotType.LEGS, tex("ytluckyblocks:thnxarmor")), "thnx_leggings");
+        register(r, thnx_Boots = new ItemModArmor(THNX_ARMOR, EquipmentSlotType.FEET, tex("ytluckyblocks:thnxarmor")), "thnx_boots");
 
-        //-------------------ARMS
-        registerItem(tntHelmet = new ItemModArmor("tnt_helmet", TntArmor, 1, EntityEquipmentSlot.HEAD), "tnt_helmet");
-        registerItem(tntChestplate = new ItemModArmor("tnt_chestplate", TntArmor, 1, EntityEquipmentSlot.CHEST), "tnt_chestplate");
-        registerItem(tntLeggings = new ItemModArmor("tnt_leggings", TntArmor, 2, EntityEquipmentSlot.LEGS), "tnt_leggings");
-        registerItem(tntBoots = new ItemModArmor("tnt_boots", TntArmor, 1, EntityEquipmentSlot.FEET), "tnt_boots");
-        registerItem(lacHelmet = new ItemModArmor("lac_helmet", LacArmor, 1, EntityEquipmentSlot.HEAD), "lac_helmet");
-        registerItem(lacChestplate = new ItemModArmor("lac_chestplate", LacArmor, 1, EntityEquipmentSlot.CHEST), "lac_chestplate");
-        registerItem(lacLeggings = new ItemModArmor("lac_leggings", LacArmor, 2, EntityEquipmentSlot.LEGS), "lac_leggings");
-        registerItem(lacBoots = new ItemModArmor("lac_boots", LacArmor, 1, EntityEquipmentSlot.FEET), "lac_boots");
-        registerItem(mrHelmet = new ItemModArmor("mr_helmet", MrArmor, 1, EntityEquipmentSlot.HEAD), "mr_helmet");
-        registerItem(mrChestplate = new ItemModArmor("mr_chestplate", MrArmor, 1, EntityEquipmentSlot.CHEST), "mr_chestplate");
-        registerItem(mrLeggings = new ItemModArmor("mr_leggings", MrArmor, 2, EntityEquipmentSlot.LEGS), "mr_leggings");
-        registerItem(mrBoots = new ItemModArmor("mr_boots", MrArmor, 1, EntityEquipmentSlot.FEET), "mr_boots");
-        registerItem(petaHelmet = new ItemModArmor("peta_helmet", PetaArmor, 1, EntityEquipmentSlot.HEAD), "peta_helmet");
-        registerItem(petaChestplate = new ItemModArmor("peta_chestplate", PetaArmor, 1, EntityEquipmentSlot.CHEST), "peta_chestplate");
-        registerItem(petaLeggings = new ItemModArmor("peta_leggings", PetaArmor, 2, EntityEquipmentSlot.LEGS), "peta_leggings");
-        registerItem(petaBoots = new ItemModArmor("peta_boots", PetaArmor, 1, EntityEquipmentSlot.FEET), "peta_boots");
-        registerItem(pinkHelmet = new ItemModArmor("pink_helmet", PinkArmor, 1, EntityEquipmentSlot.HEAD), "pink_helmet");
-        registerItem(pinkChestplate = new ItemModArmor("pink_chestplate", PinkArmor, 1, EntityEquipmentSlot.CHEST), "pink_chestplate");
-        registerItem(pinkLeggings = new ItemModArmor("pink_leggings", PinkArmor, 2, EntityEquipmentSlot.LEGS), "pink_leggings");
-        registerItem(pinkBoots = new ItemModArmor("pink_boots", PinkArmor, 1, EntityEquipmentSlot.FEET), "pink_boots");
-        registerItem(vikHelmet = new ItemModArmor("vik_helmet", VikArmor, 1, EntityEquipmentSlot.HEAD), "vik_helmet");
-        registerItem(vikChestplate = new ItemModArmor("vik_chestplate", VikArmor, 1, EntityEquipmentSlot.CHEST), "vik_chestplate");
-        registerItem(vikLeggings = new ItemModArmor("vik_leggings", VikArmor, 2, EntityEquipmentSlot.LEGS), "vik_leggings");
-        registerItem(vikBoots = new ItemModArmor("vik_boots", VikArmor, 1, EntityEquipmentSlot.FEET), "vik_boots");
+        register(r, duckHelmet = new ItemModArmor(DUCK_ARMOR, EquipmentSlotType.HEAD, tex("ytluckyblocks:duckarmor")), "duckhelmet");
+        register(r, duckChestplate = new ItemModArmor(DUCK_ARMOR, EquipmentSlotType.CHEST, tex("ytluckyblocks:duckarmor")), "duckchestplate");
+        register(r, duckLeggings = new ItemModArmor(DUCK_ARMOR, EquipmentSlotType.LEGS, tex("ytluckyblocks:duckarmor")), "duckleggings");
+        register(r, duckBoots = new ItemModArmor(DUCK_ARMOR, EquipmentSlotType.FEET, tex("ytluckyblocks:duckarmor")), "duckboots");
+        register(r, leahHelmet = new ItemModArmor(LEAH_ARMOR, EquipmentSlotType.HEAD, tex("ytluckyblocks:leaharmor")), "leahhelmet");
+        register(r, leahChestplate = new ItemModArmor(LEAH_ARMOR, EquipmentSlotType.CHEST, tex("ytluckyblocks:leaharmor")), "leahchestplate");
+        register(r, leahLeggings = new ItemModArmor(LEAH_ARMOR, EquipmentSlotType.LEGS, tex("ytluckyblocks:leaharmor")), "leahleggings");
+        register(r, leahBoots = new ItemModArmor(LEAH_ARMOR, EquipmentSlotType.FEET, tex("ytluckyblocks:leaharmor")), "leahboots");
+        register(r, maxHelmet = new ItemModArmor(MAX_ARMOR, EquipmentSlotType.HEAD, tex("ytluckyblocks:maxarmor")), "maxhelmet");
+        register(r, maxChestplate = new ItemModArmor(MAX_ARMOR, EquipmentSlotType.CHEST, tex("ytluckyblocks:maxarmor")), "maxchestplate");
+        register(r, maxLeggings = new ItemModArmor(MAX_ARMOR, EquipmentSlotType.LEGS, tex("ytluckyblocks:maxarmor")), "maxleggings");
+        register(r, maxBoots = new ItemModArmor(MAX_ARMOR, EquipmentSlotType.FEET, tex("ytluckyblocks:maxarmor")), "maxboots");
+        register(r, cassieTheCatHelmet = new ItemModArmor(CASSIE_THE_CAT_ARMOR, EquipmentSlotType.HEAD, tex("ytluckyblocks:cassiethecat")), "cassiethecathelmet");
+        register(r, cassieTheCatChestplate = new ItemModArmor(CASSIE_THE_CAT_ARMOR, EquipmentSlotType.CHEST, tex("ytluckyblocks:cassiethecat")), "cassiethecatchestplate");
+        register(r, cassieTheCatLeggings = new ItemModArmor(CASSIE_THE_CAT_ARMOR, EquipmentSlotType.LEGS, tex("ytluckyblocks:cassiethecat")), "cassiethecatleggings");
+        register(r, cassieTheCatBoots = new ItemModArmor(CASSIE_THE_CAT_ARMOR, EquipmentSlotType.FEET, tex("ytluckyblocks:cassiethecat")), "cassiethecatboots");
+        register(r, donutHelmet = new ItemModArmor(DONUT_ARMOR, EquipmentSlotType.HEAD, tex("ytluckyblocks:donutarmor")), "donuthelmet");
+        register(r, donutChestplate = new ItemModArmor(DONUT_ARMOR, EquipmentSlotType.CHEST, tex("ytluckyblocks:donutarmor")), "donutchestplate");
+        register(r, donutLeggings = new ItemModArmor(DONUT_ARMOR, EquipmentSlotType.LEGS, tex("ytluckyblocks:donutarmor")), "donutleggings");
+        register(r, donutBoots = new ItemModArmor(DONUT_ARMOR, EquipmentSlotType.FEET, tex("ytluckyblocks:donutarmor")), "donutboots");
+        register(r, evilLittleKellyHelmet = new ItemModArmor(EVIL_LITTLE_KELLY_ARMOR, EquipmentSlotType.HEAD, tex("ytluckyblocks:evillittlekellyarmor")), "evillittlekellyhelmet");
+        register(r, evilLittleKellyChestplate = new ItemModArmor(EVIL_LITTLE_KELLY_ARMOR, EquipmentSlotType.CHEST, tex("ytluckyblocks:evillittlekellyarmor")), "evillittlekellychestplate");
+        register(r, evilLittleKellyLeggings = new ItemModArmor(EVIL_LITTLE_KELLY_ARMOR, EquipmentSlotType.LEGS, tex("ytluckyblocks:evillittlekellyarmor")), "evillittlekellyleggings");
+        register(r, evilLittleKellyBoots = new ItemModArmor(EVIL_LITTLE_KELLY_ARMOR, EquipmentSlotType.FEET, tex("ytluckyblocks:evillittlekellyarmor")), "evillittlekellyboots");
+        register(r, allyHelmet = new ItemModArmor(LITTLE_ALLY_ARMOR, EquipmentSlotType.HEAD, tex("ytluckyblocks:littleallyarmor")), "allyhelmet");
+        register(r, allyChestplate = new ItemModArmor(LITTLE_ALLY_ARMOR, EquipmentSlotType.CHEST, tex("ytluckyblocks:littleallyarmor")), "allychestplate");
+        register(r, allyLeggings = new ItemModArmor(LITTLE_ALLY_ARMOR, EquipmentSlotType.LEGS, tex("ytluckyblocks:littleallyarmor")), "allyleggings");
+        register(r, allyBoots = new ItemModArmor(LITTLE_ALLY_ARMOR, EquipmentSlotType.FEET, tex("ytluckyblocks:littleallyarmor")), "allyboots");
+        register(r, carlyHelmet = new ItemModArmor(LITTLE_CARLY_ARMOR, EquipmentSlotType.HEAD, tex("ytluckyblocks:littlecarlyarmor")), "carlyhelmet");
+        register(r, carlyChestplate = new ItemModArmor(LITTLE_CARLY_ARMOR, EquipmentSlotType.CHEST, tex("ytluckyblocks:littlecarlyarmor")), "carlychestplate");
+        register(r, carlyLeggings = new ItemModArmor(LITTLE_CARLY_ARMOR, EquipmentSlotType.LEGS, tex("ytluckyblocks:littlecarlyarmor")), "carlyleggings");
+        register(r, carlyBoots = new ItemModArmor(LITTLE_CARLY_ARMOR, EquipmentSlotType.FEET, tex("ytluckyblocks:littlecarlyarmor")), "carlyboots");
+        register(r, donnyHelmet = new ItemModArmor(LITTLE_DONNY_ARMOR, EquipmentSlotType.HEAD, tex("ytluckyblocks:littledonnyarmor")), "donnyhelmet");
+        register(r, donnyChestplate = new ItemModArmor(LITTLE_DONNY_ARMOR, EquipmentSlotType.CHEST, tex("ytluckyblocks:littledonnyarmor")), "donnychestplate");
+        register(r, donnyLeggings = new ItemModArmor(LITTLE_DONNY_ARMOR, EquipmentSlotType.LEGS, tex("ytluckyblocks:littledonnyarmor")), "donnyleggings");
+        register(r, donnyBoots = new ItemModArmor(LITTLE_DONNY_ARMOR, EquipmentSlotType.FEET, tex("ytluckyblocks:littledonnyarmor")), "donnyboots");
+        register(r, littleKellyHelmet = new ItemModArmor(LITTLE_KELLY_ARMOR, EquipmentSlotType.HEAD, tex("ytluckyblocks:littlekellyarmor")), "littlekellyhelmet");
+        register(r, littleKellyChestplate = new ItemModArmor(LITTLE_KELLY_ARMOR, EquipmentSlotType.CHEST, tex("ytluckyblocks:littlekellyarmor")), "littlekellychestplate");
+        register(r, littleKellyLeggings = new ItemModArmor(LITTLE_KELLY_ARMOR, EquipmentSlotType.LEGS, tex("ytluckyblocks:littlekellyarmor")), "littlekellyleggings");
+        register(r, littleKellyBoots = new ItemModArmor(LITTLE_KELLY_ARMOR, EquipmentSlotType.FEET, tex("ytluckyblocks:littlekellyarmor")), "littlekellyboots");
+        register(r, littlelizardHelmet = new ItemModArmor(LITTLE_LIZARD_GAMING_ARMOR, EquipmentSlotType.HEAD, tex("ytluckyblocks:littlelizardgaming")), "littlelizardhelmet");
+        register(r, littlelizardChestplate = new ItemModArmor(LITTLE_LIZARD_GAMING_ARMOR, EquipmentSlotType.CHEST, tex("ytluckyblocks:littlelizardgaming")), "littlelizardchestplate");
+        register(r, littlelizardLeggings = new ItemModArmor(LITTLE_LIZARD_GAMING_ARMOR, EquipmentSlotType.LEGS, tex("ytluckyblocks:littlelizardgaming")), "littlelizardleggings");
+        register(r, littlelizardBoots = new ItemModArmor(LITTLE_LIZARD_GAMING_ARMOR, EquipmentSlotType.FEET, tex("ytluckyblocks:littlelizardgaming")), "littlelizardboots");
+        register(r, monkeyHelmet = new ItemModArmor(MAX_THE_MONKEY_ARMOR, EquipmentSlotType.HEAD, tex("ytluckyblocks:maxthemonkeyarmor")), "monkeyhelmet");
+        register(r, monkeyChestplate = new ItemModArmor(MAX_THE_MONKEY_ARMOR, EquipmentSlotType.CHEST, tex("ytluckyblocks:maxthemonkeyarmor")), "monkeychestplate");
+        register(r, monkeyLeggings = new ItemModArmor(MAX_THE_MONKEY_ARMOR, EquipmentSlotType.LEGS, tex("ytluckyblocks:maxthemonkeyarmor")), "monkeyleggings");
+        register(r, monkeyBoots = new ItemModArmor(MAX_THE_MONKEY_ARMOR, EquipmentSlotType.FEET, tex("ytluckyblocks:maxthemonkeyarmor")), "monkeyboots");
+        register(r, sharkyHelmet = new ItemModArmor(SHARKY_ARMOR, EquipmentSlotType.HEAD, tex("ytluckyblocks:sharkyarmor")), "sharkyhelmet");
+        register(r, sharkyChestplate = new ItemModArmor(SHARKY_ARMOR, EquipmentSlotType.CHEST, tex("ytluckyblocks:sharkyarmor")), "sharkychestplate");
+        register(r, sharkyLeggings = new ItemModArmor(SHARKY_ARMOR, EquipmentSlotType.LEGS, tex("ytluckyblocks:sharkyarmor")), "sharkyleggings");
+        register(r, sharkyBoots = new ItemModArmor(SHARKY_ARMOR, EquipmentSlotType.FEET, tex("ytluckyblocks:sharkyarmor")), "sharkyboots");
+        register(r, turtleHelmet = new ItemModArmor(TINY_TURTULE_ARMOR, EquipmentSlotType.HEAD, tex("ytluckyblocks:tinyturtulearmor")), "turtlehelmet");
+        register(r, turtleChestplate = new ItemModArmor(TINY_TURTULE_ARMOR, EquipmentSlotType.CHEST, tex("ytluckyblocks:tinyturtulearmor")), "turtlechestplate");
+        register(r, turtleLeggings = new ItemModArmor(TINY_TURTULE_ARMOR, EquipmentSlotType.LEGS, tex("ytluckyblocks:tinyturtulearmor")), "turtleleggings");
+        register(r, turtleBoots = new ItemModArmor(TINY_TURTULE_ARMOR, EquipmentSlotType.FEET, tex("ytluckyblocks:tinyturtulearmor")), "turtleboots");
 
-        registerItem(ytHelmet = new ItemModArmor("yt_helmet", YtArmor, 1, EntityEquipmentSlot.HEAD), "yt_helmet");
-        registerItem(ytChestplate = new ItemModArmor("yt_chestplate", YtArmor, 1, EntityEquipmentSlot.CHEST), "yt_chestplate");
-        registerItem(ytLeggings = new ItemModArmor("yt_leggings", YtArmor, 2, EntityEquipmentSlot.LEGS), "yt_leggings");
-        registerItem(ytBoots = new ItemModArmor("yt_boots", YtArmor, 1, EntityEquipmentSlot.FEET), "yt_boots");
-        registerItem(antHelmet = new ItemModArmor("ant_helmet", AntArmor, 1, EntityEquipmentSlot.HEAD), "ant_helmet");
-        registerItem(antChestplate = new ItemModArmor("ant_chestplate", AntArmor, 1, EntityEquipmentSlot.CHEST), "ant_chestplate");
-        registerItem(antLeggings = new ItemModArmor("ant_leggings", AntArmor, 2, EntityEquipmentSlot.LEGS), "ant_leggings");
-        registerItem(antBoots = new ItemModArmor("ant_boots", AntArmor, 1, EntityEquipmentSlot.FEET), "ant_boots");
-        registerItem(capHelmet = new ItemModArmor("cap_helmet", CapArmor, 1, EntityEquipmentSlot.HEAD), "cap_helmet");
-        registerItem(capChestplate = new ItemModArmor("cap_chestplate", CapArmor, 1, EntityEquipmentSlot.CHEST), "cap_chestplate");
-        registerItem(capLeggings = new ItemModArmor("cap_leggings", CapArmor, 2, EntityEquipmentSlot.LEGS), "cap_leggings");
-        registerItem(capBoots = new ItemModArmor("cap_boots", CapArmor, 1, EntityEquipmentSlot.FEET), "cap_boots");
-        registerItem(danHelmet = new ItemModArmor("dan_helmet", DanArmor, 1, EntityEquipmentSlot.HEAD), "dan_helmet");
-        registerItem(danChestplate = new ItemModArmor("dan_chestplate", DanArmor, 1, EntityEquipmentSlot.CHEST), "dan_chestplate");
-        registerItem(danLeggings = new ItemModArmor("dan_leggings", DanArmor, 2, EntityEquipmentSlot.LEGS), "dan_leggings");
-        registerItem(danBoots = new ItemModArmor("dan_boots", DanArmor, 1, EntityEquipmentSlot.FEET), "dan_boots");
-        registerItem(squidHelmet = new ItemModArmor("squid_helmet", SquidArmor, 1, EntityEquipmentSlot.HEAD), "squid_helmet");
-        registerItem(squidChestplate = new ItemModArmor("squid_chestplate", SquidArmor, 1, EntityEquipmentSlot.CHEST), "squid_chestplate");
-        registerItem(squidLeggings = new ItemModArmor("squid_leggings", SquidArmor, 2, EntityEquipmentSlot.LEGS), "squid_leggings");
-        registerItem(squidBoots = new ItemModArmor("squid_boots", SquidArmor, 1, EntityEquipmentSlot.FEET), "squid_boots");
-        registerItem(logHelmet = new ItemModArmor("log_helmet", LogArmor, 1, EntityEquipmentSlot.HEAD), "log_helmet");
-        registerItem(logChestplate = new ItemModArmor("log_chestplate", LogArmor, 1, EntityEquipmentSlot.CHEST), "log_chestplate");
-        registerItem(logLeggings = new ItemModArmor("log_leggings", LogArmor, 2, EntityEquipmentSlot.LEGS), "log_leggings");
-        registerItem(logBoots = new ItemModArmor("log_boots", LogArmor, 1, EntityEquipmentSlot.FEET), "log_boots");
-        registerItem(popHelmet = new ItemModArmor("pop_helmet", PopArmor, 1, EntityEquipmentSlot.HEAD), "pop_helmet");
-        registerItem(popChestplate = new ItemModArmor("pop_chestplate", PopArmor, 1, EntityEquipmentSlot.CHEST), "pop_chestplate");
-        registerItem(popLeggings = new ItemModArmor("pop_leggings", PopArmor, 2, EntityEquipmentSlot.LEGS), "pop_leggings");
-        registerItem(popBoots = new ItemModArmor("pop_boots", PopArmor, 1, EntityEquipmentSlot.FEET), "pop_boots");
-        registerItem(spHelmet = new ItemModArmor("sp_helmet", SpArmor, 1, EntityEquipmentSlot.HEAD), "sp_helmet");
-        registerItem(spChestplate = new ItemModArmor("sp_chestplate", SpArmor, 1, EntityEquipmentSlot.CHEST), "sp_chestplate");
-        registerItem(spLeggings = new ItemModArmor("sp_leggings", SpArmor, 2, EntityEquipmentSlot.LEGS), "sp_leggings");
-        registerItem(spBoots = new ItemModArmor("sp_boots", SpArmor, 1, EntityEquipmentSlot.FEET), "sp_boots");
-        registerItem(skyHelmet = new ItemModArmor("sky_helmet", SkyArmor, 1, EntityEquipmentSlot.HEAD), "sky_helmet");
-        registerItem(skyChestplate = new ItemModArmor("sky_chestplate", SkyArmor, 1, EntityEquipmentSlot.CHEST), "sky_chestplate");
-        registerItem(skyLeggings = new ItemModArmor("sky_leggings", SkyArmor, 2, EntityEquipmentSlot.LEGS), "sky_leggings");
-        registerItem(skyBoots = new ItemModArmor("sky_boots", SkyArmor, 1, EntityEquipmentSlot.FEET), "sky_boots");
-        registerItem(superHelmet = new ItemModArmor("super_helmet", SuperArmor, 1, EntityEquipmentSlot.HEAD), "super_helmet");
-        registerItem(superChestplate = new ItemModArmor("super_chestplate", SuperArmor, 1, EntityEquipmentSlot.CHEST), "super_chestplate");
-        registerItem(superLeggings = new ItemModArmor("super_leggings", SuperArmor, 2, EntityEquipmentSlot.LEGS), "super_leggings");
-        registerItem(superBoots = new ItemModArmor("super_boots", SuperArmor, 1, EntityEquipmentSlot.FEET), "super_boots");
-        registerItem(trueHelmet = new ItemModArmor("true_helmet", TrueArmor, 1, EntityEquipmentSlot.HEAD), "true_helmet");
-        registerItem(trueChestplate = new ItemModArmor("true_chestplate", TrueArmor, 1, EntityEquipmentSlot.CHEST), "true_chestplate");
-        registerItem(trueLeggings = new ItemModArmor("true_leggings", TrueArmor, 2, EntityEquipmentSlot.LEGS), "true_leggings");
-        registerItem(trueBoots = new ItemModArmor("true_boots", TrueArmor, 1, EntityEquipmentSlot.FEET), "true_boots");
-        registerItem(alexHelmet = new ItemModArmor("alex_helmet", AlexArmor, 1, EntityEquipmentSlot.HEAD), "alex_helmet");
-        registerItem(alexChestplate = new ItemModArmor("alex_chestplate", AlexArmor, 1, EntityEquipmentSlot.CHEST), "alex_chestplate");
-        registerItem(alexLeggings = new ItemModArmor("alex_leggings", AlexArmor, 2, EntityEquipmentSlot.LEGS), "alex_leggings");
-        registerItem(alexBoots = new ItemModArmor("alex_boots", AlexArmor, 1, EntityEquipmentSlot.FEET), "alex_boots");
-        registerItem(bajanHelmet = new ItemModArmor("bajan_helmet", BajanArmor, 1, EntityEquipmentSlot.HEAD), "bajan_helmet");
-        registerItem(bajanChestplate = new ItemModArmor("bajan_chestplate", BajanArmor, 1, EntityEquipmentSlot.CHEST), "bajan_chestplate");
-        registerItem(bajanLeggings = new ItemModArmor("bajan_leggings", BajanArmor, 2, EntityEquipmentSlot.LEGS), "bajan_leggings");
-        registerItem(bajanBoots = new ItemModArmor("bajan_boots", BajanArmor, 1, EntityEquipmentSlot.FEET), "bajan_boots");
-        registerItem(frizzHelmet = new ItemModArmor("frizz_helmet", FrizzArmor, 1, EntityEquipmentSlot.HEAD), "frizz_helmet");
-        registerItem(frizzChestplate = new ItemModArmor("frizz_chestplate", FrizzArmor, 1, EntityEquipmentSlot.CHEST), "frizz_chestplate");
-        registerItem(frizzLeggings = new ItemModArmor("frizz_leggings", FrizzArmor, 2, EntityEquipmentSlot.LEGS), "frizz_leggings");
-        registerItem(frizzBoots = new ItemModArmor("frizz_boots", FrizzArmor, 1, EntityEquipmentSlot.FEET), "frizz_boots");
-        registerItem(jeromeHelmet = new ItemModArmor("jerome_helmet", JeromeArmor, 1, EntityEquipmentSlot.HEAD), "jerome_helmet");
-        registerItem(jeromeChestplate = new ItemModArmor("jerome_chestplate", JeromeArmor, 1, EntityEquipmentSlot.CHEST), "jerome_chestplate");
-        registerItem(jeromeLeggings = new ItemModArmor("jerome_leggings", JeromeArmor, 2, EntityEquipmentSlot.LEGS), "jerome_leggings");
-        registerItem(jeromeBoots = new ItemModArmor("jerome_boots", JeromeArmor, 1, EntityEquipmentSlot.FEET), "jerome_boots");
-        registerItem(tewityHelmet = new ItemModArmor("tewity_helmet", TewityArmor, 1, EntityEquipmentSlot.HEAD), "tewity_helmet");
-        registerItem(tewityChestplate = new ItemModArmor("tewity_chestplate", TewityArmor, 1, EntityEquipmentSlot.CHEST), "tewity_chestplate");
-        registerItem(tewityLeggings = new ItemModArmor("tewity_leggings", TewityArmor, 2, EntityEquipmentSlot.LEGS), "tewity_leggings");
-        registerItem(tewityBoots = new ItemModArmor("tewity_boots", TewityArmor, 1, EntityEquipmentSlot.FEET), "tewity_boots");
-        registerItem(ihas_Helmet = new ItemModArmor("ihas_helmet", IHasArmor, 1, EntityEquipmentSlot.HEAD), "ihas_helmet");
-        registerItem(ihas_Chestplate = new ItemModArmor("ihas_chestplate", IHasArmor, 1, EntityEquipmentSlot.CHEST), "ihas_chestplate");
-        registerItem(ihas_Leggings = new ItemModArmor("ihas_leggings", IHasArmor, 2, EntityEquipmentSlot.LEGS), "ihas_leggings");
-        registerItem(ihas_Boots = new ItemModArmor("ihas_boots", IHasArmor, 1, EntityEquipmentSlot.FEET), "ihas_boots");
-        registerItem(ld_Helmet = new ItemModArmor("ld_helmet", LDArmor, 1, EntityEquipmentSlot.HEAD), "ld_helmet");
-        registerItem(ld_Chestplate = new ItemModArmor("ld_chestplate", LDArmor, 1, EntityEquipmentSlot.CHEST), "ld_chestplate");
-        registerItem(ld_Leggings = new ItemModArmor("ld_leggings", LDArmor, 2, EntityEquipmentSlot.LEGS), "ld_leggings");
-        registerItem(ld_Boots = new ItemModArmor("ld_boots", LDArmor, 1, EntityEquipmentSlot.FEET), "ld_boots");
-        registerItem(preston_Helmet = new ItemModArmor("preston_helmet", PrestonArmor, 1, EntityEquipmentSlot.HEAD), "preston_helmet");
-        registerItem(preston_Chestplate = new ItemModArmor("preston_chestplate", PrestonArmor, 1, EntityEquipmentSlot.CHEST), "preston_chestplate");
-        registerItem(preston_Leggings = new ItemModArmor("preston_leggings", PrestonArmor, 2, EntityEquipmentSlot.LEGS), "preston_leggings");
-        registerItem(preston_Boots = new ItemModArmor("preston_boots", PrestonArmor, 1, EntityEquipmentSlot.FEET), "preston_boots");
-        registerItem(s_Helmet = new ItemModArmor("s_helmet", SArmor, 1, EntityEquipmentSlot.HEAD), "s_helmet");
-        registerItem(s_Chestplate = new ItemModArmor("s_chestplate", SArmor, 1, EntityEquipmentSlot.CHEST), "s_chestplate");
-        registerItem(s_Leggings = new ItemModArmor("s_leggings", SArmor, 2, EntityEquipmentSlot.LEGS), "s_leggings");
-        registerItem(s_Boots = new ItemModArmor("s_boots", SArmor, 1, EntityEquipmentSlot.FEET), "s_boots");
-        registerItem(stampy_Helmet = new ItemModArmor("stampy_helmet", StampyArmor, 1, EntityEquipmentSlot.HEAD), "stampy_helmet");
-        registerItem(stampy_Chestplate = new ItemModArmor("stampy_chestplate", StampyArmor, 1, EntityEquipmentSlot.CHEST), "stampy_chestplate");
-        registerItem(stampy_Leggings = new ItemModArmor("stampy_leggings", StampyArmor, 2, EntityEquipmentSlot.LEGS), "stampy_leggings");
-        registerItem(stampy_Boots = new ItemModArmor("stampy_boots", StampyArmor, 1, EntityEquipmentSlot.FEET), "stampy_boots");
-        registerItem(thnx_Helmet = new ItemModArmor("thnx_helmet", ThnxArmor, 1, EntityEquipmentSlot.HEAD), "thnx_helmet");
-        registerItem(thnx_Chestplate = new ItemModArmor("thnx_chestplate", ThnxArmor, 1, EntityEquipmentSlot.CHEST), "thnx_chestplate");
-        registerItem(thnx_Leggings = new ItemModArmor("thnx_leggings", ThnxArmor, 2, EntityEquipmentSlot.LEGS), "thnx_leggings");
-        registerItem(thnx_Boots = new ItemModArmor("thnx_boots", ThnxArmor, 1, EntityEquipmentSlot.FEET), "thnx_boots");
+        register(r, aphmauHelmet = new ItemModArmor(APHMAU_ARMOR, EquipmentSlotType.HEAD, tex("ytluckyblocks:aphmauarmor")), "aphmauhelmet");
+        register(r, aphmauChestplate = new ItemModArmor(APHMAU_ARMOR, EquipmentSlotType.CHEST, tex("ytluckyblocks:aphmauarmor")), "aphmauchestplate");
+        register(r, aphmauLeggings = new ItemModArmor(APHMAU_ARMOR, EquipmentSlotType.LEGS, tex("ytluckyblocks:aphmauarmor")), "aphmauleggings");
+        register(r, aphmauBoots = new ItemModArmor(APHMAU_ARMOR, EquipmentSlotType.FEET, tex("ytluckyblocks:aphmauarmor")), "aphmauboots");
+        register(r, ropoHelmet = new ItemModArmor(ROPO_ARMOR, EquipmentSlotType.HEAD, tex("ytluckyblocks:ropoarmor")), "ropohelmet");
+        register(r, ropoChestplate = new ItemModArmor(ROPO_ARMOR, EquipmentSlotType.CHEST, tex("ytluckyblocks:ropoarmor")), "ropochestplate");
+        register(r, ropoLeggings = new ItemModArmor(ROPO_ARMOR, EquipmentSlotType.LEGS, tex("ytluckyblocks:ropoarmor")), "ropoleggings");
+        register(r, ropoBoots = new ItemModArmor(ROPO_ARMOR, EquipmentSlotType.FEET, tex("ytluckyblocks:ropoarmor")), "ropoboots");
+        register(r, scubaHelmet = new ItemModArmor(SCUBA_ARMOR, EquipmentSlotType.HEAD, tex("ytluckyblocks:scubaarmor")), "scubahelmet");
+        register(r, scubaChestplate = new ItemModArmor(SCUBA_ARMOR, EquipmentSlotType.CHEST, tex("ytluckyblocks:scubaarmor")), "scubachestplate");
+        register(r, scubaLeggings = new ItemModArmor(SCUBA_ARMOR, EquipmentSlotType.LEGS, tex("ytluckyblocks:scubaarmor")), "scubaleggings");
+        register(r, scubaBoots = new ItemModArmor(SCUBA_ARMOR, EquipmentSlotType.FEET, tex("ytluckyblocks:scubaarmor")), "scubaboots");
+        register(r, crainerHelmet = new ItemModArmor(CRAINER_ARMOR, EquipmentSlotType.HEAD, tex("ytluckyblocks:crainerarmor")), "crainerhelmet");
+        register(r, crainerChestplate = new ItemModArmor(CRAINER_ARMOR, EquipmentSlotType.CHEST, tex("ytluckyblocks:crainerarmor")), "crainerchestplate");
+        register(r, crainerLeggings = new ItemModArmor(CRAINER_ARMOR, EquipmentSlotType.LEGS, tex("ytluckyblocks:crainerarmor")), "crainerleggings");
+        register(r, crainerBoots = new ItemModArmor(CRAINER_ARMOR, EquipmentSlotType.FEET, tex("ytluckyblocks:crainerarmor")), "crainerboots");
+        register(r, angelHelmet = new ItemModArmor(ANGEL_ARMOR, EquipmentSlotType.HEAD, tex("ytluckyblocks:angelarmor")), "angelhelmet");
+        register(r, angelChestplate = new ItemModArmor(ANGEL_ARMOR, EquipmentSlotType.CHEST, tex("ytluckyblocks:angelarmor")), "angelchestplate");
+        register(r, angelLeggings = new ItemModArmor(ANGEL_ARMOR, EquipmentSlotType.LEGS, tex("ytluckyblocks:angelarmor")), "angelleggings");
+        register(r, angelBoots = new ItemModArmor(ANGEL_ARMOR, EquipmentSlotType.FEET, tex("ytluckyblocks:angelarmor")), "angelboots");
 
-        registerItem(duckHelmet = new ItemModArmor("duckhelmet", DuckArmor, 1, EntityEquipmentSlot.HEAD), "duckhelmet");
-        registerItem(duckChestplate = new ItemModArmor("duckchestplate", DuckArmor, 1, EntityEquipmentSlot.CHEST), "duckchestplate");
-        registerItem(duckLeggings = new ItemModArmor("duckleggings", DuckArmor, 2, EntityEquipmentSlot.LEGS), "duckleggings");
-        registerItem(duckBoots = new ItemModArmor("duckboots", DuckArmor, 1, EntityEquipmentSlot.FEET), "duckboots");
-        registerItem(leahHelmet = new ItemModArmor("leahhelmet", LeahArmor, 1, EntityEquipmentSlot.HEAD), "leahhelmet");
-        registerItem(leahChestplate = new ItemModArmor("leahchestplate", LeahArmor, 1, EntityEquipmentSlot.CHEST), "leahchestplate");
-        registerItem(leahLeggings = new ItemModArmor("leahleggings", LeahArmor, 2, EntityEquipmentSlot.LEGS), "leahleggings");
-        registerItem(leahBoots = new ItemModArmor("leahboots", LeahArmor, 1, EntityEquipmentSlot.FEET), "leahboots");
-        registerItem(maxHelmet = new ItemModArmor("maxhelmet", MaxArmor, 1, EntityEquipmentSlot.HEAD), "maxhelmet");
-        registerItem(maxChestplate = new ItemModArmor("maxchestplate", MaxArmor, 1, EntityEquipmentSlot.CHEST), "maxchestplate");
-        registerItem(maxLeggings = new ItemModArmor("maxleggings", MaxArmor, 2, EntityEquipmentSlot.LEGS), "maxleggings");
-        registerItem(maxBoots = new ItemModArmor("maxboots", MaxArmor, 1, EntityEquipmentSlot.FEET), "maxboots");
-        registerItem(cassieTheCatHelmet = new ItemModArmor("cassiethecathelmet", CassieTheCat, 1, EntityEquipmentSlot.HEAD), "cassiethecathelmet");
-        registerItem(cassieTheCatChestplate = new ItemModArmor("cassiethecatchestplate", CassieTheCat, 1, EntityEquipmentSlot.CHEST), "cassiethecatchestplate");
-        registerItem(cassieTheCatLeggings = new ItemModArmor("cassiethecatleggings", CassieTheCat, 2, EntityEquipmentSlot.LEGS), "cassiethecatleggings");
-        registerItem(cassieTheCatBoots = new ItemModArmor("cassiethecatboots", CassieTheCat, 1, EntityEquipmentSlot.FEET), "cassiethecatboots");
-        registerItem(donutHelmet = new ItemModArmor("donuthelmet", DonutArmor, 1, EntityEquipmentSlot.HEAD), "donuthelmet");
-        registerItem(donutChestplate = new ItemModArmor("donutchestplate", DonutArmor, 1, EntityEquipmentSlot.CHEST), "donutchestplate");
-        registerItem(donutLeggings = new ItemModArmor("donutleggings", DonutArmor, 2, EntityEquipmentSlot.LEGS), "donutleggings");
-        registerItem(donutBoots = new ItemModArmor("donutboots", DonutArmor, 1, EntityEquipmentSlot.FEET), "donutboots");
-        registerItem(evilLittleKellyHelmet = new ItemModArmor("evillittlekellyhelmet", EvilLittleKellyArmor, 1, EntityEquipmentSlot.HEAD), "evillittlekellyhelmet");
-        registerItem(evilLittleKellyChestplate = new ItemModArmor("evillittlekellychestplate", EvilLittleKellyArmor, 1, EntityEquipmentSlot.CHEST), "evillittlekellychestplate");
-        registerItem(evilLittleKellyLeggings = new ItemModArmor("evillittlekellyleggings", EvilLittleKellyArmor, 2, EntityEquipmentSlot.LEGS), "evillittlekellyleggings");
-        registerItem(evilLittleKellyBoots = new ItemModArmor("evillittlekellyboots", EvilLittleKellyArmor, 1, EntityEquipmentSlot.FEET), "evillittlekellyboots");
-        registerItem(allyHelmet = new ItemModArmor("allyhelmet", LittleAllyArmor, 1, EntityEquipmentSlot.HEAD), "allyhelmet");
-        registerItem(allyChestplate = new ItemModArmor("allychestplate", LittleAllyArmor, 1, EntityEquipmentSlot.CHEST), "allychestplate");
-        registerItem(allyLeggings = new ItemModArmor("allyleggings", LittleAllyArmor, 2, EntityEquipmentSlot.LEGS), "allyleggings");
-        registerItem(allyBoots = new ItemModArmor("allyboots", LittleAllyArmor, 1, EntityEquipmentSlot.FEET), "allyboots");
-        registerItem(carlyHelmet = new ItemModArmor("carlyhelmet", LittleCarlyArmor, 1, EntityEquipmentSlot.HEAD), "carlyhelmet");
-        registerItem(carlyChestplate = new ItemModArmor("carlychestplate", LittleCarlyArmor, 1, EntityEquipmentSlot.CHEST), "carlychestplate");
-        registerItem(carlyLeggings = new ItemModArmor("carlyleggings", LittleCarlyArmor, 2, EntityEquipmentSlot.LEGS), "carlyleggings");
-        registerItem(carlyBoots = new ItemModArmor("carlyboots", LittleCarlyArmor, 1, EntityEquipmentSlot.FEET), "carlyboots");
-        registerItem(donnyHelmet = new ItemModArmor("donnyhelmet", LittleDonnyArmor, 1, EntityEquipmentSlot.HEAD), "donnyhelmet");
-        registerItem(donnyChestplate = new ItemModArmor("donnychestplate", LittleDonnyArmor, 1, EntityEquipmentSlot.CHEST), "donnychestplate");
-        registerItem(donnyLeggings = new ItemModArmor("donnyleggings", LittleDonnyArmor, 2, EntityEquipmentSlot.LEGS), "donnyleggings");
-        registerItem(donnyBoots = new ItemModArmor("donnyboots", LittleDonnyArmor, 1, EntityEquipmentSlot.FEET), "donnyboots");
-        registerItem(littleKellyHelmet = new ItemModArmor("littlekellyhelmet", LittleKellyArmor, 1, EntityEquipmentSlot.HEAD), "littlekellyhelmet");
-        registerItem(littleKellyChestplate = new ItemModArmor("littlekellychestplate", LittleKellyArmor, 1, EntityEquipmentSlot.CHEST), "littlekellychestplate");
-        registerItem(littleKellyLeggings = new ItemModArmor("littlekellyleggings", LittleKellyArmor, 2, EntityEquipmentSlot.LEGS), "littlekellyleggings");
-        registerItem(littleKellyBoots = new ItemModArmor("littlekellyboots", LittleKellyArmor, 1, EntityEquipmentSlot.FEET), "littlekellyboots");
-        registerItem(littlelizardHelmet = new ItemModArmor("littlelizardhelmet", LittleLizardGaming, 1, EntityEquipmentSlot.HEAD), "littlelizardhelmet");
-        registerItem(littlelizardChestplate = new ItemModArmor("littlelizardchestplate", LittleLizardGaming, 1, EntityEquipmentSlot.CHEST), "littlelizardchestplate");
-        registerItem(littlelizardLeggings = new ItemModArmor("littlelizardleggings", LittleLizardGaming, 2, EntityEquipmentSlot.LEGS), "littlelizardleggings");
-        registerItem(littlelizardBoots = new ItemModArmor("littlelizardboots", LittleLizardGaming, 1, EntityEquipmentSlot.FEET), "littlelizardboots");
-        registerItem(monkeyHelmet = new ItemModArmor("monkeyhelmet", MaxTheMonkeyArmor, 1, EntityEquipmentSlot.HEAD), "monkeyhelmet");
-        registerItem(monkeyChestplate = new ItemModArmor("monkeychestplate", MaxTheMonkeyArmor, 1, EntityEquipmentSlot.CHEST), "monkeychestplate");
-        registerItem(monkeyLeggings = new ItemModArmor("monkeyleggings", MaxTheMonkeyArmor, 2, EntityEquipmentSlot.LEGS), "monkeyleggings");
-        registerItem(monkeyBoots = new ItemModArmor("monkeyboots", MaxTheMonkeyArmor, 1, EntityEquipmentSlot.FEET), "monkeyboots");
-        registerItem(sharkyHelmet = new ItemModArmor("sharkyhelmet", SharkyArmor, 1, EntityEquipmentSlot.HEAD), "sharkyhelmet");
-        registerItem(sharkyChestplate = new ItemModArmor("sharkychestplate", SharkyArmor, 1, EntityEquipmentSlot.CHEST), "sharkychestplate");
-        registerItem(sharkyLeggings = new ItemModArmor("sharkyleggings", SharkyArmor, 2, EntityEquipmentSlot.LEGS), "sharkyleggings");
-        registerItem(sharkyBoots = new ItemModArmor("sharkyboots", SharkyArmor, 1, EntityEquipmentSlot.FEET), "sharkyboots");
-        registerItem(turtleHelmet = new ItemModArmor("turtlehelmet", TinyTurtuleArmor, 1, EntityEquipmentSlot.HEAD), "turtlehelmet");
-        registerItem(turtleChestplate = new ItemModArmor("turtlechestplate", TinyTurtuleArmor, 1, EntityEquipmentSlot.CHEST), "turtlechestplate");
-        registerItem(turtleLeggings = new ItemModArmor("turtleleggings", TinyTurtuleArmor, 2, EntityEquipmentSlot.LEGS), "turtleleggings");
-        registerItem(turtleBoots = new ItemModArmor("turtleboots", TinyTurtuleArmor, 1, EntityEquipmentSlot.FEET), "turtleboots");
-
-        registerItem(aphmauHelmet = new ItemModArmor("aphmauhelmet", aphmauArmor, 1, EntityEquipmentSlot.HEAD), "aphmauhelmet");
-        registerItem(aphmauChestplate = new ItemModArmor("aphmauchestplate", aphmauArmor, 1, EntityEquipmentSlot.CHEST), "aphmauchestplate");
-        registerItem(aphmauLeggings = new ItemModArmor("aphmauleggings", aphmauArmor, 2, EntityEquipmentSlot.LEGS), "aphmauleggings");
-        registerItem(aphmauBoots = new ItemModArmor("aphmauboots", aphmauArmor, 1, EntityEquipmentSlot.FEET), "aphmauboots");
-        registerItem(ropoHelmet = new ItemModArmor("ropohelmet", ropoArmor, 1, EntityEquipmentSlot.HEAD), "ropohelmet");
-        registerItem(ropoChestplate = new ItemModArmor("ropochestplate", ropoArmor, 1, EntityEquipmentSlot.CHEST), "ropochestplate");
-        registerItem(ropoLeggings = new ItemModArmor("ropoleggings", ropoArmor, 2, EntityEquipmentSlot.LEGS), "ropoleggings");
-        registerItem(ropoBoots = new ItemModArmor("ropoboots", ropoArmor, 1, EntityEquipmentSlot.FEET), "ropoboots");
-        registerItem(scubaHelmet = new ItemModArmor("scubahelmet", scubaArmor, 1, EntityEquipmentSlot.HEAD), "scubahelmet");
-        registerItem(scubaChestplate = new ItemModArmor("scubachestplate", scubaArmor, 1, EntityEquipmentSlot.CHEST), "scubachestplate");
-        registerItem(scubaLeggings = new ItemModArmor("scubaleggings", scubaArmor, 2, EntityEquipmentSlot.LEGS), "scubaleggings");
-        registerItem(scubaBoots = new ItemModArmor("scubaboots", scubaArmor, 1, EntityEquipmentSlot.FEET), "scubaboots");
-        registerItem(crainerHelmet = new ItemModArmor("crainerhelmet", crainerArmor, 1, EntityEquipmentSlot.HEAD), "crainerhelmet");
-        registerItem(crainerChestplate = new ItemModArmor("crainerchestplate", crainerArmor, 1, EntityEquipmentSlot.CHEST), "crainerchestplate");
-        registerItem(crainerLeggings = new ItemModArmor("crainerleggings", crainerArmor, 2, EntityEquipmentSlot.LEGS), "crainerleggings");
-        registerItem(crainerBoots = new ItemModArmor("crainerboots", crainerArmor, 1, EntityEquipmentSlot.FEET), "crainerboots");
-        registerItem(angelHelmet = new ItemModArmor("angelhelmet", angelArmor, 1, EntityEquipmentSlot.HEAD), "angelhelmet");
-        registerItem(angelChestplate = new ItemModArmor("angelchestplate", angelArmor, 1, EntityEquipmentSlot.CHEST), "angelchestplate");
-        registerItem(angelLeggings = new ItemModArmor("angelleggings", angelArmor, 2, EntityEquipmentSlot.LEGS), "angelleggings");
-        registerItem(angelBoots = new ItemModArmor("angelboots", angelArmor, 1, EntityEquipmentSlot.FEET), "angelboots");
-
+        ModSpawnEggs.registerAll(r);
     }
 
-    public static void registerItem(Item item, String name) {
-        GameRegistry.register(item);
+    private static void register(IForgeRegistry<Item> reg, Item item, String name) {
+        item.setRegistryName(new ResourceLocation(Main.MODID, name));
+        reg.register(item);
     }
-
-
 
 }

@@ -1,25 +1,20 @@
 package thvardhan.ytluckyblocks.blocks;
+import net.minecraft.entity.EntityType;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.monster.EntityElderGuardian;
-import net.minecraft.entity.monster.EntityGhast;
-import net.minecraft.entity.monster.EntityGuardian;
-import net.minecraft.entity.monster.EntityIronGolem;
-import net.minecraft.entity.passive.EntityChicken;
-import net.minecraft.entity.passive.EntitySquid;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.block.Blocks;
+import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import thvardhan.ytluckyblocks.CommonProxy;
 import thvardhan.ytluckyblocks.entity.EntityBabyMax;
 import thvardhan.ytluckyblocks.entity.EntityIhasCupquake;
@@ -30,32 +25,19 @@ import thvardhan.ytluckyblocks.items.ModItems;
 import java.util.Random;
 
 public class BabyMaxLuckyBlock extends Block {
-
     public BabyMaxLuckyBlock(String unlocalizedName, Material material, float hardness, float resistance) {
-        super(material);
-        this.setUnlocalizedName(unlocalizedName);
-        this.setRegistryName(unlocalizedName);
-        this.setCreativeTab(CommonProxy.tabYTStuffMod);
-        this.setHardness(hardness);
-        this.setResistance(resistance);
-        this.setLightLevel(0F);
+        super(net.minecraft.block.AbstractBlock.Properties.of(material).strength(hardness, resistance).noOcclusion().lightLevel(s -> (int)(15.0F * (0F))));
     }
 
     public BabyMaxLuckyBlock(String unlocalizedName, float hardness, float resistance) {
-        this(unlocalizedName, Material.ROCK, 0, 10000);
+        this(unlocalizedName, Material.STONE, 0, 10000);
     }
 
     public BabyMaxLuckyBlock(String unlocalizedName) {
         this(unlocalizedName, 2.0f, 10.0f);
     }
-
-
-    @Override
-    public boolean isOpaqueCube(IBlockState state) {
-        return false;
-    }
-    @SideOnly(Side.CLIENT)
-    public void randomDisplayTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+@OnlyIn(Dist.CLIENT)
+    public void animateTick(BlockState state, World worldIn, BlockPos pos, Random rand) {
         for (int i = 0; i < 3; ++i) {
             int j = rand.nextInt(2) * 2 - 1;
             int k = rand.nextInt(2) * 2 - 1;
@@ -65,31 +47,37 @@ public class BabyMaxLuckyBlock extends Block {
             double d3 = (double) (rand.nextFloat() * (float) j);
             double d4 = ((double) rand.nextFloat() - 0.5D) * 0.125D;
             double d5 = (double) (rand.nextFloat() * (float) k);
-            worldIn.spawnParticle(EnumParticleTypes.CRIT_MAGIC, d0, d1, d2, d3, d4, d5);
+            worldIn.addParticle(ParticleTypes.CRIT, d0, d1, d2, d3, d4, d5);
         }
     }
 
-
     @Override
-    public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
-        if (!world.isRemote && player != null && !(player instanceof FakePlayer)) {
+    public void playerWillDestroy(net.minecraft.world.World world, net.minecraft.util.math.BlockPos pos, net.minecraft.block.BlockState state, net.minecraft.entity.player.PlayerEntity player) {
+        super.playerWillDestroy(world, pos, state, player);
+        LuckyBlock.creativeLuckyBreak(world, pos, player, () -> drops(world, pos, player));
+    }
 
-            world.setBlockToAir(pos);
+
+
+
+        @Override
+    public void playerDestroy(net.minecraft.world.World world, net.minecraft.entity.player.PlayerEntity player, net.minecraft.util.math.BlockPos pos, net.minecraft.block.BlockState state, @javax.annotation.Nullable net.minecraft.tileentity.TileEntity blockEntity, net.minecraft.item.ItemStack tool) {
+        if (!world.isClientSide() && player != null && !(player instanceof FakePlayer) && !player.abilities.instabuild) {
+
+            world.removeBlock(pos, false);
 
             drops(world, pos, player);
         }
-        return false;
-        //super.onBlockDestroyedByPlayer(worldIn, pos, state);
     }
 
-    private void drops(World worldIn, BlockPos pos, EntityPlayer player) {
+    private void drops(World worldIn, BlockPos pos, PlayerEntity player) {
 
         Enchantment[] e = new Enchantment[5];
-        e[0] = Enchantment.getEnchantmentByID(50);
-        e[1] = Enchantment.getEnchantmentByID(19);
-        e[2] = Enchantment.getEnchantmentByID(48);
-        e[3] = Enchantment.getEnchantmentByID(7);
-        e[4] = Enchantment.getEnchantmentByID(21);
+        e[0] = ExtraFunctions.enchantmentByLegacyNumericId(50);
+        e[1] = ExtraFunctions.enchantmentByLegacyNumericId(19);
+        e[2] = ExtraFunctions.enchantmentByLegacyNumericId(48);
+        e[3] = ExtraFunctions.enchantmentByLegacyNumericId(7);
+        e[4] = ExtraFunctions.enchantmentByLegacyNumericId(21);
 
 
         Random rand = new Random();
@@ -105,7 +93,7 @@ public class BabyMaxLuckyBlock extends Block {
                 break;
             }
             case 1: {
-                ExtraFunctions.summonMobsNearby(new EntityGhast(worldIn), 15, worldIn, pos, rand);
+                ExtraFunctions.summonMobsNearby(EntityType.GHAST.create(worldIn), 15, worldIn, pos, rand);
                 break;
             }
             case 2: {
@@ -149,11 +137,11 @@ public class BabyMaxLuckyBlock extends Block {
                 break;
             }
             case 12: {
-                ExtraFunctions.summonMobsNearby(new EntitySquid(worldIn), 125, worldIn, pos, rand);
+                ExtraFunctions.summonMobsNearby(EntityType.SQUID.create(worldIn), 125, worldIn, pos, rand);
                 break;
             }
             case 13: {
-                ExtraFunctions.summonMobsOnBreakBlock(new EntityBabyMax(worldIn), 10, worldIn, pos);
+                ExtraFunctions.summonMobsOnBreakBlock(EntityBabyMax.TYPE.create(worldIn), 10, worldIn, pos);
                 break;
             }
             case 14: {
@@ -161,7 +149,7 @@ public class BabyMaxLuckyBlock extends Block {
                 break;
             }
             case 15: {
-                ExtraFunctions.summonMobsOnBreakBlock(new EntityChicken(worldIn), 30, worldIn, pos);
+                ExtraFunctions.summonMobsOnBreakBlock(EntityType.CHICKEN.create(worldIn), 30, worldIn, pos);
                 break;
             }
             case 16: {
@@ -185,7 +173,7 @@ public class BabyMaxLuckyBlock extends Block {
                 break;
             }
             case 21: {
-                ExtraFunctions.summonMobsOnBreakBlock(new EntityJeromeASF(worldIn), 30, worldIn, pos);
+                ExtraFunctions.summonMobsOnBreakBlock(EntityJeromeASF.TYPE.create(worldIn), 30, worldIn, pos);
                 break;
             }
             case 22: {
@@ -217,7 +205,7 @@ public class BabyMaxLuckyBlock extends Block {
                 break;
             }
             case 29: {
-                ExtraFunctions.summonMobsOnBreakBlock(new EntityIhasCupquake(worldIn), 10, worldIn, pos);
+                ExtraFunctions.summonMobsOnBreakBlock(EntityIhasCupquake.TYPE.create(worldIn), 10, worldIn, pos);
                 break;
             }
             case 30: {
@@ -229,16 +217,16 @@ public class BabyMaxLuckyBlock extends Block {
                 break;
             }
             case 32: {
-                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, ModItems.maxBoots, "AAAA!!", Enchantment.getEnchantmentByID(0), 100);
+                ExtraFunctions.summonEnchantedItemAsDrop(worldIn, pos, ModItems.maxBoots, "AAAA!!", ExtraFunctions.enchantmentByLegacyNumericId(0), 100);
                 break;
             }
             case 33: {
-                ExtraFunctions.summonMobsOnBreakBlock(new EntityGuardian(worldIn), 30, worldIn, pos);
+                ExtraFunctions.summonMobsOnBreakBlock(EntityType.GUARDIAN.create(worldIn), 30, worldIn, pos);
                 break;
             }
             case 34: {
 
-                ExtraFunctions.summonMobsOnBreakBlock(new EntityElderGuardian(worldIn), 30, worldIn, pos);
+                ExtraFunctions.summonMobsOnBreakBlock(EntityType.ELDER_GUARDIAN.create(worldIn), 30, worldIn, pos);
                 break;
             }
             case 35: {
@@ -254,7 +242,7 @@ public class BabyMaxLuckyBlock extends Block {
                 break;
             }
             case 38: {
-                ExtraFunctions.summonMobsOnBreakBlock(new EntityGhast(worldIn), 30, worldIn, pos);
+                ExtraFunctions.summonMobsOnBreakBlock(EntityType.GHAST.create(worldIn), 30, worldIn, pos);
                 break;
             }
             case 39: {
@@ -270,11 +258,11 @@ public class BabyMaxLuckyBlock extends Block {
                 break;
             }
             case 42: {
-                ExtraFunctions.summonMobsNearby(new EntityIronGolem(worldIn), 35, worldIn, pos, rand);
+                ExtraFunctions.summonMobsNearby(EntityType.IRON_GOLEM.create(worldIn), 35, worldIn, pos, rand);
                 break;
             }
             case 43: {
-                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.POTIONITEM));
+                ExtraFunctions.summonItemAsDrop(pos, worldIn, new ItemStack(Items.POTION));
                 break;
             }
             case 44: {
@@ -282,7 +270,7 @@ public class BabyMaxLuckyBlock extends Block {
                 break;
             }
             case 45: {
-                ExtraFunctions.summonMobsNearby(new EntityBabyMax(worldIn), 55, worldIn, pos, rand);
+                ExtraFunctions.summonMobsNearby(EntityBabyMax.TYPE.create(worldIn), 55, worldIn, pos, rand);
                 break;
             }
             case 46: {
@@ -290,11 +278,11 @@ public class BabyMaxLuckyBlock extends Block {
                 break;
             }
             case 47: {
-                ExtraFunctions.summonMobsNearby(new EntityBabyMax(worldIn), 40, worldIn, pos, rand);
+                ExtraFunctions.summonMobsNearby(EntityBabyMax.TYPE.create(worldIn), 40, worldIn, pos, rand);
                 break;
             }
             case 48: {
-                ExtraFunctions.summonMobsNearby(new EntityBabyMax(worldIn), 15, worldIn, pos, rand);
+                ExtraFunctions.summonMobsNearby(EntityBabyMax.TYPE.create(worldIn), 15, worldIn, pos, rand);
                 break;
             }
             case 49: {

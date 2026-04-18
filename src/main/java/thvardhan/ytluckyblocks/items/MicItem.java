@@ -5,10 +5,8 @@ import thvardhan.ytluckyblocks.CommonProxy;
 
 public class MicItem extends Item {
 
-    public MicItem(String string) {
-        this.setUnlocalizedName(string);
-        this.setRegistryName(string);
-        this.setCreativeTab(CommonProxy.tabYTStuffMod);
+    public MicItem() {
+        super(new Item.Properties().tab(CommonProxy.tabYTStuffMod));
     }
 
 }

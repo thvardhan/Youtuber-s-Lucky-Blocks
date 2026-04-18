@@ -1,143 +1,136 @@
 package thvardhan.ytluckyblocks.entity;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.IEntityLivingData;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.*;
-import net.minecraft.entity.monster.EntityIronGolem;
-import net.minecraft.entity.monster.EntityMob;
-import net.minecraft.entity.monster.EntityPigZombie;
-import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.pathfinding.PathNavigateGround;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.util.DamageSource;
+import net.minecraft.entity.EntityType;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.ILivingEntityData;
+import net.minecraft.entity.EntityClassification;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.ai.goal.SwimGoal;
+import net.minecraft.entity.ai.goal.LookAtGoal;
+import net.minecraft.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.entity.ai.goal.MoveTowardsRestrictionGoal;
+import net.minecraft.entity.ai.goal.LookRandomlyGoal;
+import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
+import net.minecraft.entity.ai.goal.HurtByTargetGoal;
+import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
+import net.minecraft.pathfinding.GroundPathNavigator;
+import net.minecraft.entity.passive.IronGolemEntity;
+import net.minecraft.entity.monster.MonsterEntity;
+import net.minecraft.entity.monster.ZombifiedPiglinEntity;
+import net.minecraft.entity.merchant.villager.VillagerEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.world.World;
+import net.minecraft.world.IServerWorld;
+import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import thvardhan.ytluckyblocks.Main;
+import net.minecraft.block.Blocks;
 
-public class EntityGhost extends EntityMob {
+import net.minecraft.particles.ParticleTypes;
+
+import javax.annotation.Nullable;
+
+@Mod.EventBusSubscriber(modid = Main.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+public class EntityGhost extends MonsterEntity {
+
+    public static EntityType<EntityGhost> TYPE;
 
     boolean alwaysRenderNameTag = true;
-    private String name = "Ghost";
+    private final String displayName = "Ghost";
 
-    public EntityGhost(World worldIn) {
-        super(worldIn);
-        ((PathNavigateGround) this.getNavigator()).setBreakDoors(true);
-        this.tasks.addTask(0, new EntityAISwimming(this));
-         this.tasks.addTask(5, new EntityAIMoveTowardsRestriction(this, 1.0D));
-        this.tasks.addTask(7, new EntityAIWander(this, 1.0D));
-        this.tasks.addTask(8, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
-        this.tasks.addTask(8, new EntityAILookIdle(this));
-        this.applyEntityAI();
-        this.setSize(0.8F, 2.0F);
-        this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Blocks.PUMPKIN));
-
-        this.setAlwaysRenderNameTag(alwaysRenderNameTag);
-        this.setCustomNameTag(name);
-
+    public EntityGhost(EntityType<? extends EntityGhost> type, World worldIn) {
+        super(type, worldIn);
+        if (this.getNavigation() instanceof GroundPathNavigator) {
+            ((GroundPathNavigator) this.getNavigation()).setCanOpenDoors(true);
+        }
+        this.setCustomNameVisible(alwaysRenderNameTag);
+        this.setCustomName(new StringTextComponent(displayName));
+        this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Blocks.PUMPKIN.asItem()));
     }
 
-    protected void applyEntityAI() {
-        this.tasks.addTask(2, new EntityAIAttackMelee(this, 1.0D, false));
-
-
-        this.tasks.addTask(6, new EntityAIMoveThroughVillage(this, 1.0D, false));
-        this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, true, EntityPigZombie.class));
-        this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityPlayer.class, true));
-        this.targetTasks.addTask(3, new EntityAINearestAttackableTarget(this, EntityVillager.class, false));
-        this.targetTasks.addTask(3, new EntityAINearestAttackableTarget(this, EntityIronGolem.class, true));
+    public static AttributeModifierMap.MutableAttribute createAttributes() {
+        return MonsterEntity.createMonsterAttributes()
+                .add(Attributes.FOLLOW_RANGE, 20.0D)
+                .add(Attributes.MOVEMENT_SPEED, 0.4D)
+                .add(Attributes.ATTACK_DAMAGE, 10.0D)
+                .add(Attributes.MAX_HEALTH, 10.0D)
+                .add(Attributes.KNOCKBACK_RESISTANCE, 2.0D);
     }
 
-    protected void applyEntityAttributes() {
-        super.applyEntityAttributes();
-        this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(20.0D);
-        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.4D);
-        this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(10.0D);
-        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(10D);
-        this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(2D);
+    @SubscribeEvent
+    public static void registerType(net.minecraftforge.event.RegistryEvent.Register<EntityType<?>> event) {
+        TYPE = EntityType.Builder.of(EntityGhost::new, EntityClassification.MONSTER)
+                .sized(0.8F, 2.0F)
+                .clientTrackingRange(80)
+                .updateInterval(3)
+                .build(new ResourceLocation(Main.MODID, "ghost").toString());
+        TYPE.setRegistryName(new ResourceLocation(Main.MODID, "ghost"));
+        event.getRegistry().register(TYPE);
+    }
+
+    @SubscribeEvent
+    public static void registerAttributes(EntityAttributeCreationEvent event) {
+        event.put(TYPE, createAttributes().build());
     }
 
     @Override
-    public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty,
-                                            IEntityLivingData livingdata) {
+    protected void registerGoals() {
+        this.goalSelector.addGoal(0, new SwimGoal(this));
+        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0D, false));
+        this.goalSelector.addGoal(5, new MoveTowardsRestrictionGoal(this, 1.0D));
+        this.goalSelector.addGoal(7, new WaterAvoidingRandomWalkingGoal(this, 1.0D, 0.0F));
+        this.goalSelector.addGoal(8, new LookAtGoal(this, PlayerEntity.class, 8.0F));
+        this.goalSelector.addGoal(8, new LookRandomlyGoal(this));
 
-
-        return livingdata;
+        this.targetSelector.addGoal(1, new HurtByTargetGoal(this, ZombifiedPiglinEntity.class));
+        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, VillagerEntity.class, false));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, true));
     }
 
-
-    public void onLivingUpdate() {
-        if (this.worldObj.isRemote) {
-            if (rand.nextBoolean() && rand.nextBoolean()) {
+    @Override
+    public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable net.minecraft.nbt.CompoundNBT dataTag) {
+        return spawnDataIn;
+    }
+    @Override
+    public void setCustomNameVisible(boolean alwaysVisible) {
+        super.setCustomNameVisible(alwaysRenderNameTag);
+    }
+    @Override
+    public void tick() {
+        super.tick();
+        if (this.level.isClientSide) {
+            if (this.random.nextBoolean() && this.random.nextBoolean()) {
                 for (int i = 0; i < 2; ++i) {
-                    this.worldObj.spawnParticle(EnumParticleTypes.DRIP_LAVA, this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.width, this.posY + this.rand.nextDouble() * (double) this.height - 0.25D, this.posZ + (this.rand.nextDouble() - 0.5D) * (double) this.width, (this.rand.nextDouble() - 0.5D) * 2.0D, -this.rand.nextDouble(), (this.rand.nextDouble() - 0.5D) * 2.0D);
+                    this.level.addParticle(ParticleTypes.DRIPPING_LAVA,
+                            this.getX() + (this.random.nextDouble() - 0.5D) * (double) this.getBbWidth(),
+                            this.getY() + this.random.nextDouble() * (double) this.getBbHeight() - 0.25D,
+                            this.getZ() + (this.random.nextDouble() - 0.5D) * (double) this.getBbWidth(),
+                            (this.random.nextDouble() - 0.5D) * 2.0D,
+                            -this.random.nextDouble(),
+                            (this.random.nextDouble() - 0.5D) * 2.0D);
                 }
             }
         }
-
-
-        super.onLivingUpdate();
     }
-
-
     @Override
-    protected Item getDropItem() {
-
-        return Items.PUMPKIN_SEEDS;
-        //return super.getDropItem();
+    protected void dropCustomDeathLoot(DamageSource source, int looting, boolean recentlyHit) {
+        super.dropCustomDeathLoot(source, looting, recentlyHit);
+        int i = this.random.nextInt(3);
+        if (looting > 0) {
+            i += this.random.nextInt(looting + 1);
+        }
+        if (i > 0) {
+            this.spawnAtLocation(new ItemStack(Items.PUMPKIN_SEEDS, i));
+        }
     }
-
-
-    @Override
-    protected void setSize(float width, float height) {
-        super.setSize(width, height);
-    }
-
-
-    @Override
-    public void onUpdate() {
-        super.onUpdate();
-    }
-
-
-    @Override
-    public boolean attackEntityFrom(DamageSource source, float amount) {
-        return super.attackEntityFrom(source, amount);
-    }
-
-    @Override
-    public boolean attackEntityAsMob(Entity entityIn) {
-        return super.attackEntityAsMob(entityIn);
-    }
-
-
-
-    @Override
-    protected boolean isValidLightLevel() {
-        return super.isValidLightLevel();
-    }
-
-    @Override
-    public boolean getCanSpawnHere() {
-        return super.getCanSpawnHere();
-    }
-
-    @Override
-    public void onDeath(DamageSource cause) {
-
-
-        super.onDeath(cause);
-    }
-
-    @Override
-    public void setAlwaysRenderNameTag(boolean alwaysRenderNameTag) {
-        super.setAlwaysRenderNameTag(alwaysRenderNameTag);
-    }
-
-
 }

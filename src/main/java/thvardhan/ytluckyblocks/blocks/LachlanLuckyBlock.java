@@ -1,26 +1,24 @@
 package thvardhan.ytluckyblocks.blocks;
+import net.minecraft.entity.EntityType;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 
-import com.mojang.realmsclient.gui.ChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.monster.EntityCreeper;
-import net.minecraft.entity.monster.EntityElderGuardian;
-import net.minecraft.entity.monster.EntityGuardian;
-import net.minecraft.entity.monster.EntityZombie;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.init.PotionTypes;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.block.Blocks;
+import net.minecraft.item.Items;
+import net.minecraft.potion.Potions;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import thvardhan.ytluckyblocks.CommonProxy;
 import thvardhan.ytluckyblocks.entity.EntityISquid;
 import thvardhan.ytluckyblocks.entity.EntityLachlan;
@@ -31,30 +29,18 @@ import java.util.Random;
 
 public class LachlanLuckyBlock extends Block {
     public LachlanLuckyBlock(String unlocalizedName, Material material, float hardness, float resistance) {
-        super(material);
-        this.setUnlocalizedName(unlocalizedName);
-        this.setRegistryName(unlocalizedName);
-        this.setCreativeTab(CommonProxy.tabYTStuffMod);
-        this.setHardness(hardness);
-        this.setResistance(resistance);
-
+        super(net.minecraft.block.AbstractBlock.Properties.of(material).strength(hardness, resistance).noOcclusion());
     }
 
     public LachlanLuckyBlock(String unlocalizedName, float hardness, float resistance) {
-        this(unlocalizedName, Material.ROCK, 0, 10000);
+        this(unlocalizedName, Material.STONE, 0, 10000);
     }
 
     public LachlanLuckyBlock(String unlocalizedName) {
         this(unlocalizedName, 2.0f, 10.0f);
     }
-
-    @Override
-    public boolean isOpaqueCube(IBlockState state) {
-        return false;
-    }
-
-    @SideOnly(Side.CLIENT)
-    public void randomDisplayTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+@OnlyIn(Dist.CLIENT)
+    public void animateTick(BlockState state, World worldIn, BlockPos pos, Random rand) {
         for (int i = 0; i < 3; ++i) {
             int j = rand.nextInt(2) * 2 - 1;
             int k = rand.nextInt(2) * 2 - 1;
@@ -64,32 +50,38 @@ public class LachlanLuckyBlock extends Block {
             double d3 = (double) (rand.nextFloat() * (float) j);
             double d4 = ((double) rand.nextFloat() - 0.5D) * 0.125D;
             double d5 = (double) (rand.nextFloat() * (float) k);
-            worldIn.spawnParticle(EnumParticleTypes.SPELL_WITCH, d0, d1, d2, d3, d4, d5);
+            worldIn.addParticle(ParticleTypes.WITCH, d0, d1, d2, d3, d4, d5);
         }
     }
 
-
     @Override
-    public boolean removedByPlayer(IBlockState state, World worldIn, BlockPos pos, EntityPlayer player, boolean willHarvest) {
-        if (!worldIn.isRemote && player != null && !(player instanceof FakePlayer)) {
+    public void playerWillDestroy(net.minecraft.world.World worldIn, net.minecraft.util.math.BlockPos pos, net.minecraft.block.BlockState state, net.minecraft.entity.player.PlayerEntity player) {
+        super.playerWillDestroy(worldIn, pos, state, player);
+        LuckyBlock.creativeLuckyBreak(worldIn, pos, player, () -> drops(worldIn, pos, player));
+    }
 
-            worldIn.setBlockToAir(pos);
+
+
+
+        @Override
+    public void playerDestroy(net.minecraft.world.World worldIn, net.minecraft.entity.player.PlayerEntity player, net.minecraft.util.math.BlockPos pos, net.minecraft.block.BlockState state, @javax.annotation.Nullable net.minecraft.tileentity.TileEntity blockEntity, net.minecraft.item.ItemStack tool) {
+        if (!worldIn.isClientSide() && player != null && !(player instanceof FakePlayer) && !player.abilities.instabuild) {
+
+            worldIn.removeBlock(pos, false);
 
 
             drops(worldIn, pos, player);
         }
-        return false;
-
     }
 
-    private void drops(World worldIn, BlockPos pos, EntityPlayer player) {
+    private void drops(World worldIn, BlockPos pos, PlayerEntity player) {
 
         Enchantment[] e = new Enchantment[5];
-        e[0] = Enchantment.getEnchantmentByID(50);
-        e[1] = Enchantment.getEnchantmentByID(19);
-        e[2] = Enchantment.getEnchantmentByID(48);
-        e[3] = Enchantment.getEnchantmentByID(7);
-        e[4] = Enchantment.getEnchantmentByID(21);
+        e[0] = ExtraFunctions.enchantmentByLegacyNumericId(50);
+        e[1] = ExtraFunctions.enchantmentByLegacyNumericId(19);
+        e[2] = ExtraFunctions.enchantmentByLegacyNumericId(48);
+        e[3] = ExtraFunctions.enchantmentByLegacyNumericId(7);
+        e[4] = ExtraFunctions.enchantmentByLegacyNumericId(21);
 
 
         Random rand = new Random();
@@ -101,15 +93,15 @@ public class LachlanLuckyBlock extends Block {
                 ExtraFunctions.addEnchantsMany(new ItemStack(Items.DIAMOND_SWORD), e, 5, worldIn, pos);
             }
             case 0: {
-                ExtraFunctions.summonMobsNearby(new EntityLachlan(worldIn), 5, worldIn, pos, rand);
+                ExtraFunctions.summonMobsNearby(EntityLachlan.TYPE.create(worldIn), 5, worldIn, pos, rand);
                 break;
             }
             case 1: {
-                ExtraFunctions.summonMobsNearby(new EntityLachlan(worldIn), 29, worldIn, pos, rand);
+                ExtraFunctions.summonMobsNearby(EntityLachlan.TYPE.create(worldIn), 29, worldIn, pos, rand);
                 break;
             }
             case 2: {
-                ExtraFunctions.summonMobsOnBreakBlock(new EntityISquid(worldIn), 10, worldIn, pos);
+                ExtraFunctions.summonMobsOnBreakBlock(EntityISquid.TYPE.create(worldIn), 10, worldIn, pos);
                 break;
             }
             case 3: {
@@ -125,7 +117,7 @@ public class LachlanLuckyBlock extends Block {
                 break;
             }
             case 6: {
-                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.WOOL);
+                ExtraFunctions.setOneBlock(worldIn, pos, Blocks.WHITE_WOOL);
                 break;
             }
             case 7: {
@@ -179,7 +171,7 @@ public class LachlanLuckyBlock extends Block {
                 break;
             }
             case 19: {
-                ExtraFunctions.summonMobsNearby(new EntityLachlan(worldIn), 50, worldIn, pos, rand);
+                ExtraFunctions.summonMobsNearby(EntityLachlan.TYPE.create(worldIn), 50, worldIn, pos, rand);
                 break;
             }
             case 20: {
@@ -199,11 +191,11 @@ public class LachlanLuckyBlock extends Block {
                 break;
             }
             case 24: {
-                ExtraFunctions.setOneBlock(worldIn, new BlockPos(player.posX, player.posY, player.posZ), Blocks.FLOWING_LAVA);
+                ExtraFunctions.setOneBlock(worldIn, new BlockPos(player.getX(), player.getY(), player.getZ()), Blocks.LAVA);
                 break;
             }
             case 25: {
-                ExtraFunctions.setOneBlock(worldIn, new BlockPos(player.posX, player.posY, player.posZ), Blocks.FLOWING_WATER);
+                ExtraFunctions.setOneBlock(worldIn, new BlockPos(player.getX(), player.getY(), player.getZ()), Blocks.WATER);
                 break;
             }
             case 26: {
@@ -219,7 +211,7 @@ public class LachlanLuckyBlock extends Block {
                 break;
             }
             case 29: {
-                ExtraFunctions.summonMobsNearby(new EntityZombie(worldIn), 5, worldIn, pos, rand);
+                ExtraFunctions.summonMobsNearby(EntityType.ZOMBIE.create(worldIn), 5, worldIn, pos, rand);
                 break;
             }
             case 30: {
@@ -243,7 +235,7 @@ public class LachlanLuckyBlock extends Block {
                 break;
             }
             case 35: {
-                ExtraFunctions.chat(ChatFormatting.AQUA + "Hello There ~", player);
+                ExtraFunctions.chat(TextFormatting.AQUA + "Hello There ~", player);
                 break;
             }
             case 36: {
@@ -255,7 +247,7 @@ public class LachlanLuckyBlock extends Block {
                 break;
             }
             case 38: {
-                ExtraFunctions.summonMobsNearby(new EntityElderGuardian(worldIn), 5, worldIn, pos, rand);
+                ExtraFunctions.summonMobsNearby(EntityType.ELDER_GUARDIAN.create(worldIn), 5, worldIn, pos, rand);
                 break;
             }
             case 39: {
@@ -271,7 +263,7 @@ public class LachlanLuckyBlock extends Block {
                 break;
             }
             case 42: {
-                ExtraFunctions.summonMobsNearby(new EntityCreeper(worldIn), 300, worldIn, pos, rand);
+                ExtraFunctions.summonMobsNearby(EntityType.CREEPER.create(worldIn), 300, worldIn, pos, rand);
                 break;
             }
             case 43: {
@@ -287,7 +279,7 @@ public class LachlanLuckyBlock extends Block {
                 break;
             }
             case 46: {
-                ExtraFunctions.effectPlayer(player, new PotionEffect(PotionTypes.REGENERATION.getEffects().get(0).getPotion(), 10, 500));
+                ExtraFunctions.effectPlayer(player, new EffectInstance(Effects.REGENERATION, 10, 500));
                 break;
             }
             case 47: {

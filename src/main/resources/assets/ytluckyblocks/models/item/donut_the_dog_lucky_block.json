@@ -1,4 +1,5 @@
 {
+    "gui_light": "front",
     "parent":"ytluckyblocks:block/donut_the_dog_lucky_block",
     "display": {
         "thirdperson": {
