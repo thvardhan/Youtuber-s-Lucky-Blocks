@@ -5,21 +5,18 @@ import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.util.ResourceLocation;
 import thvardhan.ytluckyblocks.Main;
-
 import thvardhan.ytluckyblocks.entity.EntityLDShadowLady;
 
 public class EntityLDShadowLadyRender extends BipedRenderer<EntityLDShadowLady, BipedModel<EntityLDShadowLady>> {
-    protected ResourceLocation texture = new ResourceLocation(Main.MODID + ":textures/entity/ld_skin.png");
 
-    public EntityLDShadowLadyRender(EntityRendererManager renderManager) {
-        super(renderManager, new BipedModel<>(0.0F), 0.5F);
+    private static final ResourceLocation TEX = new ResourceLocation(Main.MODID, "textures/entity/ld_skin.png");
+
+    public EntityLDShadowLadyRender(EntityRendererManager mgr, BipedModel<EntityLDShadowLady> model, float shadow) {
+        super(mgr, model, shadow);
     }
 
-    /**
-     * Returns the location of an entity's texture.
-     */
     @Override
-    public ResourceLocation getEntityTexture(EntityLDShadowLady entity) {
-        return texture;
+    public ResourceLocation getTextureLocation(EntityLDShadowLady entity) {
+        return TEX;
     }
 }

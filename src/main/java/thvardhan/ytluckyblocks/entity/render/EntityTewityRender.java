@@ -6,20 +6,17 @@ import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.util.ResourceLocation;
 import thvardhan.ytluckyblocks.Main;
 import thvardhan.ytluckyblocks.entity.EntityTewity;
-import thvardhan.ytluckyblocks.entity.EntityVikkstar123;
 
 public class EntityTewityRender extends BipedRenderer<EntityTewity, BipedModel<EntityTewity>> {
-    protected ResourceLocation texture = new ResourceLocation(Main.MODID + ":textures/entity/tewity_skin.png");
 
-    public EntityTewityRender(EntityRendererManager renderManager) {
-        super(renderManager, new BipedModel<>(0.0F), 0.5F);
+    private static final ResourceLocation TEX = new ResourceLocation(Main.MODID, "textures/entity/tewity_skin.png");
+
+    public EntityTewityRender(EntityRendererManager mgr, BipedModel<EntityTewity> model, float shadow) {
+        super(mgr, model, shadow);
     }
 
-    /**
-     * Returns the location of an entity's texture.
-     */
     @Override
-    public ResourceLocation getEntityTexture(EntityTewity entity) {
-        return texture;
+    public ResourceLocation getTextureLocation(EntityTewity entity) {
+        return TEX;
     }
 }

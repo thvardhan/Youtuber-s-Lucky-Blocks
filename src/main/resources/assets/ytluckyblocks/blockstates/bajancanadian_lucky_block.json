@@ -1,5 +1,5 @@
 {
     "variants": {
-        "normal": { "model": "ytluckyblocks:bajancanadian_lucky_block" }
+        "": { "model": "ytluckyblocks:block/bajancanadian_lucky_block" }
     }
 }

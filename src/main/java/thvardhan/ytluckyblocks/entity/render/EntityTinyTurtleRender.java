@@ -5,21 +5,18 @@ import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.util.ResourceLocation;
 import thvardhan.ytluckyblocks.Main;
-import thvardhan.ytluckyblocks.entity.EntityAlexirCraft;
 import thvardhan.ytluckyblocks.entity.EntityTinyTurtle;
 
 public class EntityTinyTurtleRender extends BipedRenderer<EntityTinyTurtle, BipedModel<EntityTinyTurtle>> {
-    protected ResourceLocation texture = new ResourceLocation(Main.MODID + ":textures/entity/tiny_turtle.png");
 
-    public EntityTinyTurtleRender(EntityRendererManager renderManager) {
-        super(renderManager, new BipedModel<>(0.0F), 0.5F);
+    private static final ResourceLocation TEX = new ResourceLocation(Main.MODID, "textures/entity/tiny_turtle.png");
+
+    public EntityTinyTurtleRender(EntityRendererManager mgr, BipedModel<EntityTinyTurtle> model, float shadow) {
+        super(mgr, model, shadow);
     }
 
-    /**
-     * Returns the location of an entity's texture.
-     */
     @Override
-    public ResourceLocation getEntityTexture(EntityTinyTurtle entity) {
-        return texture;
+    public ResourceLocation getTextureLocation(EntityTinyTurtle entity) {
+        return TEX;
     }
 }

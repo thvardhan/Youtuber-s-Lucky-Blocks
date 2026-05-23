@@ -1,5 +1,5 @@
 {
     "variants": {
-        "normal": { "model": "ytluckyblocks:lucky_pressure_plate" }
+        "": { "model": "ytluckyblocks:block/lucky_pressure_plate" }
     }
 }

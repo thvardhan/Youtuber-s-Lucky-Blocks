@@ -1,5 +1,5 @@
 {
     "variants": {
-        "normal": { "model": "ytluckyblocks:donut_the_dog_lucky_block" }
+        "": { "model": "ytluckyblocks:block/donut_the_dog_lucky_block" }
     }
 }

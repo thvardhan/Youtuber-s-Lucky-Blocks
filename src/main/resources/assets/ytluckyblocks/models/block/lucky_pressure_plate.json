@@ -1,6 +1,6 @@
 {
     "textures": {
-	 "2": "ytluckyblocks:blocks/BaseLine",
+	 "2": "ytluckyblocks:blocks/baseline",
         "particle": "ytluckyblocks:blocks/baseline"
     },
     "elements": [

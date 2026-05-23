@@ -6,20 +6,17 @@ import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.util.ResourceLocation;
 import thvardhan.ytluckyblocks.Main;
 import thvardhan.ytluckyblocks.entity.EntityStampylonghead;
-import thvardhan.ytluckyblocks.entity.EntityTewity;
 
 public class EntityStampylongheadRender extends BipedRenderer<EntityStampylonghead, BipedModel<EntityStampylonghead>> {
-    protected ResourceLocation texture = new ResourceLocation(Main.MODID + ":textures/entity/stampy_skin.png");
 
-    public EntityStampylongheadRender(EntityRendererManager renderManager) {
-        super(renderManager, new BipedModel<>(0.0F), 0.5F);
+    private static final ResourceLocation TEX = new ResourceLocation(Main.MODID, "textures/entity/stampy_skin.png");
+
+    public EntityStampylongheadRender(EntityRendererManager mgr, BipedModel<EntityStampylonghead> model, float shadow) {
+        super(mgr, model, shadow);
     }
 
-    /**
-     * Returns the location of an entity's texture.
-     */
     @Override
-    public ResourceLocation getEntityTexture(EntityStampylonghead entity) {
-        return texture;
+    public ResourceLocation getTextureLocation(EntityStampylonghead entity) {
+        return TEX;
     }
 }

@@ -8,17 +8,15 @@ import thvardhan.ytluckyblocks.Main;
 import thvardhan.ytluckyblocks.entity.EntityMrWoofless;
 
 public class EntityMrWooflessRender extends BipedRenderer<EntityMrWoofless, BipedModel<EntityMrWoofless>> {
-    protected ResourceLocation texture = new ResourceLocation(Main.MODID + ":textures/entity/mr_skin.png");
 
-    public EntityMrWooflessRender(EntityRendererManager renderManager) {
-        super(renderManager, new BipedModel<>(0.0F), 0.5F);
+    private static final ResourceLocation TEX = new ResourceLocation(Main.MODID, "textures/entity/mr_skin.png");
+
+    public EntityMrWooflessRender(EntityRendererManager mgr, BipedModel<EntityMrWoofless> model, float shadow) {
+        super(mgr, model, shadow);
     }
 
-    /**
-     * Returns the location of an entity's texture.
-     */
     @Override
-    public ResourceLocation getEntityTexture(EntityMrWoofless entity) {
-        return texture;
+    public ResourceLocation getTextureLocation(EntityMrWoofless entity) {
+        return TEX;
     }
 }
